@@ -55,11 +55,11 @@ export default function Hero() {
                         Hi, I'm Charles — a full-stack web developer with a strong foundation in software engineering and a passion for building clean, scalable, and user-centered digital products.
                     </h1>
 
-                    <ShimmerButton shimmerColor="#8040ed" shimmerSize="0.2em" background="rgba(225, 217, 188, 1)" className="text-black font-vietnam text-xs font-bold w-23 h-7 mt-10 mr-15 self-end">Learn more</ShimmerButton>
+                    <ShimmerButton shimmerColor="#8040ed" shimmerSize="0.2em" background="rgba(225, 217, 188, 1)" className="text-black font-vietnam text-xs font-bold w-23 h-7 mt-10 mr-15 self-end">About me</ShimmerButton>
                 </div> 
 
                 {/* Socials buttons Div */}
-                <div className="flex justify-between px-25 mt-10">
+                <div className="flex justify-between px-25 mt-15">
 
                     <a href="https://github.com/selrvk">
                         <Image src="/icons/git-icon-coloured.png" alt="Hero Image" width={30} height={40} 
