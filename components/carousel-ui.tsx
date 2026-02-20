@@ -49,7 +49,7 @@ export function CarouselUI() {
         {projects.map((project, index) => (
           <CarouselItem
             key={project.id}
-            className="basis-[65%] md:basis-[50%] flex justify-center py-12"
+            className="basis-[70%] md:basis-[50%] flex justify-center py-12"
           >
             <div
               className={`transition-all duration-500 ${
