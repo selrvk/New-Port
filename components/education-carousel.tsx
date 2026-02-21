@@ -16,7 +16,7 @@ export default function EducationCarousel() {
       orientation="vertical"
       className="flex w-[80%] mt-30"
     >
-      <CarouselContent className="h-[400px]">
+      <CarouselContent className="h-100">
         {education.map((school) => (
                   <CarouselItem
                     key={school.id}

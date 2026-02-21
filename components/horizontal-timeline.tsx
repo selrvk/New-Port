@@ -30,12 +30,12 @@ export default function HorizontalEducationTimeline() {
                     
                     {/* Left half line (for all except first) */}
                     {index !== 0 && (
-                      <div className="absolute left-[-2rem] top-1/2 w-[calc(50%+2rem)] h-1 bg-amber-100 -translate-y-1/2" />
+                      <div className="absolute -left-8 top-1/2 w-[calc(50%+2rem)] h-1 bg-amber-100 -translate-y-1/2" />
                     )}
 
                     {/* Right half line (for all except last) */}
                     {index !== education.length - 1 && (
-                      <div className="absolute right-[-2rem] top-1/2 w-[calc(50%+2rem)] h-1 bg-amber-100 -translate-y-1/2" />
+                      <div className="absolute -right-8 top-1/2 w-[calc(50%+2rem)] h-1 bg-amber-100 -translate-y-1/2" />
                     )}
 
                     {/* Circle */}
@@ -45,7 +45,7 @@ export default function HorizontalEducationTimeline() {
                   </div>
 
                   {/* Card */}
-                  <div className="mt-10 bg-linear-to-t from-[#191E32] to-palette-four p-5 md:p-6 rounded-xl shadow-2xl/40 shadow-palette-one w-full transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2">
+                  <div className="mt-10 border border-black bg-linear-to-t from-[#191E32] to-palette-four p-5 md:p-6 rounded-xl shadow-2xl/40 shadow-palette-one w-full transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2">
                     <h3 className="text-lg md:text-xl font-bold mb-1 text-palette-two">
                       {item.school}
                     </h3>

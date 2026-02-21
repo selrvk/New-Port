@@ -1,4 +1,7 @@
 // components/sections/projects.tsx
+
+"use client"
+import { motion } from "motion/react"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 import { Car } from "lucide-react"
 
@@ -11,7 +14,12 @@ export default function Projects() {
             
             <div className="flex flex-col items-center justify-center">
 
-                <div>
+                <motion.div
+                        initial={{ opacity: 0, y: 20 }}   
+                        whileInView={{ opacity: 1, y: 0 }} 
+                        viewport={{ once: false, amount: 0.5 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                >
                     <h1 className="text-palette-one font-bebas text-6xl text-center mt-20">
                         Projects
                     </h1>
@@ -19,10 +27,9 @@ export default function Projects() {
                     <h2 className="text-palette-two font-calistoga text-2xl text-center -mt-3">
                         some of my work
                     </h2>
-                </div>
+                </motion.div>
 
                 <CarouselUI />
-
             </div>
 
         </section>

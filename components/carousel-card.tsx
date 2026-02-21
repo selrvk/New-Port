@@ -31,7 +31,7 @@ export default function CarouselCard({ project }: { project: Project }) {
 
   return (
 
-    <div className="flex flex-col text-center items-center justify-center p-6 rounded-2xl shadow-2xl/40 shadow-palette-one bg-linear-to-t from-[#191E32] to-palette-four">
+    <div className="flex flex-col text-center items-center justify-center p-6 rounded-2xl  shadow-2xl/40 shadow-palette-one bg-linear-to-t from-[#191E32] to-palette-four">
 
         <img src={project.image} alt={project.title} className="w-80 mb-4" />
             <h2 className="text-3xl font-bold font-calistoga text-palette-two">

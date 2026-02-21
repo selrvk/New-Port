@@ -27,7 +27,12 @@ export default function Skills() {
                     
                     <div className="flex flex-col items-center justify-center">
         
-                        <div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}   
+                            whileInView={{ opacity: 1, y: 0 }} 
+                            viewport={{ once: false, amount: 0.5 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                        >
                             <h1 className="text-palette-one font-bebas text-6xl text-center mt-20">
                                 Skills
                             </h1>
@@ -35,12 +40,17 @@ export default function Skills() {
                             <h2 className="text-palette-two font-calistoga text-xl text-center -mt-3">
                                 tech stack & practices
                             </h2>
-                        </div>
+                        </motion.div>
         
                     </div>
 
-                    <div className="sticky top-0 z-40 flex justify-between mt-30 px-3 py-4 
-                bg-linear-to-l from-[#1C2442] to-palette-four">
+                    <motion.div
+                            initial={{ opacity: 0, y: 20 }}   
+                            whileInView={{ opacity: 1, y: 0 }} 
+                            viewport={{ once: false, amount: 0.2 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                            className="sticky top-0 z-40 flex justify-between mt-30 px-3 py-4 
+                                        bg-linear-to-l from-[#1C2442] to-palette-four">
                         <DropdownMenu>
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
                                 Web Development
@@ -94,7 +104,7 @@ export default function Skills() {
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                    </div>
+                    </motion.div>
 
                     <h1 className="text-palette-one/50 text-center mt-40">
                         {selectedSkill.category} → {selectedSkill.type}
@@ -109,7 +119,7 @@ export default function Skills() {
                         exit={{ opacity: 0, y: -40 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     
-                    id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl">
+                    id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto border border-black shadow-xl/20 shadow-palette-one bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl">
                         <div className="flex flex-col items-center gap-3 pb-5">
                             <h2 className="text-palette-two font-bold text-4xl font-bebas mt-5">
                                 {selectedSkill.type}

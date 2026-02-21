@@ -5,6 +5,8 @@ import "./globals.css";
 import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import Education from "@/components/sections/education";
+import AboutMe from "@/components/sections/about-me";
+import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
@@ -13,6 +15,8 @@ export default function Home() {
       <Projects />
       <Skills />
       <Education />
+      <AboutMe />
+      <Contact />
     </>
   );
 }

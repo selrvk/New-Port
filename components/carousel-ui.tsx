@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "motion/react"
 import { projects } from "@/data/projects"
 import * as React from "react"
 import Autoplay from "embla-carousel-autoplay"
@@ -34,14 +35,22 @@ export function CarouselUI() {
   }, [api])
 
   return (
-    <Carousel
+
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}   
+      whileInView={{ opacity: 1, y: 0 }} 
+      viewport={{ once: false, amount: 0.2 }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
+      className="w-full h-screen mt-20"
+    >
+
+      <Carousel
       setApi={setApi}
       opts={{
         align: "center",
         loop: true,
       }}
       plugins={[plugin.current]}
-      className="w-full h-screen mt-20"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
@@ -67,5 +76,7 @@ export function CarouselUI() {
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
+
+    </motion.div>
   )
 }

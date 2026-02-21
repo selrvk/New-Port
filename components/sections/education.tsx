@@ -1,4 +1,5 @@
-import EducationCarousel from "@/components/education-carousel";
+"use client"
+import { motion } from "motion/react"
 import HorizontalEducationTimeline from "../horizontal-timeline";
 
 export default function Education() {
@@ -8,7 +9,12 @@ export default function Education() {
                     
                     <div className="flex flex-col items-center justify-center">
         
-                        <div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}   
+                            whileInView={{ opacity: 1, y: 0 }} 
+                            viewport={{ once: false, amount: 0.5 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                        >
                             <h1 className="text-palette-one font-bebas text-6xl text-center mt-20">
                                 Education
                             </h1>
@@ -16,11 +22,18 @@ export default function Education() {
                             <h2 className="text-palette-two font-calistoga text-xl text-center -mt-3">
                                 what brought me here
                             </h2>
-                        </div>
+                        </motion.div>
                         
-                        <div className="max-w-full mt-40">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}   
+                            whileInView={{ opacity: 1, y: 0 }} 
+                            viewport={{ once: false, amount: 0.2 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                            className="max-w-full mt-40"
+                        >
                             <HorizontalEducationTimeline/>
-                        </div>
+
+                        </motion.div>
                         
                     </div>
         
