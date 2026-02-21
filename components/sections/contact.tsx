@@ -6,7 +6,7 @@ import Image from "next/image"
 export default function Contact(){
 
     return (
-        <section id="contact" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="contact" className="pb-40 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
             
             <div className="flex flex-col items-center justify-center">
                     

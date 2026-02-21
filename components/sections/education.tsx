@@ -5,7 +5,7 @@ import HorizontalEducationTimeline from "../horizontal-timeline";
 export default function Education() {
 
     return (
-        <section id="education" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="education" className="pb-40 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
                     
                     <div className="flex flex-col items-center justify-center">
         

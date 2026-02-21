@@ -7,7 +7,7 @@ export default function AboutMe() {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <section id="about-me" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="about-me" className="pb-40 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
                     
                     <div className="flex flex-col items-center justify-center">
         
@@ -31,7 +31,8 @@ export default function AboutMe() {
                             whileInView={{ opacity: 1, y: 0 }} 
                             viewport={{ once: false, amount: 0.2 }}
                             transition={{ duration: 1.2, ease: "easeOut" }}
-                            className="mt-20 space-y-6 max-w-[80%] justify-center text-lg leading-relaxed text-center">
+                            className="mt-20 space-y-6 max-w-[80%] justify-center text-lg leading-relaxed text-center
+                                        md:max-w-[50%]">
                             <motion.p
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

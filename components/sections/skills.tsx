@@ -50,9 +50,11 @@ export default function Skills() {
                             viewport={{ once: false, amount: 0.2 }}
                             transition={{ duration: 1.2, ease: "easeOut" }}
                             className="sticky top-0 z-40 flex justify-between mt-30 px-3 py-4 
-                                        bg-linear-to-l from-[#1C2442] to-palette-four">
+                                        bg-linear-to-l from-[#1C2442] to-palette-four
+                                        md:justify-center md:gap-30 ">
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
+                            <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]
+                                                            md:max-w-full md:text-lg">
                                 Web Development
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">    
@@ -76,7 +78,8 @@ export default function Skills() {
                         </DropdownMenu>
 
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
+                            <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]
+                                                            md:max-w-full md:text-lg">
                                 Software Development
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
@@ -93,7 +96,8 @@ export default function Skills() {
                         </DropdownMenu>
 
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
+                            <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]
+                                                            md:max-w-full md:text-lg">
                                 Visual Graphic Design
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
@@ -119,7 +123,8 @@ export default function Skills() {
                         exit={{ opacity: 0, y: -40 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                     
-                    id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto border border-black shadow-xl/20 shadow-palette-one bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl">
+                    id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto border border-black shadow-xl/20 shadow-palette-one bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl
+                                                        md:max-w-[50%]">
                         <div className="flex flex-col items-center gap-3 pb-5">
                             <h2 className="text-palette-two font-bold text-4xl font-bebas mt-5">
                                 {selectedSkill.type}
