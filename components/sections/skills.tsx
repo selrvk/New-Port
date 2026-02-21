@@ -1,6 +1,8 @@
-
-
+"use client"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { skillsData } from "@/data/skills"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +15,13 @@ import {
 
 export default function Skills() {
 
+    const [selectedSkill, setSelectedSkill] = useState({
+        category: "Web Development",
+        type: "Front End",
+    });
+
     return (
-        <section id="skills" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="skills" className="relative min-h-screen bg-linear-to-l from-[#1C2442] to-palette-four">
                     
                     <div className="flex flex-col items-center justify-center">
         
@@ -30,18 +37,28 @@ export default function Skills() {
         
                     </div>
 
-                    <div className="flex justify-between mt-30 px-3">
+                    <div className="sticky top-0 z-40 flex justify-between mt-30 px-3 py-4 
+                bg-linear-to-l from-[#1C2442] to-palette-four">
                         <DropdownMenu>
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
                                 Web Development
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="text-palette-one bg-transparent">    
+                            <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">    
                                 <DropdownMenuGroup>
-                                <DropdownMenuItem>Front End</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() =>
+                                        setSelectedSkill({ category: "Web Development", type: "Front End" })}>
+                                        Front End
+                                    </DropdownMenuItem>
                                 <DropdownMenuSeparator/>
-                                <DropdownMenuItem>Back End</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() =>
+                                        setSelectedSkill({ category: "Web Development", type: "Back End" })}>
+                                        Back End
+                                    </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>Practices</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() =>
+                                        setSelectedSkill({ category: "Web Development", type: "Practices" })}>
+                                        Practices
+                                    </DropdownMenuItem>
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -50,11 +67,15 @@ export default function Skills() {
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
                                 Software Development
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="text-palette-one bg-transparent">
+                            <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
                                 <DropdownMenuGroup>
-                                <DropdownMenuItem>Desktop Apps</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() =>
+                                    setSelectedSkill({ category: "Software Development", type: "Desktop Apps" })
+                                }>Desktop Apps</DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>Mobile Apps</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() =>
+                                    setSelectedSkill({ category: "Software Development", type: "Mobile Apps" })
+                                }>Mobile Apps</DropdownMenuItem>
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -63,18 +84,42 @@ export default function Skills() {
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
                                 Visual Graphic Design
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="text-palette-one bg-transparent">
+                            <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
                                 <DropdownMenuGroup>
-                                <DropdownMenuItem>Brand Identity</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() =>
+                                    setSelectedSkill({ category: "Visual Graphic Design", type: "Brand Identity" })
+                                }>Brand Identity</DropdownMenuItem>
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
 
                     <h1 className="text-palette-one/50 text-center mt-40">
-                        Web Development --- Front End
+                        {selectedSkill.category} --- {selectedSkill.type}
                     </h1>
+
+                    <div id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl">
+                        <div className="flex flex-col items-center gap-3">
+                            <h2 className="text-palette-two font-bold text-4xl font-bebas mt-5">
+                                {selectedSkill.type}
+                            </h2>
+                            <ul className="mt-5 space-y-5">
+                                {skillsData[selectedSkill.category][selectedSkill.type].map((skill : string)=> (
+                                    <SkillItem key={skill} text={skill} />
+                                ))} 
+                            </ul>
+                        </div>
+                    </div>
         
         </section>
     )
+}
+
+function SkillItem({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-3">
+      <span className="text-purple-500 mt-1 text-3xl leading-none">•</span>
+      <span className="text-palette-one">{text}</span>
+    </li>
+  )
 }
