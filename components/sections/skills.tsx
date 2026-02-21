@@ -1,4 +1,6 @@
 "use client"
+
+import { AnimatePresence,motion } from "motion/react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { skillsData } from "@/data/skills"
@@ -21,7 +23,7 @@ export default function Skills() {
     });
 
     return (
-        <section id="skills" className="relative min-h-screen bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="skills" className="pb-40 relative min-h-screen bg-linear-to-l from-[#1C2442] to-palette-four">
                     
                     <div className="flex flex-col items-center justify-center">
         
@@ -97,9 +99,18 @@ export default function Skills() {
                     <h1 className="text-palette-one/50 text-center mt-40">
                         {selectedSkill.category} --- {selectedSkill.type}
                     </h1>
+                    
+                    <AnimatePresence mode="wait">
+                    <motion.div 
 
-                    <div id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl">
-                        <div className="flex flex-col items-center gap-3">
+                        key={`${selectedSkill.category}-${selectedSkill.type}`}
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -40 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                    
+                    id="skills-showcase-card" className="flex justify-center mt-10 gap-5 w-[80%] mx-auto bg-linear-to-t from-[#101425] to-palette-four p-5 rounded-2xl">
+                        <div className="flex flex-col items-center gap-3 pb-5">
                             <h2 className="text-palette-two font-bold text-4xl font-bebas mt-5">
                                 {selectedSkill.type}
                             </h2>
@@ -109,7 +120,8 @@ export default function Skills() {
                                 ))} 
                             </ul>
                         </div>
-                    </div>
+                    </motion.div>
+                    </AnimatePresence>
         
         </section>
     )

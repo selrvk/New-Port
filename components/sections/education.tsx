@@ -1,4 +1,5 @@
 import EducationCarousel from "@/components/education-carousel";
+import HorizontalEducationTimeline from "../horizontal-timeline";
 
 export default function Education() {
 
@@ -17,7 +18,9 @@ export default function Education() {
                             </h2>
                         </div>
                         
-                        <EducationCarousel />
+                        <div className="max-w-full mt-40">
+                            <HorizontalEducationTimeline/>
+                        </div>
                         
                     </div>
         
