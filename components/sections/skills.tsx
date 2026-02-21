@@ -97,7 +97,7 @@ export default function Skills() {
                     </div>
 
                     <h1 className="text-palette-one/50 text-center mt-40">
-                        {selectedSkill.category} --- {selectedSkill.type}
+                        {selectedSkill.category} → {selectedSkill.type}
                     </h1>
                     
                     <AnimatePresence mode="wait">

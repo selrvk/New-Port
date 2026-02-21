@@ -19,36 +19,53 @@ export default function HorizontalEducationTimeline() {
         {/* Horizontal container with scroll on mobile */}
         <div className="relative">
           <div className="overflow-x-auto pb-8 scrollbar-hide">
-            <div className="flex items-center justify-between min-w-max gap-8 md:gap-16 px-4">
+            <div className="flex items-start min-w-max px-4 pb-10">
               {education.map((item, index) => (
                 <div
                   key={index}
-                  className="flex flex-col items-center text-center relative group min-w-[220px] md:min-w-[280px]"
+                  className="flex flex-col items-center text-center relative group shrink-0 w-80 mx-8"
                 >
-                  {/* Circle / Milestone */}
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg z-10 transition-transform duration-300 group-hover:scale-110">
-                    <GraduationCap className="w-8 h-8 md:w-10 md:h-10" />
+                  {/* ICON WRAPPER (important) */}
+                  <div className="relative flex items-center justify-center w-full">
+                    
+                    {/* Left half line (for all except first) */}
+                    {index !== 0 && (
+                      <div className="absolute left-[-2rem] top-1/2 w-[calc(50%+2rem)] h-1 bg-amber-100 -translate-y-1/2" />
+                    )}
+
+                    {/* Right half line (for all except last) */}
+                    {index !== education.length - 1 && (
+                      <div className="absolute right-[-2rem] top-1/2 w-[calc(50%+2rem)] h-1 bg-amber-100 -translate-y-1/2" />
+                    )}
+
+                    {/* Circle */}
+                    <div className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                      <GraduationCap className="w-8 h-8 md:w-10 md:h-10" />
+                    </div>
                   </div>
 
-                  {/* Connecting line (except last) */}
-                  {index < education.length - 1 && (
-                    <div className="absolute top-8 md:top-10 left-[calc(50%+40px)] md:left-[calc(50%+50px)] right-[-50%] md:right-[-100%] h-1 bg-gradient-to-r from-primary to-primary/40 hidden md:block" />
-                  )}
-
-                  {/* Content card below */}
-                  <div className="mt-6 bg-card p-5 md:p-6 rounded-xl shadow-md border border-border w-full transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2">
-                    <h3 className="text-lg md:text-xl font-bold mb-1">{item.school}</h3>
+                  {/* Card */}
+                  <div className="mt-10 bg-linear-to-t from-[#191E32] to-palette-four p-5 md:p-6 rounded-xl shadow-2xl/40 shadow-palette-one w-full transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-2">
+                    <h3 className="text-lg md:text-xl font-bold mb-1 text-palette-two">
+                      {item.school}
+                    </h3>
                     {item.degree && (
-                      <p className="text-sm md:text-base text-primary font-medium mb-2">
+                      <p className="text-sm md:text-base text-palette-one font-medium mb-2">
                         {item.degree}
                       </p>
                     )}
-                    <p className="text-sm md:text-base text-muted-foreground">{item.year}</p>
+                    <p className="text-sm md:text-base text-muted-foreground">
+                      {item.year}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>    
+          </div>  
+
+          <div className="md:hidden text-center text-sm text-muted-foreground mt-6 italic">
+              ← Scroll horizontally to view all →
+          </div>  
         </div>
       </div>
     </section>
