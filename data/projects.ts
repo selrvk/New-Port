@@ -26,4 +26,22 @@ export const projects = [
     demo: "https://majestic-balinese.vercel.app",
     source: "https://github.com/selrvk/Majestic-Balinese"
   },
+  {
+    id: 4,
+    title: "Yoru Hotel",
+    description: "A luxury hotel website for a fictional in hotel.",
+    image: "/pictures/laptop2.png",
+    stack: ["Php","HTML5", "CSS3"],
+    demo: "https://yoruhotel.ct.ws/?i=1",
+    source: "https://github.com/selrvk/yoru-hotel"
+  },
+  {
+    id: 5,
+    title: "Para",
+    description: "An all in one information hub for public transport for Batangas.",
+    image: "/pictures/laptop2.png",
+    stack: ["NodeJS", "TypeScript"],
+    demo: "https://para-ph.vercel.app/",
+    source: "https://github.com/selrvk"
+  },
 ];

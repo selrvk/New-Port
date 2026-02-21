@@ -21,10 +21,12 @@ export default function Hero() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         
                 className="flex justify-between bg-palette-one rounded-[50] px-5 pt-2 pb-0.5 m-5 text-center">
-
-                    <h2 className="font-bebas w-10 leading-3.5 ">
-                        LET'S TALK
-                    </h2>
+                    
+                    <a href="#contact">
+                        <h2 className="font-bebas w-10 leading-3.5">
+                            LET'S TALK
+                        </h2>
+                    </a>
 
                     <h1 className="font-bebas text-2xl">
                         CHARLES ALCANTARA
@@ -78,8 +80,11 @@ export default function Hero() {
                     <h1 className="font-vietnam text-palette-one text-center w-80 self-center">
                         Hi, I'm Charles — a full-stack web developer with a strong foundation in software engineering and a passion for building clean, scalable, and user-centered digital products.
                     </h1>
-
-                    <ShimmerButton shimmerColor="#8040ed" shimmerSize="0.2em" background="rgba(225, 217, 188, 1)" className="text-black font-vietnam text-xs font-bold w-23 h-7 mt-10 mr-15 self-end">About me</ShimmerButton>
+                    
+                    <a href="#about-me" className="self-end">
+                        <ShimmerButton shimmerColor="#8040ed" shimmerSize="0.2em" background="rgba(225, 217, 188, 1)" className="text-black font-vietnam text-xs font-bold w-23 h-7 mt-10 mr-15">About me</ShimmerButton>
+                    </a>
+                    
                 </motion.div> 
 
                 {/* Socials buttons Div */}

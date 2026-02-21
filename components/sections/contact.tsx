@@ -6,7 +6,7 @@ import Image from "next/image"
 export default function Contact(){
 
     return (
-        <section id="about-me" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="contact" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
             
             <div className="flex flex-col items-center justify-center">
                     
@@ -34,7 +34,14 @@ export default function Contact(){
                         </div>
                     </motion.div>
 
-                    <div className="flex flex-col gap-5 text-palette-one font-vietnam mt-10">
+                    <motion.div 
+                
+                        initial={{ opacity: 0, y: 20 }}   
+                        whileInView={{ opacity: 1, y: 0 }} 
+                        viewport={{ once: false, amount: 0.5 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        
+                        className="flex flex-col gap-5 text-palette-one font-vietnam mt-10">
 
                         <div className="flex flex-row justify-between gap-10">
                             <Image src="/icons/con-email-icon.png" alt="Hero Image" width={50} height={50} 
@@ -54,10 +61,17 @@ export default function Contact(){
                                 +63 939 354 7380
                             </h1>
                         </div>
-                    </div>
+                    </motion.div>
                     
 
-                    <div className="flex flex-col">
+                    <motion.div 
+                
+                        initial={{ opacity: 0, y: 20 }}   
+                        whileInView={{ opacity: 1, y: 0 }} 
+                        viewport={{ once: false, amount: 0.5 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        
+                        className="flex flex-col">
 
                         <h1 className="font-vietnam text-palette-one font-bold mt-10">
                             or reach out to me on common platforms
@@ -83,7 +97,7 @@ export default function Contact(){
                             </div>
 
                         </div>
-                    </div>
+                    </motion.div>
             </div>
         </section>
     )
