@@ -49,14 +49,14 @@ export default function AboutMe() {
                                         animate={{ opacity: 1, height: "auto" }}
                                         exit={{ opacity: 0, height: 0 }}
                                         transition={{ duration: 0.5, ease: "easeInOut" }}
-                                        className="space-y-6 overflow-hidden text-palette-one font-vietnam"
+                                        className="space-y-10 overflow-hidden text-palette-one font-vietnam"
                                     >
                                         <p>
                                             I began my journey studying BS-Software Technology at De La Salle University, and I am currently pursuing BS-Information Technology at Lyceum of the Philippines University – Batangas. My academic background, combined with hands-on project experience, has shaped my ability to work across the entire development stack — from crafting intuitive user interfaces to architecting robust backend systems.
                                         </p>
                                         
                                         <p>
-                                            I'm proficient in a wide range of programming languages and frameworks, with certifications to support my technical expertise. I work confidently with front-end libraries, modern backend development, RESTful APIs, and both SQL and NoSQL databases. I also have experience in system design, cloud services (AWS), deployment pipelines, and version control with Git, enabling me to deliver complete, production-ready solutions.
+                                            I'm proficient in a wide range of programming languages and frameworks, with certifications to support my technical expertise. I work confidently with front-end libraries, modern backend development, RESTful APIs, and both SQL and NoSQL databases. I also have experience in system design, deployment pipelines, and version control with Git, enabling me to deliver complete, production-ready solutions.
                                         </p>
                                         
                                         <p>

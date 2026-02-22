@@ -1,7 +1,8 @@
 "use client";
 
 import { education } from "@/data/education";
-import { GraduationCap } from "lucide-react"; // or any icon library
+import { GraduationCap } from "lucide-react";
+import { useRef, useState } from "react";
 
 type EducationEntry = {
   year: string;
@@ -11,6 +12,29 @@ type EducationEntry = {
 };
 
 export default function HorizontalEducationTimeline() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => setIsDragging(false);
+  const handleMouseUp = () => setIsDragging(false);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5; // speed multiplier
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
   return (
     <section className="">
 
@@ -18,7 +42,14 @@ export default function HorizontalEducationTimeline() {
 
         {/* Horizontal container with scroll on mobile */}
         <div className="relative">
-          <div className="overflow-x-auto pb-8 scrollbar-hide">
+          <div
+              ref={scrollRef}
+              className="overflow-x-auto pb-8 pt-8 scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+            >
             <div className="flex items-start min-w-max px-4 pb-10">
               {education.map((item, index) => (
                 <div

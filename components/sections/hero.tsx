@@ -24,16 +24,18 @@ export default function Hero() {
                             md:bg-transparent md:text-palette-one">
                     
                     <a href="#contact">
-                        <h2 className="font-bebas w-10 leading-3.5">
+                        <h2 className="font-bebas w-10 leading-3.5 transition-transform duration-300 hover:scale-120
+                                        md:w-30 md:text-2xl">
                             LET'S TALK
                         </h2>
                     </a>
 
-                    <h1 className="font-bebas text-2xl">
+                    <h1 className="font-bebas text-2xl md:text-4xl">
                         CHARLES ALCANTARA
                     </h1>
 
-                    <h2 className="font-bebas w-10 leading-7 mt-0.5">
+                    <h2 className="font-bebas w-10 leading-7 mt-0.5
+                                    md:w-30 md:text-2xl">
                         2026
                     </h2>
 
@@ -47,7 +49,7 @@ export default function Hero() {
                         viewport={{ once: true, amount: 0.5 }}
                         transition={{ duration: 2, ease: "easeOut" }}
                         
-                className=" flex flex-row items-center justify-center mt-20 gap-2 
+                className=" flex flex-row items-center justify-center mt-30 gap-2 
                             md:gap-[5%]">
                     
                     <div className="flex flex-col">
@@ -65,10 +67,11 @@ export default function Hero() {
                         </h1>
                     </div>
 
-                    <div className="relative h-[20vh] md:h-[30vh] lg:h-[40vh] aspect-[3/3]"> 
+                    <div className="relative h-[20vh] md:h-[30vh] lg:h-[40vh] aspect-3/3"> 
                         <Image
                             src="/pictures/my-closeup.png"
-                            alt="Hero Image"
+                            title="so handsome oh my"
+                            alt="Very handsome picture of Charles"
                             fill
                             className="object-cover rounded-lg"
                             priority 
@@ -92,12 +95,12 @@ export default function Hero() {
                         Hi, I'm Charles — a full-stack web developer with a strong foundation in software engineering and a passion for building clean, scalable, and user-centered digital products.
                     </h1>
                     
-                    <a href="#about-me" className=" self-end 
+                    <a href="#about-me" className=" self-center 
                                                     md:self-center">
-                        <ShimmerButton shimmerColor="#8040ed" shimmerSize="0.2em" background="rgba(225, 217, 188, 1)" className="text-black font-vietnam text-xs font-bold w-23 h-7 mt-10 mr-15 md:mr-0">About me</ShimmerButton>
+                        <ShimmerButton shimmerColor="#8040ed" shimmerSize="0.2em" background="rgba(225, 217, 188, 1)" className="transition-transform hover:scale-130 text-black font-vietnam text-xs font-bold w-23 h-7 mt-10">About me</ShimmerButton>
                     </a>
                     
-                </motion.div> 
+                </motion.div>   
 
                 {/* Socials buttons Div */}
                 <motion.div 
@@ -107,21 +110,21 @@ export default function Hero() {
                         viewport={{ once: true, amount: 0.5 }}
                         transition={{ duration: 3, ease: "easeOut" }}
                         
-                className=" flex justify-between px-25 mt-15 
-                            md:gap-10 md:justify-center md:flex-row">
+                className=" flex justify-center gap-20 px-25 mt-15 
+                            md:gap-30 md:justify-center md:flex-row">
 
-                    <a href="https://github.com/selrvk">
-                        <Image src="/icons/git-icon-coloured.png" alt="Hero Image" width={30} height={40} 
+                    <a href="https://github.com/selrvk" className="transition-transform duration-300 hover:scale-120">
+                        <Image src="/icons/git-icon-coloured.png" alt="Hero Image" width={35} height={35} 
                         className="" />
                     </a>
 
-                    <a href="https://linkedin/in/charles-alcantara">
-                        <Image src="/icons/linkedin-icon-coloured.png" alt="Hero Image" width={30} height={40} 
+                    <a href="https://linkedin/in/charles-alcantara" className="transition-transform duration-300 hover:scale-120">
+                        <Image src="/icons/linkedin-icon-coloured.png" alt="Hero Image" width={35} height={35} 
                         className="" />
                     </a>
 
-                    <a href="https://instagram.com/selrvk">
-                        <Image src="/icons/insta-icon-coloured.png" alt="Hero Image" width={30} height={40} 
+                    <a href="https://instagram.com/selrvk" className="transition-transform duration-300 hover:scale-120">
+                        <Image src="/icons/insta-icon-coloured.png" alt="Hero Image" width={35} height={35} 
                         className="" />
                     </a>
                 </motion.div>

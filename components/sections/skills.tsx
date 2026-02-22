@@ -4,6 +4,8 @@ import { AnimatePresence,motion } from "motion/react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { skillsData } from "@/data/skills"
+import { SkillCategory } from "@/data/skills"
+import { SkillType } from "@/data/skills"
 
 import {
   DropdownMenu,
@@ -17,10 +19,15 @@ import {
 
 export default function Skills() {
 
-    const [selectedSkill, setSelectedSkill] = useState({
+    const [selectedSkill, setSelectedSkill] = useState<{
+        category: SkillCategory;
+        type: string;
+    }>({
         category: "Web Development",
         type: "Front End",
     });
+
+    const currentCategory = skillsData[selectedSkill.category];
 
     return (
         <section id="skills" className="pb-40 relative min-h-screen bg-linear-to-l from-[#1C2442] to-palette-four">
@@ -54,7 +61,7 @@ export default function Skills() {
                                         md:justify-center md:gap-30 ">
                         <DropdownMenu>
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]
-                                                            md:max-w-full md:text-lg">
+                                                            md:max-w-full md:text-lg transition-transform duration-300 hover:scale-120">
                                 Web Development
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">    
@@ -79,7 +86,7 @@ export default function Skills() {
 
                         <DropdownMenu>
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]
-                                                            md:max-w-full md:text-lg">
+                                                            md:max-w-full md:text-lg transition-transform duration-300 hover:scale-120">
                                 Software Development
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
@@ -97,7 +104,7 @@ export default function Skills() {
 
                         <DropdownMenu>
                             <DropdownMenuTrigger className="font-bold p-2 max-w-[30%] rounded-2xl text-sm text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]
-                                                            md:max-w-full md:text-lg">
+                                                            md:max-w-full md:text-lg transition-transform duration-300 hover:scale-120">
                                 Visual Graphic Design
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="text-palette-one bg-linear-to-t from-[#59607F] to-[#546197]">
@@ -130,7 +137,7 @@ export default function Skills() {
                                 {selectedSkill.type}
                             </h2>
                             <ul className="mt-5 space-y-5">
-                                {skillsData[selectedSkill.category][selectedSkill.type].map((skill : string)=> (
+                                {(skillsData[selectedSkill.category] as any)[selectedSkill.type].map((skill : string)=> (
                                     <SkillItem key={skill} text={skill} />
                                 ))} 
                             </ul>
@@ -145,8 +152,8 @@ export default function Skills() {
 function SkillItem({ text }: { text: string }) {
   return (
     <li className="flex items-start gap-3">
-      <span className="text-purple-500 mt-1 text-3xl leading-none">•</span>
-      <span className="text-palette-one">{text}</span>
+      <span className="text-purple-500 text-3xl leading-none">•</span>
+      <span className="text-palette-one mt-1.5">{text}</span>
     </li>
   )
 }

@@ -48,3 +48,6 @@ export const skillsData = {
   },
 
 } as const;
+
+export type SkillCategory = keyof typeof skillsData;
+export type SkillType<T extends SkillCategory> = keyof typeof skillsData[T];

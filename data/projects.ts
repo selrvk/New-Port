@@ -3,7 +3,7 @@ export const projects = [
     id: 1,
     title: "E-Commerce Website",
     description: "Full-stack e-commerce app with cart & checkout.",
-    stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+    stack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     image: "/pictures/laptop2.png",
     demo: "https://ecommerce-demo.com",
     source: "https://github.com/selrvk/eCommerce"
@@ -13,7 +13,7 @@ export const projects = [
     title: "Inventory Management System",
     description: "An Inventory Management System for a local business in Batangas.",
     image: "/pictures/laptop2.png",
-    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
+    stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
     demo: "https://fnv-inventory.vercel.app",
     source: "https://github.com/selrvk/fnv-inventory"
   },
@@ -22,7 +22,7 @@ export const projects = [
     title: "Majestic Balinese",
     description: "A luxury resort website for a resort in Calatagan, Batangas.",
     image: "/pictures/laptop2.png",
-    stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+    stack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     demo: "https://majestic-balinese.vercel.app",
     source: "https://github.com/selrvk/Majestic-Balinese"
   },
@@ -31,7 +31,7 @@ export const projects = [
     title: "Yoru Hotel",
     description: "A luxury hotel website for a fictional in hotel.",
     image: "/pictures/laptop2.png",
-    stack: ["Php","HTML5", "CSS3"],
+    stack: ["React", "Php","HTML5", "CSS3"],
     demo: "https://yoruhotel.ct.ws/?i=1",
     source: "https://github.com/selrvk/yoru-hotel"
   },
@@ -40,7 +40,7 @@ export const projects = [
     title: "Para",
     description: "An all in one information hub for public transport for Batangas.",
     image: "/pictures/laptop2.png",
-    stack: ["NodeJS", "TypeScript"],
+    stack: ["React", "NodeJS", "TypeScript"],
     demo: "https://para-ph.vercel.app/",
     source: "https://github.com/selrvk"
   },
