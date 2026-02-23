@@ -24,7 +24,7 @@ export default function Contact(){
                             Keep in touch
                         </h2>
 
-                        <div className="text-center mt-20 text-palette-one font-vietnam font-bold">
+                        <div className="text-center mt-20 text-palette-one font-vietnam font-bold text-xl">
                             <h1>
                                 Have a project or design in mind?
                             </h1>
@@ -41,26 +41,33 @@ export default function Contact(){
                         viewport={{ once: false, amount: 0.5 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
                         
-                        className="flex flex-col gap-5 text-palette-one font-vietnam mt-10">
+                        className="">
+                        
+                        <div className="grid grid-cols-2 grid-rows-2 gap-10 mt-10 text-palette-one font-vietnam">
+                            <div className="flex justify-center">
+                                <Image src="/icons/con-email-icon.png" alt="Hero Image" width={50} height={50} 
+                                    className="rounded-full bg-palette-one" />
+                            </div>
 
-                        <div className="flex flex-row justify-between gap-10">
-                            <Image src="/icons/con-email-icon.png" alt="Hero Image" width={50} height={50} 
-                                className="rounded-full bg-palette-one" />
+                            <div>
+                                <h1>
+                                    selrvk@gmail.com
+                                </h1>
+                            </div>
                             
-                            <h1>
-                                selrvk@gmail.com
-                            </h1>
+
+                            <div className="flex justify-center">
+                                <Image src="/icons/con-phone-icon.png" alt="Hero Image" width={50} height={50} 
+                                    className="rounded-full bg-palette-one" />
+                            </div>
+
+                            <div>
+                                <h1>
+                                    +63 939 354 7380
+                                </h1>
+                            </div>
                         </div>
                         
-
-                        <div className="flex flex-row justify-between">
-                            <Image src="/icons/con-phone-icon.png" alt="Hero Image" width={50} height={50} 
-                                className="rounded-full bg-palette-one" />
-                            
-                            <h1>
-                                +63 939 354 7380
-                            </h1>
-                        </div>
                     </motion.div>
                     
 
@@ -71,26 +78,31 @@ export default function Contact(){
                         viewport={{ once: false, amount: 0.5 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
                         
-                        className="flex flex-col">
+                        className="">
 
-                        <h1 className="font-vietnam text-palette-one font-bold mt-10">
+                        <h1 className="font-vietnam text-palette-one font-bold mt-10 text-center text-xl">
                             or reach out to me on common platforms
                         </h1>
 
-                        <div className="flex flex-col justify-center text-palette-one font-vietnam mt-10 gap-10 text-lg">
+                        <div className="grid grid-cols-2 grid-rows-2 text-palette-one font-vietnam mt-10 gap-10 text-lg">
 
-                            <div className="flex justify-between">
-                                <Image src="/icons/con-dc-icon.jpg" alt="Hero Image" width={50} height={50} 
+                            <div className="flex justify-center">
+                                <Image src="/icons/con-dc-icon.jpg" alt="Discord Icon" width={50} height={50} 
                                 className="rounded-sm" />
+                            </div>
 
+                            <div>
                                 <h1>
                                     selrvk
                                 </h1>
                             </div>
 
-                            <div className="flex justify-between">
-                                <Image src="/icons/con-ig-icon.png" alt="Hero Image" width={50} height={50} 
+                            <div className="flex justify-center ">
+                                <Image src="/icons/con-ig-icon.png" alt="Instagram Icon" width={50} height={50} 
                                 className="" />
+                            </div>
+
+                            <div>
                                 <h1>
                                     instagram.com/selrvk
                                 </h1>

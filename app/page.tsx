@@ -7,6 +7,7 @@ import Skills from "@/components/sections/skills";
 import Education from "@/components/sections/education";
 import AboutMe from "@/components/sections/about-me";
 import Contact from "@/components/sections/contact";
+import Languages from "@/components/sections/languages";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Skills />
       <Education />
       <AboutMe />
+      <Languages />
       <Contact />
     </>
   );

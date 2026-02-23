@@ -113,17 +113,17 @@ export default function Hero() {
                 className=" flex justify-center gap-20 px-25 mt-15 
                             md:gap-30 md:justify-center md:flex-row">
 
-                    <a href="https://github.com/selrvk" className="transition-transform duration-300 hover:scale-120">
+                    <a href="https://github.com/selrvk" target="_blank" className="transition-transform duration-300 hover:scale-120">
                         <Image src="/icons/git-icon-coloured.png" alt="Hero Image" width={35} height={35} 
                         className="" />
                     </a>
 
-                    <a href="https://linkedin/in/charles-alcantara" className="transition-transform duration-300 hover:scale-120">
+                    <a href="https://linkedin.com/in/charles-alcantara" target="_blank" className="transition-transform duration-300 hover:scale-120">
                         <Image src="/icons/linkedin-icon-coloured.png" alt="Hero Image" width={35} height={35} 
                         className="" />
                     </a>
 
-                    <a href="https://instagram.com/selrvk" className="transition-transform duration-300 hover:scale-120">
+                    <a href="https://instagram.com/selrvk" target="_blank" className="transition-transform duration-300 hover:scale-120">
                         <Image src="/icons/insta-icon-coloured.png" alt="Hero Image" width={35} height={35} 
                         className="" />
                     </a>
