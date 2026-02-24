@@ -7,7 +7,7 @@ export default function AboutMe() {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <section id="about-me" className="pb-40 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="about-me" className="pb-80 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
                     
                     <div className="flex flex-col items-center justify-center">
         

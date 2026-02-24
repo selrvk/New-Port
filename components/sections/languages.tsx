@@ -15,7 +15,7 @@ export default function Languages() {
             ([entry]) => {
             if (entry.isIntersecting) setInView(true)
             },
-            { threshold: 0.5 } // 50% visible
+            { threshold: 0.5 }
         )
         if (ref.current) observer.observe(ref.current)
         return () => {
@@ -26,7 +26,7 @@ export default function Languages() {
     
 
     return (
-        <section id="languages" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="languages" className="pb-80 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
             
             <div className="flex flex-col items-center justify-center">
 
@@ -40,7 +40,7 @@ export default function Languages() {
                         Languages
                     </h1>
 
-                    <h2 className="text-palette-two font-calistoga text-2xl text-center -mt-3">
+                    <h2 className="text-palette-two font-calistoga text-xl text-center -mt-3">
                         (not programming ones)
                     </h2>
                 </motion.div>
@@ -50,26 +50,26 @@ export default function Languages() {
                         whileInView={{ opacity: 1, y: 0 }} 
                         viewport={{ once: false, amount: 0.5 }}
                         transition={{ duration: 1.2, ease: "easeOut" }} 
-                    className="grid grid-rows-3 grid-cols-2 justify-items-center gap-10 text-palette-one text-2xl font-bebas mt-35">
+                    className="grid grid-rows-3 grid-cols-2 justify-items-center gap-10 text-palette-one text-2xl mt-35 pb-10">
                     
-                    <div className="flex items-center">
+                    <div className="flex items-center font-bebas">
                         <h1>
                             English
                         </h1>
                     </div>
-                        <AnimatedCircularProgressBar value={90} gaugePrimaryColor="#F0F0DB" gaugeSecondaryColor="#ACBAC4"/>
-                    <div className="flex items-center">
+                        <AnimatedCircularProgressBar className="max-w-30 md:max-w-50" value={90} gaugePrimaryColor="#F0F0DB" gaugeSecondaryColor="#ACBAC4"/>
+                    <div className="flex items-center font-bebas">
                         <h1>
                             Filipino
                         </h1>
                     </div>
-                    <AnimatedCircularProgressBar value={80} gaugePrimaryColor="#F0F0DB" gaugeSecondaryColor="#ACBAC4"/>
-                    <div className="flex items-center">
+                    <AnimatedCircularProgressBar className="max-w-30 md:max-w-50" value={80} gaugePrimaryColor="#F0F0DB" gaugeSecondaryColor="#ACBAC4"/>
+                    <div className="flex items-center font-bebas">
                         <h1>
                             Spanish
                         </h1>
                     </div>
-                    <AnimatedCircularProgressBar min={0} max={100} value={15} gaugePrimaryColor="#F0F0DB" gaugeSecondaryColor="#ACBAC4"/>
+                    <AnimatedCircularProgressBar className="max-w-30 md:max-w-50" min={0} max={100} value={15} gaugePrimaryColor="#F0F0DB" gaugeSecondaryColor="#ACBAC4"/>
                 </motion.div>
 
 

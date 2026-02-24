@@ -10,7 +10,7 @@ import { CarouselUI } from "../carousel-ui"
 
 export default function Projects() {
     return (
-        <section id="projects" className="relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="projects" className="pb-40 relative min-h-screen overflow-hidden bg-linear-to-l from-[#1C2442] to-palette-four">
             
             <div className="flex flex-col items-center justify-center">
 
@@ -24,7 +24,7 @@ export default function Projects() {
                         Projects
                     </h1>
 
-                    <h2 className="text-palette-two font-calistoga text-2xl text-center -mt-3">
+                    <h2 className="text-palette-two font-calistoga text-xl text-center -mt-3">
                         some of my work
                     </h2>
                 </motion.div>

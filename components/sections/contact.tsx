@@ -24,7 +24,7 @@ export default function Contact(){
                             Keep in touch
                         </h2>
 
-                        <div className="text-center mt-20 text-palette-one font-vietnam font-bold text-xl">
+                        <div className="text-center mt-20 text-palette-one font-vietnam font-bold text-md md:text-xl">
                             <h1>
                                 Have a project or design in mind?
                             </h1>
@@ -43,14 +43,14 @@ export default function Contact(){
                         
                         className="">
                         
-                        <div className="grid grid-cols-2 grid-rows-2 gap-10 mt-10 text-palette-one font-vietnam">
+                        <div className="grid grid-cols-2 grid-rows-2 gap-5 md:gap-10 mt-10 text-palette-one font-vietnam">
                             <div className="flex justify-center">
                                 <Image src="/icons/con-email-icon.png" alt="Hero Image" width={50} height={50} 
                                     className="rounded-full bg-palette-one" />
                             </div>
 
-                            <div>
-                                <h1>
+                            <div className="flex items-center">
+                                <h1 className="text-sm md:text-md lg:text-lg">
                                     selrvk@gmail.com
                                 </h1>
                             </div>
@@ -61,8 +61,8 @@ export default function Contact(){
                                     className="rounded-full bg-palette-one" />
                             </div>
 
-                            <div>
-                                <h1>
+                            <div className="flex items-center">
+                                <h1 className="text-sm md:text-md lg:text-lg">
                                     +63 939 354 7380
                                 </h1>
                             </div>
@@ -80,30 +80,30 @@ export default function Contact(){
                         
                         className="">
 
-                        <h1 className="font-vietnam text-palette-one font-bold mt-10 text-center text-xl">
+                        <h1 className="font-vietnam text-palette-one font-bold mt-10 text-center text-md md:text-xl">
                             or reach out to me on common platforms
                         </h1>
 
-                        <div className="grid grid-cols-2 grid-rows-2 text-palette-one font-vietnam mt-10 gap-10 text-lg">
+                        <div className="grid grid-cols-2 grid-rows-2 text-palette-one font-vietnam mt-10 gap-5 md:gap-10 text-lg">
 
                             <div className="flex justify-center">
                                 <Image src="/icons/con-dc-icon.jpg" alt="Discord Icon" width={50} height={50} 
                                 className="rounded-sm" />
                             </div>
 
-                            <div>
-                                <h1>
+                            <div className="flex items-center">
+                                <h1 className="text-sm md:text-md lg:text-lg">
                                     selrvk
                                 </h1>
                             </div>
 
-                            <div className="flex justify-center ">
+                            <div className="flex justify-center">
                                 <Image src="/icons/con-ig-icon.png" alt="Instagram Icon" width={50} height={50} 
                                 className="" />
                             </div>
 
-                            <div>
-                                <h1>
+                            <div className="flex items-center">
+                                <h1 className="text-sm md:text-md lg:text-lg">
                                     instagram.com/selrvk
                                 </h1>
                             </div>

@@ -30,7 +30,7 @@ export default function Skills() {
     const currentCategory = skillsData[selectedSkill.category];
 
     return (
-        <section id="skills" className="pb-40 relative min-h-screen bg-linear-to-l from-[#1C2442] to-palette-four">
+        <section id="skills" className="pb-80 relative min-h-screen bg-linear-to-l from-[#1C2442] to-palette-four">
                     
                     <div className="flex flex-col items-center justify-center">
         
