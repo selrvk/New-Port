@@ -8,6 +8,7 @@ import Education from "@/components/sections/education";
 import AboutMe from "@/components/sections/about-me";
 import Contact from "@/components/sections/contact";
 import Languages from "@/components/sections/languages";
+import Certifications from "@/components/sections/certifications";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <Projects />
       <Skills />
+      <Certifications/>
       <Education />
       <AboutMe />
       <Languages />

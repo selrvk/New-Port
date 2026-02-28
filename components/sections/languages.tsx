@@ -5,7 +5,6 @@ import { useRef } from "react"
 
 const SPRING = [0.16, 1, 0.3, 1] as const
 
-// ── Language data ──────────────────────────────────────────────────────────────
 const LANGUAGES = [
   {
     name:       "English",
@@ -30,7 +29,6 @@ const LANGUAGES = [
   },
 ]
 
-// ── Level → neon intensity ─────────────────────────────────────────────────────
 const LEVEL_COLOR: Record<string, string> = {
   Native:       "#E8FF47",   // full neon
   Fluent:       "#E8FF47",   // full neon
@@ -125,7 +123,6 @@ export default function Languages() {
   )
 }
 
-// ── Individual language row ────────────────────────────────────────────────────
 function LanguageRow({
   lang,
   index,

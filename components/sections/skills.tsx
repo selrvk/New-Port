@@ -4,13 +4,11 @@ import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { skillsData, SkillCategory } from "@/data/skills"
 
-// ── Types ─────────────────────────────────────────────────────────────────────
 type ActiveSkill = {
   category: SkillCategory
   type: string
 }
 
-// ── All nav items flat — category + subtypes ──────────────────────────────────
 const NAV: { category: SkillCategory; type: string; index: string }[] = [
   { category: "Web Development",       type: "Front End",     index: "01" },
   { category: "Web Development",       type: "Back End",      index: "02" },
@@ -20,7 +18,6 @@ const NAV: { category: SkillCategory; type: string; index: string }[] = [
   { category: "Visual Graphic Design", type: "Brand Identity",index: "06" },
 ]
 
-// Map category → short label for the group header
 const CATEGORY_LABELS: Record<SkillCategory, string> = {
   "Web Development":       "web_dev",
   "Software Development":  "software_dev",
@@ -100,10 +97,8 @@ export default function Skills() {
         </motion.div>
       </div>
 
-      {/* ── Two-panel IDE layout ── */}
       <div className="flex min-h-[60vh] flex-col md:flex-row">
 
-        {/* ── LEFT: file-explorer nav ── */}
         <motion.aside
           initial={{ opacity: 0, x: -16 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -175,7 +170,6 @@ export default function Skills() {
           </div>
         </motion.aside>
 
-        {/* ── RIGHT: skill display panel ── */}
         <div className="flex flex-1 flex-col">
 
           {/* Panel tab bar */}
@@ -255,7 +249,6 @@ export default function Skills() {
   )
 }
 
-// ── Skill item — card with hover glow ─────────────────────────────────────────
 function SkillItem({ text, index }: { text: string; index: number }) {
   return (
     <div
