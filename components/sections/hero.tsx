@@ -212,7 +212,6 @@ export default function Hero() {
                     transition={slideTransition(delay)}
                     className={[
                       "font-syne block select-none",
-                      // Tighter on mobile, scales up — won't clip on small screens
                       "text-[clamp(2.2rem,7vw,7.5rem)]",
                       "font-extrabold leading-[0.9] tracking-[-0.03em]",
                       outline ? "text-outline-paper" : "",
@@ -233,12 +232,12 @@ export default function Hero() {
               transition={fadeTransition(0.85)}
               className="flex flex-col gap-5 border-t border-ca-rule pt-5 md:flex-row md:items-end md:justify-between"
             >
-              <p className="font-jakarta max-w-[38ch] text-sm leading-relaxed text-slate-400/50">
+              <p className="font-jakarta max-w-[38ch] text-sm leading-relaxed text-white/60">
                 Full-stack developer &amp; UI/UX designer from the Philippines.
                 Building products that are{" "}
-                <span className="font-medium text-white">technically solid</span>
+                <span className="font-bold text-white">technically solid</span>
                 {" "}and{" "}
-                <span className="font-medium text-ca-neon">visually sharp.</span>
+                <span className="font-bold text-ca-neon">visually sharp.</span>
               </p>
 
               <div className="flex flex-shrink-0 items-center gap-3">
@@ -323,7 +322,7 @@ export default function Hero() {
 
               {/* Tags */}
               <div className="tag-panel px-5 py-4">
-                <p className="font-mono mb-3 text-[0.54rem] uppercase tracking-[0.18em] text-ca-muted">
+                <p className="font-mono mb-3 text-[0.54rem] uppercase tracking-[0.18em] text-white/40">
                   Role / Expertise
                 </p>
                 <div className="flex flex-wrap gap-1.5 ">
@@ -352,15 +351,15 @@ export default function Hero() {
           <div className="marquee-track">
             {Array(10).fill(null).map((_, i) => (
               <span key={i} className="mx-8 inline-flex items-center gap-8">
-                <span className="font-syne text-[0.62rem] font-bold uppercase tracking-[0.22em] text-ca-rule">
+                <span className="font-syne text-[0.62rem] font-bold uppercase tracking-[0.22em] text-ca-hot/40">
                   Full-Stack Developer
                 </span>
                 <span className="text-[5px] text-ca-neon">◆</span>
-                <span className="font-syne text-[0.62rem] font-bold uppercase tracking-[0.22em] text-ca-rule">
+                <span className="font-syne text-[0.62rem] font-bold uppercase tracking-[0.22em] text-ca-neon/40">
                   UI/UX Designer
                 </span>
                 <span className="text-[5px] text-ca-hot">◆</span>
-                <span className="font-syne text-[0.62rem] font-bold uppercase tracking-[0.22em] text-ca-rule">
+                <span className="font-syne text-[0.62rem] font-bold uppercase tracking-[0.22em] text-white/40">
                   Charles Alcantara
                 </span>
                 <span className="text-[5px] text-ca-neon">◆</span>

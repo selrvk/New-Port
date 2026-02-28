@@ -220,12 +220,12 @@ function CertCard({
         </div>
 
         {/* Cert name */}
-        <h3 className="font-syne text-[0.9rem] font-extrabold leading-tight tracking-[-0.01em] text-ca-paper">
+        <h3 className="font-zen text-[1.2rem] font-light leading-tight tracking-[-0.01em] text-ca-paper">
           {cert.name}
         </h3>
 
         {/* Issuer full name */}
-        <p className="font-jakarta text-[0.72rem] leading-snug text-ca-muted">
+        <p className="font-jakarta text-[0.72rem] leading-snug text-ca-paper/50">
           {cert.issuer}
         </p>
 
@@ -236,7 +236,7 @@ function CertCard({
               className="inline-block h-1.5 w-1.5 rounded-full bg-ca-neon"
               style={{ boxShadow: "0 0 6px rgba(232,255,71,0.6)" }}
             />
-            <span className="font-mono text-[0.56rem] uppercase tracking-[0.12em] text-ca-muted">
+            <span className="font-mono text-[0.56rem] uppercase tracking-[0.12em] text-ca-paper/50">
               Valid until {cert.validUntil}
             </span>
           </div>
@@ -248,7 +248,7 @@ function CertCard({
             {cert.skills.map((skill) => (
               <span
                 key={skill}
-                className="font-mono border border-ca-rule px-2 py-0.5 text-[0.55rem] uppercase tracking-wider text-ca-muted"
+                className="font-mono border border-ca-rule px-2 py-0.5 text-[0.55rem] uppercase tracking-wider text-ca-paper/40"
               >
                 {skill}
               </span>
@@ -261,7 +261,7 @@ function CertCard({
       {(cert.credentialId || cert.credentialUrl) && (
         <div className="flex items-center justify-between gap-3 border-t border-ca-rule px-5 py-3">
           {cert.credentialId && (
-            <span className="font-mono text-[0.52rem] tracking-[0.1em] text-ca-muted opacity-50 truncate">
+            <span className="font-mono text-[0.52rem] tracking-[0.1em] text-ca-hot opacity-70 truncate">
               ID: {cert.credentialId}
             </span>
           )}

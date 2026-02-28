@@ -84,7 +84,7 @@ export default function CarouselCard({
 
         {/* Title row */}
         <div className="flex items-start justify-between gap-3">
-          <h2 className="font-syne text-xl font-extrabold leading-tight tracking-[-0.02em] text-ca-paper">
+          <h2 className="font-zen text-xl leading-tight tracking-[-0.02em] text-ca-paper">
             {project.title}
           </h2>
           {isActive && (
@@ -98,7 +98,7 @@ export default function CarouselCard({
         </div>
 
         {/* Description */}
-        <p className="font-jakarta text-sm leading-relaxed text-ca-muted">
+        <p className="font-jakarta text-sm leading-relaxed text-white/40">
           {project.description}
         </p>
 

@@ -110,10 +110,10 @@ export default function Contact() {
               </span>
             </h2>
 
-            <p className="font-jakarta mt-8 max-w-[38ch] text-sm leading-relaxed text-ca-muted">
+            <p className="font-jakarta mt-8 max-w-[38ch] text-sm leading-relaxed text-ca-paper/70">
               I'm open to freelance work, collaborations, and full-time opportunities.
               Whether it's a product idea, a design system, or just a conversation —
-              {" "}<span className="text-ca-paper font-medium">reach out.</span>
+              {" "}<span className="text-ca-neon font-medium">reach out.</span>
             </p>
           </motion.div>
 

@@ -117,16 +117,16 @@ export default function HorizontalEducationTimeline() {
                   }}
                 >
                   {/* Year badge */}
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-1 ">
                     <span
-                      className="font-mono text-[0.56rem] uppercase tracking-[0.2em]"
+                      className="font-mono text-[0.56rem] uppercase tracking-[0.2em] "
                       style={{ color: isActive ? "#E8FF47" : "#6B6860" }}
                     >
                       {item.year}
                     </span>
                     {isActive && (
                       <span
-                        className="h-px flex-1"
+                        className="h-px flex-1 "
                         style={{
                           background: "linear-gradient(90deg, #E8FF47, transparent)",
                           opacity: 0.4,
@@ -136,13 +136,13 @@ export default function HorizontalEducationTimeline() {
                   </div>
 
                   {/* School */}
-                  <h3 className="font-syne text-base font-extrabold leading-tight tracking-[-0.01em] text-ca-paper">
+                  <h3 className="font-zen text-[1.2rem] font-light leading-tight tracking-[-0.01em] text-ca-paper">
                     {item.school}
                   </h3>
 
                   {/* Degree */}
                   {item.degree && (
-                    <p className="font-jakarta text-[0.78rem] leading-snug text-ca-muted">
+                    <p className="font-jakarta text-[0.78rem] leading-snug text-ca-paper/40">
                       {item.degree}
                     </p>
                   )}
@@ -156,7 +156,7 @@ export default function HorizontalEducationTimeline() {
 
                   {/* Bottom index tag */}
                   <div className="mt-3 flex items-center gap-2 border-t border-ca-rule pt-3">
-                    <span className="font-mono text-[0.52rem] uppercase tracking-[0.14em] text-ca-muted opacity-50">
+                    <span className="font-mono text-[0.52rem] uppercase tracking-[0.14em] text-ca-muted opacity-90">
                       entry_{String(index + 1).padStart(2, "0")}
                     </span>
                     <div

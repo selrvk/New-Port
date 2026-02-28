@@ -281,7 +281,7 @@ function SkillItem({ text, index }: { text: string; index: number }) {
       />
 
       {/* Skill name */}
-      <span className="font-mono text-[0.72rem] text-ca-muted transition-colors duration-200 group-hover:text-ca-paper">
+      <span className="font-mono text-[0.72rem] text-ca-paper/70 transition-colors duration-200 group-hover:text-ca-paper">
         {text}
       </span>
     </div>

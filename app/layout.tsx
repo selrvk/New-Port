@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Be_Vietnam_Pro, Calistoga, Syne, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, Be_Vietnam_Pro, Calistoga, Syne, Plus_Jakarta_Sans, JetBrains_Mono, Zen_Dots } from "next/font/google";
 import "./globals.css";
+
+const zenDots = Zen_Dots({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-zen-dots",
+})
 
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
