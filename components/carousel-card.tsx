@@ -1,7 +1,7 @@
 import LogoLoop from "./LogoLoop"
 import {
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss,
-  SiPhp, SiHtml5, SiCss3, SiNodedotjs, SiSupabase,
+  SiPhp, SiHtml5, SiCss3, SiNodedotjs, SiSupabase, SiVite
 } from "react-icons/si"
 
 type Project = {
@@ -15,6 +15,7 @@ type Project = {
 
 const techLogos = [
   { node: <SiReact      style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "React",       href: "https://react.dev" },
+  { node: <SiVite      style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "Vite",       href: "https://vite.dev" },
   { node: <SiNextdotjs  style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "Next.js",     href: "https://nextjs.org" },
   { node: <SiTypescript style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "TypeScript",  href: "https://www.typescriptlang.org" },
   { node: <SiTailwindcss style={{ color: "#E8FF47", opacity: 0.7 }}/>, title: "Tailwind CSS",href: "https://tailwindcss.com" },

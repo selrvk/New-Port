@@ -1,18 +1,18 @@
 export const projects = [
   {
     id: 1,
-    title: "E-Commerce Website",
-    description: "Full-stack e-commerce app with cart & checkout.",
-    stack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-    image: "/pictures/laptop2.png",
-    demo: "https://ecommerce-demo.com",
-    source: "https://github.com/selrvk/eCommerce"
+    title: "System Administration & Automation System",
+    description: "Full-stack SADAS app with database from Supabase",
+    stack: ["React", "Vite", "TypeScript", "Tailwind CSS", "Supabase"],
+    image: "/pictures/sadas-img.png",
+    demo: "https://sadas.selrvk.dev",
+    source: "https://github.com/selrvk/sadas"
   },
   {
     id: 2,
     title: "Inventory Management System",
     description: "An Inventory Management System for a local business in Batangas.",
-    image: "/pictures/laptop2.png",
+    image: "/pictures/fnv-img.png",
     stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
     demo: "https://fnv-inventory.vercel.app",
     source: "https://github.com/selrvk/fnv-inventory"
@@ -21,7 +21,7 @@ export const projects = [
     id: 3,
     title: "Majestic Balinese",
     description: "A luxury resort website for a resort in Calatagan, Batangas.",
-    image: "/pictures/laptop2.png",
+    image: "/pictures/majestic-img.png",
     stack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     demo: "https://majestic-balinese.vercel.app",
     source: "https://github.com/selrvk/Majestic-Balinese"
@@ -39,7 +39,7 @@ export const projects = [
     id: 5,
     title: "Para",
     description: "An all in one information hub for public transport for Batangas.",
-    image: "/pictures/laptop2.png",
+    image: "/pictures/para-img.png",
     stack: ["React", "NodeJS", "TypeScript"],
     demo: "https://para-ph.vercel.app/",
     source: "https://github.com/selrvk"
