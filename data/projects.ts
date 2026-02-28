@@ -28,11 +28,11 @@ export const projects = [
   },
   {
     id: 4,
-    title: "Yoru Hotel",
-    description: "A luxury hotel website for a fictional in hotel.",
-    image: "/pictures/laptop2.png",
-    stack: ["React", "Php","HTML5", "CSS3"],
-    demo: "https://yoruhotel.ct.ws/?i=1",
+    title: "Selrvk Skies",
+    description: "A weather Next.js app with WeatherAPI.",
+    image: "/pictures/weather-img.png",
+    stack: ["React","HTML5", "CSS3", "Next.js"],
+    demo: "https://skies.selrvk.dev",
     source: "https://github.com/selrvk/yoru-hotel"
   },
   {
