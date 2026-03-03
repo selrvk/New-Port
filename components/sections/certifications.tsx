@@ -8,6 +8,7 @@ const SPRING = [0.16, 1, 0.3, 1] as const
 
 const ISSUER_CODE: Record<string, string> = {
   "TESDA (Technical Education and Skills Development Authority)": "TESDA",
+  "Cisco Networking Academy": "CISCO",
   "Johns Hopkins University": "JHU",
   "Board Infinity":           "BI",
   "Microsoft":                "MSFT",

@@ -14,6 +14,24 @@ export type Certification = {
 
 export const certifications: Certification[] = [
   {
+    id:           "cisco-networking-1",
+    name:         "CCNA: Introduction to Networks",
+    issuer:       "Cisco Networking Academy",
+    issued:       "March 2026",
+    skills:       [
+      "Ethernet",
+      "IP Connectivity",
+      "IP Services",
+      "OSI Model",
+      "IP Subnetting",
+      "Switch Configuration",
+      "IPv4 & IPv6 Addressing",
+      "Network Security Fundamentals",
+      "Network Topology Design",
+    ],
+    featured: true,
+  },
+  {
     id:           "tesda-vgd",
     name:         "National Certificate — Visual Graphic Design",
     issuer:       "TESDA (Technical Education and Skills Development Authority)",
