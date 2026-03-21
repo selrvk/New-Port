@@ -14,6 +14,20 @@ export type Certification = {
 
 export const certifications: Certification[] = [
   {
+    id:           "anthropic-ai-fluency",
+    name:         "AI Fluency Framework & Foundations",
+    issuer:       "Anthropic",
+    issued:       "March 2026",
+    credentialId: "qypqa4ipvewi",
+    skills:       [
+      "Artificial Intelligence",
+      "AI Literacy",
+      "Prompt Engineering",
+      "AI Tools & Applications",
+    ],
+    featured: true,
+  },
+  {
     id:           "cisco-networking-1",
     name:         "CCNA: Introduction to Networks",
     issuer:       "Cisco Networking Academy",
