@@ -7,18 +7,21 @@ import { useState, useEffect } from "react"
 const SPRING = [0.16, 1, 0.3, 1] as const
 
 function useScramble(target: string, startDelay = 300) {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%"
-  const randomChar = () => chars[Math.floor(Math.random() * chars.length)]
-
-  const [output, setOutput] = useState(() =>
-    target.split("").map((c) => (c === " " || c === "-" ? c : randomChar())).join("")
-  )
+  // Seeded with the real text, NOT random characters: the server and the first
+  // client render must agree or React throws a hydration mismatch. The scramble
+  // starts after mount, where a mismatch is impossible — and it also means the
+  // headline is readable if JS never runs.
+  const [output, setOutput] = useState(target)
 
   useEffect(() => {
-    let frame = 0
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%"
+    const randomChar = () => chars[Math.floor(Math.random() * chars.length)]
     const total = 20
+    let frame = 0
+    let id: ReturnType<typeof setInterval> | undefined
+
     const timeout = setTimeout(() => {
-      const id = setInterval(() => {
+      id = setInterval(() => {
         frame++
         setOutput(
           target.split("").map((char, i) => {
@@ -27,11 +30,17 @@ function useScramble(target: string, startDelay = 300) {
             return randomChar()
           }).join("")
         )
-        if (frame >= total) clearInterval(id)
+        if (frame >= total) {
+          clearInterval(id)
+          setOutput(target)
+        }
       }, 42)
-      return () => clearInterval(id)
     }, startDelay)
-    return () => clearTimeout(timeout)
+
+    return () => {
+      clearTimeout(timeout)
+      if (id) clearInterval(id)
+    }
   }, [target, startDelay])
 
   return output

@@ -254,3 +254,329 @@
   }
 
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   3D LAPTOP PRESENTATION
+   Layer 2 on top of the semantic portfolio. See app/page.tsx.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: #E8FF47;
+  color: #0A0A0A;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+/* While the 3D layer runs, the DOM portfolio stays in the document — present,
+   crawlable and in source order — but is visually collapsed. Page height then
+   comes from .laptop-spacer. */
+[data-laptop="on"] [data-portfolio-dom] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+[data-laptop="on"] body,
+[data-laptop="on"] {
+  background: #0A0A0A;
+}
+
+.laptop-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: #0A0A0A;
+}
+.laptop-canvas canvas {
+  display: block;
+  touch-action: pan-y;
+}
+
+.laptop-spacer {
+  position: relative;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ── Loader ── */
+.laptop-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0A0A0A;
+  transition: opacity 0.4s ease;
+}
+.laptop-loader.is-done {
+  opacity: 0;
+  pointer-events: none;
+}
+.laptop-loader__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #6B6860;
+}
+.laptop-loader__track {
+  width: 180px;
+  height: 2px;
+  background: #1E1E1E;
+  overflow: hidden;
+}
+.laptop-loader__bar {
+  height: 100%;
+  transition: width 0.2s ease;
+  box-shadow: 0 0 10px rgba(232, 255, 71, 0.5);
+}
+.laptop-loader__pct {
+  color: #E8FF47;
+  min-width: 3ch;
+}
+
+/* ── Hero HUD ── */
+.hero-hud {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.hero-hud a,
+.hero-hud button {
+  pointer-events: auto;
+}
+.hero-hud__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.hero-hud__meta {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #6B6860;
+}
+.hero-hud__meta--name {
+  color: #F0EDE6;
+}
+.hero-hud__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.hero-hud__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #E8FF47;
+  box-shadow: 0 0 8px 2px rgba(232, 255, 71, 0.85);
+}
+.hero-hud__headline {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.9;
+}
+.hero-hud__line {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 6.5vw, 6rem);
+  letter-spacing: -0.03em;
+  color: #F0EDE6;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.7);
+}
+.hero-hud__line--accent {
+  color: #E8FF47;
+  text-shadow: 0 0 25px rgba(232, 255, 71, 0.45), 0 0 70px rgba(232, 255, 71, 0.12);
+}
+.hero-hud__line--outline {
+  -webkit-text-stroke: 2px #F0EDE6;
+  -webkit-text-fill-color: transparent;
+}
+.hero-hud__bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.hero-hud__tagline {
+  max-width: 38ch;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(240, 237, 230, 0.6);
+}
+.hero-hud__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.hero-hud__social,
+.hero-hud__exit {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #6B6860;
+  border: 1px solid #1E1E1E;
+  background: rgba(10, 10, 10, 0.6);
+  padding: 0.6rem 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.hero-hud__social:hover,
+.hero-hud__exit:hover,
+.hero-hud__social:focus-visible,
+.hero-hud__exit:focus-visible {
+  color: #E8FF47;
+  border-color: #E8FF47;
+}
+
+/* ── Scroll hint ── */
+.scroll-hint {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2.5rem);
+  bottom: clamp(1rem, 3vw, 2.5rem);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+.scroll-hint__cue {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #6B6860;
+  transition: opacity 0.3s ease;
+}
+.scroll-hint__arrow {
+  animation: scroll-bob 1.6s ease-in-out infinite;
+}
+@keyframes scroll-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+.scroll-hint__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.scroll-hint__label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #E8FF47;
+}
+.scroll-hint__track {
+  width: 110px;
+  height: 2px;
+  background: #1E1E1E;
+}
+.scroll-hint__bar {
+  width: 100%;
+  height: 100%;
+  background: #E8FF47;
+  transform: scaleX(0);
+  transform-origin: left center;
+  box-shadow: 0 0 8px rgba(232, 255, 71, 0.5);
+}
+
+/* ── Restore button (shown when the static layout is chosen) ── */
+.laptop-restore {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #0A0A0A;
+  background: #E8FF47;
+  border: none;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint__arrow { animation: none; }
+}
+
+
+
+/* ── Contact: the real field, laid invisibly over the 3D screen ──
+   Transparent rather than hidden: display:none or visibility:hidden would remove
+   it from the accessibility tree and make it unfocusable by click. */
+.contact-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  will-change: transform, width, height;
+}
+.contact-field {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  resize: none;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font: inherit;
+  outline: none;
+  cursor: text;
+}
+.contact-field::placeholder { color: transparent; }
+/* Keep a visible focus ring for keyboard users, who cannot see the painted caret. */
+.contact-field:focus-visible {
+  outline: 2px solid rgba(232, 255, 71, 0.55);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

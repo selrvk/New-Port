@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/carousel"
 
 import CarouselCard from "./carousel-card"
+import { useDomPaused } from "./portfolio-dom/DomActivity"
 
 export function CarouselUI() {
   const [api, setApi] = React.useState<CarouselApi>()
@@ -24,11 +25,26 @@ export function CarouselUI() {
     Autoplay({ delay: 4000, stopOnInteraction: false })
   )
 
+  const domPaused = useDomPaused()
+
   React.useEffect(() => {
     if (!api) return
     setCurrent(api.selectedScrollSnap())
     api.on("select", () => setCurrent(api.selectedScrollSnap()))
   }, [api])
+
+  // Autoplay is configured with stopOnInteraction:false, so left alone it advances
+  // every 4s forever — including while this whole section is clipped to a pixel
+  // behind the 3D scene. Each tick re-renders and makes embla re-measure.
+  React.useEffect(() => {
+    if (!api) return
+    const autoplay = api.plugins()?.autoplay as
+      | { stop?: () => void; play?: () => void }
+      | undefined
+    if (!autoplay) return
+    if (domPaused) autoplay.stop?.()
+    else autoplay.play?.()
+  }, [api, domPaused])
 
   return (
     <motion.div

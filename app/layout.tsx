@@ -58,6 +58,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`
+          ${zenDots.variable}
           ${bebasNeue.variable}
           ${beVietnamPro.variable}
           ${calistoga.variable}

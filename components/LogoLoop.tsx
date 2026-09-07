@@ -1,6 +1,7 @@
 // components/logoloop.tsx
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDomPaused } from "./portfolio-dom/DomActivity";
 
 export type LogoItem =
   | {
@@ -124,7 +125,9 @@ const useAnimationLoop = (
   seqHeight: number,
   isHovered: boolean,
   hoverSpeed: number | undefined,
-  isVertical: boolean
+  isVertical: boolean,
+  /** True while this content is hidden behind the 3D scene. */
+  paused: boolean
 ) => {
   const rafRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
@@ -150,7 +153,9 @@ const useAnimationLoop = (
       track.style.transform = transformValue;
     }
 
-    if (prefersReduced) {
+    // Paused when this content sits hidden behind the 3D scene: the loop would run
+    // every frame, per card, transforming something clipped to a single pixel.
+    if (prefersReduced || paused) {
       track.style.transform = isVertical ? 'translate3d(0, 0, 0)' : 'translate3d(0, 0, 0)';
       return () => {
         lastTimestampRef.current = null;
@@ -193,7 +198,7 @@ const useAnimationLoop = (
       }
       lastTimestampRef.current = null;
     };
-  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical]);
+  }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, paused]);
 };
 
 export const LogoLoop = React.memo<LogoLoopProps>(
@@ -273,7 +278,17 @@ export const LogoLoop = React.memo<LogoLoopProps>(
 
     useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight, isVertical]);
 
-    useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, isHovered, effectiveHoverSpeed, isVertical);
+    const domPaused = useDomPaused();
+    useAnimationLoop(
+      trackRef,
+      targetVelocity,
+      seqWidth,
+      seqHeight,
+      isHovered,
+      effectiveHoverSpeed,
+      isVertical,
+      domPaused
+    );
 
     const cssVariables = useMemo(
       () =>
