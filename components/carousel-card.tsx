@@ -1,17 +1,10 @@
 import LogoLoop from "./LogoLoop"
 import {
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss,
-  SiPhp, SiHtml5, SiCss3, SiNodedotjs, SiSupabase, SiVite
+  SiPhp, SiHtml5, SiCss3, SiNodedotjs, SiSupabase, SiVite, SiApple
 } from "react-icons/si"
 
-type Project = {
-  title: string
-  description: string
-  image: string
-  stack: string[]
-  demo: string
-  source: string
-}
+import type { Project } from "@/data/projects"
 
 const techLogos = [
   { node: <SiReact      style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "React",       href: "https://react.dev" },
@@ -24,6 +17,9 @@ const techLogos = [
   { node: <SiHtml5      style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "HTML5",       href: "https://www.w3schools.com/html/" },
   { node: <SiNodedotjs  style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "NodeJS",      href: "https://nodejs.org/en" },
   { node: <SiSupabase   style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "Supabase",    href: "https://supabase.com/" },
+  // React Native has no mark of its own in simple-icons — it shares React's.
+  { node: <SiReact      style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "React Native", href: "https://reactnative.dev" },
+  { node: <SiApple      style={{ color: "#E8FF47", opacity: 0.7 }} />, title: "iOS",          href: "https://www.apple.com/ios/" },
 ]
 
 export default function CarouselCard({
@@ -145,31 +141,34 @@ export default function CarouselCard({
             onMouseEnter={e => (e.currentTarget.style.boxShadow = "2px 2px 0 0 #F0EDE6")}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
           >
-            Live Demo
+            {project.demoLabel ?? "Live Demo"}
             <svg width="10" height="10" viewBox="0 0 14 14" fill="none" className="transition-transform duration-150 group-hover:translate-x-0.5">
               <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </a>
 
-          <a
-            href={project.source}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              flex-1
-              font-syne text-[0.72rem] font-bold uppercase tracking-[0.1em]
-              border border-ca-rule text-ca-muted
-              flex items-center justify-center gap-1.5
-              py-2.5 px-4
-              transition-all duration-180
-              hover:border-[#3A3A3A] hover:bg-[#1A1A1A] hover:text-ca-paper
-            "
-          >
-            Source
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="#6B6860" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </a>
+          {/* Not every project is open source — see data/projects.ts. */}
+          {project.source && (
+            <a
+              href={project.source}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                flex-1
+                font-syne text-[0.72rem] font-bold uppercase tracking-[0.1em]
+                border border-ca-rule text-ca-muted
+                flex items-center justify-center gap-1.5
+                py-2.5 px-4
+                transition-all duration-180
+                hover:border-[#3A3A3A] hover:bg-[#1A1A1A] hover:text-ca-paper
+              "
+            >
+              Source
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="#6B6860" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </a>
+          )}
         </div>
 
       </div>

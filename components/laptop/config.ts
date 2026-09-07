@@ -155,7 +155,9 @@ export const SECTION_SCROLL_VH: Record<SectionId, number> = {
   // The hero is long because three things happen in it: the lid opens, the POST
   // log types out, then the name card settles. Roughly 1.0vh / 1.0vh / 1.2vh.
   hero: 3.2,
-  projects: 2.6,
+  // ~0.52vh per project, so adding one lengthens the section rather than
+  // speeding the others up. Six projects -> 3.1.
+  projects: 3.1,
   // Six categories, each typing its name then listing its skills.
   skills: 3.0,
   certifications: 1.9,
@@ -355,6 +357,55 @@ export const LID_LIFT_KEYFRAMES: { progress: number; lift: number }[] = [
 // carries the CanvasTexture and is the raycast target for the Projects tab strip
 // (its UVs are a clean 0→1, unlike the model's atlas UVs).
 
+/**
+ * Render layer that keeps the screen's spill light off the screen itself.
+ *
+ * That light exists to throw display-glow onto the deck and keyboard. Parked on the
+ * panel's centre line to do that, it also lit the panel — so the display was
+ * illuminating itself, and bloomed a soft white blob over the middle of the UI.
+ *
+ * The light is restricted to this layer; the model opts in, the screen plane does
+ * not. Objects stay on layer 0 as well, so camera visibility is unaffected.
+ */
+export const SPILL_LAYER = 1
+
+// ─── Floor ───────────────────────────────────────────────────────────────────
+
+/**
+ * The surface the machine sits on. One unlit, transparent plane carrying a
+ * generated texture: a soft pool of light, a grid, and the shadow.
+ *
+ * The shadow is PAINTED, not computed. No light in this scene has `castShadow`,
+ * so there is no shadow map to sample; and the deck never moves (only the lid
+ * rotates, and its contribution to a contact shadow is negligible), so a real
+ * shadow pass every frame would cost a render target to reproduce something we can
+ * bake once. It is punched out of the light pool rather than drawn on top of it —
+ * a shadow is the absence of the floor glow, which is also why it reads at all
+ * against a black background.
+ *
+ * All distances are world units. The deck measures 3.04 x 2.01 at y = 0.
+ */
+export const FLOOR = {
+  /** Exactly the deck's underside, so the machine sits ON it rather than above it. */
+  y: 0,
+  /** Plane size. The fade finishes well inside this, so no edge is ever visible. */
+  size: 24,
+  /** Texture resolution across `size`. Power of two, so mipmaps are generated. */
+  resolution: 2048,
+  /**
+   * Light pooling around the machine. This is what the shadow cuts INTO, so it sets
+   * the ceiling on how dark the shadow can read: punched out of a 5% pool, a shadow
+   * is at most 5% dark, i.e. invisible. Tight and reasonably bright beats wide and
+   * faint for that reason.
+   */
+  pool: { radius: 5.2, alpha: 0.135 },
+  grid: { step: 1.0, majorEvery: 4, minorAlpha: 0.05, majorAlpha: 0.11, width: 2 },
+  /** Everything fades to nothing by here — comfortably inside `size` / 2. */
+  fadeRadius: 8.5,
+  /** Ellipse under the deck. `soft` is how far the penumbra reaches past it. */
+  shadow: { x: 0, z: -0.045, rx: 1.55, rz: 1.15, soft: 2.1, strength: 1.0 },
+} as const
+
 export const SCREEN = {
   /**
    * Drawn canvas resolution. The aspect MUST match the plane's, or every painter's
@@ -380,6 +431,22 @@ export const SCREEN = {
      */
     z: -0.035,
   },
+  /**
+   * How much scene light the panel itself picks up.
+   *
+   * The UI is drawn as an emissive map, so this only governs the glass's own
+   * response to the lights. It used to be white, which meant the spill light —
+   * a point light parked 0.73 in front of the screen, on its centre line, to throw
+   * screen-glow onto the keyboard — bloomed straight back off the middle of the
+   * display as a white haze over the UI.
+   *
+   * The blob itself is now fixed at the source — the spill light no longer touches
+   * the panel at all, see SPILL_LAYER. This knob only governs the flat wash left by
+   * the ambient/key/rim lights. #222 is ~13% of white: enough that the glass still
+   * catches a little light, far from the white sheet it started as. Raise toward
+   * #fff for more sheen, drop to #000 for a pure display that ignores lights.
+   */
+  surface: { color: "#222222", roughness: 0.35, metalness: 0 },
   /** Emissive intensity as a function of section — the "powered on" feel. */
   emissive: {
     off: 0.0,

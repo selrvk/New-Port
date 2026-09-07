@@ -4,96 +4,61 @@
 //
 // Single owner of everything drawn onto the physical keyboard.
 //
-// Two sections use it — Skills lights keys as it spells category names, Languages
-// relabels them per input source — and they share one glow buffer and one legend
-// overlay. Letting each section mount its own Keycaps would put two additive layers
-// on the same keys and two sets of alignment numbers to keep in step.
+// Two sections use it, and both do the same thing with it: light keys as something
+// is typed. Skills spells out category names; Languages types each input source's
+// greeting on a loop. One glow buffer, one set of alignment numbers.
 //
-// Everything is written every frame from scroll progress, so leaving a section
-// genuinely resets the board rather than leaving state behind.
+// Everything is written every frame, so leaving a section genuinely resets the
+// board rather than leaving state behind.
+//
+// What is deliberately NOT here: relabelling the keycaps per language. That needed
+// an opaque overlay plane to cover the legends painted into the model's texture,
+// and those patches read as extra keycaps stuck on top of the real ones rather than
+// as the same board in another layout. Which keys a layout moves is now said on the
+// screen instead — see drawLanguages — where it costs nothing to be wrong about.
 
 import { useFrame } from "@react-three/fiber"
 import { useRef } from "react"
 
-import { KEY_COUNT, KEY_INDEX } from "@/data/keyboard"
-import { changedKeys, languages } from "@/data/languages"
+import { KEY_COUNT } from "@/data/keyboard"
 
-import { KeyLegends, type LegendState } from "./KeyLegends"
 import { Keycaps } from "./Keycaps"
 import { SECTIONS } from "./config"
-import { clamp01, localProgress } from "./lib/keyframes"
+import { computeGreetingGlow, languageSlot } from "./languages/greeting"
+import { localProgress } from "./lib/keyframes"
 import { computeGlow } from "./skills/glow"
 
 type Props = {
   progressRef: React.RefObject<number>
 }
 
-/** How sharply the just-remapped keys stop being highlighted. */
-const REMAP_DECAY = 5
-
 export function Keyboard({ progressRef }: Props) {
   const glowRef = useRef(new Float32Array(KEY_COUNT))
-  const legendRef = useRef<LegendState>({
-    overrides: {},
-    highlight: 0,
-    changed: new Set<string>(),
-  })
 
   useFrame(() => {
     const p = progressRef.current ?? 0
     const glow = glowRef.current
-    const legend = legendRef.current
 
     const skills = SECTIONS.skills
     const langs = SECTIONS.languages
 
     if (p >= skills.start && p < skills.end) {
       computeGlow(localProgress(p, skills.start, skills.end), glow)
-      if (Object.keys(legend.overrides).length) {
-        legend.overrides = {}
-        legend.changed = new Set()
-        legend.highlight = 0
-      }
       return
     }
 
     if (p >= langs.start && p < langs.end) {
-      const t = localProgress(p, langs.start, langs.end)
-      const raw = t * languages.length
-      const index = Math.min(languages.length - 1, Math.floor(raw))
-      const frac = clamp01(raw - index)
-
-      const lang = languages[index]
-      const previous = index > 0 ? languages[index - 1] : null
-      const changed = changedKeys(previous, lang)
-
-      legend.overrides = lang.keycaps
-      legend.changed = new Set(changed)
-      // Fades as you settle into the language, so the swap is legible but the
-      // keyboard is not permanently flashing.
-      legend.highlight = Math.exp(-frac * REMAP_DECAY)
-
-      // Only the keys that actually moved light up.
-      glow.fill(0)
-      for (const id of changed) {
-        const i = KEY_INDEX[id]
-        if (i !== undefined) glow[i] = 0.4 + 1.5 * legend.highlight
-      }
+      // The selected language types its greeting, on a loop. The same call drives
+      // the preview field on screen, so the lit key and the letter that appears are
+      // guaranteed to be the same character. See languages/greeting.ts for why this
+      // one thing is allowed to run on a clock.
+      const slot = languageSlot(localProgress(p, langs.start, langs.end))
+      computeGreetingGlow(slot.language.greeting, performance.now(), glow)
       return
     }
 
     glow.fill(0)
-    if (Object.keys(legend.overrides).length) {
-      legend.overrides = {}
-      legend.changed = new Set()
-      legend.highlight = 0
-    }
   })
 
-  return (
-    <>
-      <KeyLegends stateRef={legendRef} />
-      <Keycaps glowRef={glowRef} />
-    </>
-  )
+  return <Keycaps glowRef={glowRef} />
 }

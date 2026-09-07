@@ -25,6 +25,12 @@ export type Language = {
   note: string
   /** Layout label shown in the OS-style panel, e.g. "ABC — QWERTY". */
   layout: string
+  /**
+   * Typed on the physical keyboard and into the panel's preview field, on a loop,
+   * for as long as this input source is selected. Keep it to characters we have a
+   * key for — see keysForChar in components/laptop/languages/greeting.ts.
+   */
+  greeting: string
   /** Per-key legend overrides, keyed by key id. Empty = use what is painted. */
   keycaps: Record<string, string>
   /** Shown in the panel when a layout is shared with another language. */
@@ -58,6 +64,7 @@ export const languages: Language[] = [
     percent: 90,
     note: "Professional & academic proficiency",
     layout: "ABC — US QWERTY",
+    greeting: "hello!",
     keycaps: US_LAYOUT,
   },
   {
@@ -69,6 +76,7 @@ export const languages: Language[] = [
     percent: 100,
     note: "Mother tongue",
     layout: "Filipino — US QWERTY",
+    greeting: "kamusta",
     keycaps: US_LAYOUT,
     note2: "Shares the US layout — no keys remapped",
   },
@@ -81,6 +89,7 @@ export const languages: Language[] = [
     percent: 15,
     note: "Currently learning",
     layout: "Español — ES ISO",
+    greeting: "hola",
     // Nothing to override: this is the layout the model already has painted on it.
     keycaps: {},
     note2: "The layout this keyboard is printed with",

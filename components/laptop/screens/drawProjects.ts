@@ -289,10 +289,12 @@ function drawContent(s: ScreenCtx, index: number, contentY: number, alpha: numbe
   const interactive = dx === 0 && alpha > 0.99
   const hoveredKey = getHoveredLink()
 
+  // Source is optional — see data/projects.ts. Drawing a disabled-looking button
+  // for a project that has no repo would be worse than showing one link.
   const links: { kind: "demo" | "source"; label: string; href: string }[] = [
-    { kind: "demo", label: "↗  live demo", href: project.demo },
-    { kind: "source", label: "source  ↗", href: project.source },
+    { kind: "demo", label: `↗  ${project.demoLabel ?? "live demo"}`, href: project.demo },
   ]
+  if (project.source) links.push({ kind: "source", label: "source  ↗", href: project.source })
 
   ctx.font = mono(linkSize, 500)
   let lx = tx

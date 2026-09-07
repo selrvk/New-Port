@@ -12,7 +12,8 @@
 import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 
-import { SCREEN, SECTIONS, SECTION_ORDER, type SectionId } from "@/components/laptop/config"
+import { FLOOR, SCREEN, SECTIONS, SECTION_ORDER, type SectionId } from "@/components/laptop/config"
+import { createFloorTexture } from "@/components/laptop/Floor"
 import { onImageLoaded, preloadImages } from "@/components/laptop/lib/imageCache"
 import { invalidateFonts } from "@/components/laptop/lib/canvas2d"
 import { makeStickerTexture } from "@/components/laptop/lib/stickerTexture"
@@ -191,6 +192,8 @@ export default function ScreenPreview() {
   }, [])
 
   const stickers = params.get("stickers") === "1"
+  /** ?floor=1 shows the generated floor texture flat, at 1:1. */
+  const floor = params.get("floor") === "1"
   /**
    * ?form=1 pins the contact overlay to a fixed rect so the real <input> can be
    * clicked and typed into without a WebGL scene to project it. The 3D path uses
@@ -218,6 +221,14 @@ export default function ScreenPreview() {
 
   if (form) return <FormHarness />
 
+  if (floor) {
+    return (
+      <div style={{ background: "#0A0A0A", minHeight: "100vh", padding: 16 }}>
+        <FloorSheet />
+      </div>
+    )
+  }
+
   if (stickers) {
     return (
       <div style={{ background: "#0A0A0A", minHeight: "100vh", padding: 16 }}>
@@ -239,6 +250,50 @@ export default function ScreenPreview() {
           <Frame key={i} p={p} width={width} />
         ))}
       </div>
+    </div>
+  )
+}
+
+/**
+ * The floor texture, drawn flat.
+ *
+ * Everything about the floor is decided in that one image — the pool of light, the
+ * grid, and the shadow punched out of it — and it is drawn against a black page
+ * here, which is exactly what it composites over in the scene. Seeing it head-on is
+ * more informative than seeing it at the grazing angle every camera pose uses.
+ */
+function FloorSheet() {
+  const ref = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const host = ref.current
+    if (!host) return
+    const texture = createFloorTexture()
+    const src = texture.image as HTMLCanvasElement
+    host.width = src.width
+    host.height = src.height
+    host.getContext("2d")!.drawImage(src, 0, 0)
+    texture.dispose()
+  }, [])
+
+  const grid = FLOOR.size / FLOOR.grid.step
+
+  return (
+    <div style={{ color: "#6B6860", font: "12px/1.6 ui-monospace, Menlo, monospace" }}>
+      <p style={{ margin: "0 0 8px" }}>
+        floor texture · {FLOOR.resolution}px across {FLOOR.size} world units ·{" "}
+        {grid} grid cells · fade ends at {FLOOR.fadeRadius} (plane half-width{" "}
+        {FLOOR.size / 2})
+      </p>
+      <p style={{ margin: "0 0 12px" }}>
+        deck footprint 3.04 x 2.01 · shadow {FLOOR.shadow.rx * 2} x{" "}
+        {FLOOR.shadow.rz * 2} + {FLOOR.shadow.soft} penumbra
+      </p>
+      {/* Black behind it, as in the scene: the shadow is the absence of floor. */}
+      <canvas
+        ref={ref}
+        style={{ width: "min(90vw, 900px)", background: "#0A0A0A", display: "block" }}
+      />
     </div>
   )
 }

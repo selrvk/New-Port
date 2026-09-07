@@ -11,8 +11,10 @@
 // across all three. The plane also gives us clean 0→1 UVs, which is what makes the
 // Projects tab raycasting work.
 //
-// Redraws are driven purely by progress, never by elapsed time. That keeps the
-// screen a pure function of scroll — scrub backwards and you get the same pixels.
+// Redraws are driven by progress, not by elapsed time — scrub backwards and you get
+// the same pixels. Two sections are deliberate exceptions, and both repaint on a
+// signal rather than on a fixed timer so a still page is not redrawing for nothing:
+// Contact (a blinking caret and live typing) and Languages (the greeting loop).
 //
 // The canvas/texture live in a ref rather than useMemo because we mutate them
 // (`texture.needsUpdate`) every frame, and values returned from hooks are not
@@ -28,6 +30,7 @@ import { invalidateFonts } from "./lib/canvas2d"
 import { onImageLoaded, preloadImages } from "./lib/imageCache"
 import { localProgress, sampleTable } from "./lib/keyframes"
 import { contactState } from "./contact/state"
+import { greetingSignature, languageSlot } from "./languages/greeting"
 import { paintScreen, sectionAt } from "./screens"
 import {
   linkAtUv,
@@ -76,6 +79,7 @@ export function ScreenSurface({ progressRef }: Props) {
   const hoveredTab = useRef<number | null>(null)
   const lastVersion = useRef(-1)
   const lastLive = useRef(0)
+  const lastGreeting = useRef("")
   const scrollToProgress = useScrollToProgress()
 
   /** Force a repaint on the next frame. */
@@ -134,16 +138,32 @@ export function ScreenSurface({ progressRef }: Props) {
     if (!res) return
     const p = progressRef.current ?? 0
 
-    // Contact is the one screen that is not purely a function of scroll: a caret
-    // blinks on wall-clock time and the visitor can type. Repaint it on a timer
-    // rather than every frame — 12fps is plenty for a caret and costs far less
-    // than redrawing a 1600x1000 canvas 60 times a second.
+    // The two screens that move without scrolling. Repainting this canvas is not
+    // cheap (it is re-uploaded to the GPU whole), so neither of these runs every
+    // frame.
     let live = false
-    if (sectionAt(p) === "contact") {
+    const section = sectionAt(p)
+
+    if (section === "contact") {
+      // A caret blinking on wall-clock time, plus whatever the visitor types.
+      // 12fps is plenty for both.
       const now = performance.now()
       if (contactState.version !== lastVersion.current || now - lastLive.current > 80) {
         lastVersion.current = contactState.version
         lastLive.current = now
+        live = true
+      }
+    } else if (section === "languages") {
+      // The greeting loop. Only two things can change — the number of characters
+      // in the field and the caret — so repaint when one of them actually does
+      // rather than on a timer. That is a handful of repaints a second while
+      // typing and two a second while the caret blinks over a finished word.
+      const slot = languageSlot(
+        localProgress(p, SECTIONS.languages.start, SECTIONS.languages.end)
+      )
+      const sig = greetingSignature(slot, performance.now())
+      if (sig !== lastGreeting.current) {
+        lastGreeting.current = sig
         live = true
       }
     }
@@ -235,10 +255,11 @@ export function ScreenSurface({ progressRef }: Props) {
       <planeGeometry args={[SCREEN.size.width, SCREEN.size.height]} />
       <meshStandardMaterial
         ref={matRef}
+        color={SCREEN.surface.color}
         emissive="#ffffff"
         emissiveIntensity={0}
-        roughness={0.35}
-        metalness={0}
+        roughness={SCREEN.surface.roughness}
+        metalness={SCREEN.surface.metalness}
         toneMapped={false}
       />
     </mesh>

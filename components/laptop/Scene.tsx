@@ -6,17 +6,18 @@
 // persists across every section; only the numbers driving it change.
 
 import { useFrame } from "@react-three/fiber"
-import { useRef } from "react"
+import { useLayoutEffect, useRef } from "react"
 import * as THREE from "three"
 
 import { CameraRig } from "./CameraRig"
 import { ContactAnchor } from "./ContactAnchor"
+import { Floor } from "./Floor"
 import { Laptop } from "./Laptop"
 import { SceneDebug } from "./SceneDebug"
 import { ScreenSurface } from "./ScreenSurface"
 import { Stickers } from "./Stickers"
 import { Keyboard } from "./Keyboard"
-import { COLORS, LIGHTS, SCREEN, SECTIONS } from "./config"
+import { COLORS, LIGHTS, SCREEN, SECTIONS, SPILL_LAYER } from "./config"
 import { localProgress, sampleTable, smoothstep } from "./lib/keyframes"
 
 type Props = {
@@ -32,6 +33,13 @@ type SceneProps = Props & { debug?: boolean }
  */
 function ScreenSpill({ progressRef }: Props) {
   const ref = useRef<THREE.PointLight>(null)
+
+  // Restricted to SPILL_LAYER so it lights the deck but not the display. Without
+  // this the panel lit itself: a soft white blob right through the middle of the UI.
+  useLayoutEffect(() => {
+    ref.current?.layers.set(SPILL_LAYER)
+  }, [])
+
   useFrame(() => {
     const light = ref.current
     if (!light) return
@@ -107,6 +115,8 @@ export function Scene({ progressRef, debug = false }: SceneProps) {
       />
       <ScreenSpill progressRef={progressRef} />
       <LidBackLight progressRef={progressRef} />
+
+      <Floor />
 
       <Laptop
         progressRef={progressRef}

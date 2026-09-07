@@ -459,41 +459,23 @@
 }
 
 /* ── Scroll hint ── */
+/* A rail down the right edge. Vertical because that is the axis it measures —
+   the fill runs downward at the same rate the page does. */
 .scroll-hint {
   position: fixed;
-  right: clamp(1rem, 3vw, 2.5rem);
-  bottom: clamp(1rem, 3vw, 2.5rem);
+  right: clamp(0.85rem, 2.4vw, 2rem);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 25;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
+  align-items: center;
+  gap: 0.9rem;
   pointer-events: none;
 }
-.scroll-hint__cue {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: #6B6860;
-  transition: opacity 0.3s ease;
-}
-.scroll-hint__arrow {
-  animation: scroll-bob 1.6s ease-in-out infinite;
-}
-@keyframes scroll-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(4px); }
-}
-.scroll-hint__meta {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
+/* Rotated rather than stacked per-letter: keeps the mono letter-spacing intact. */
 .scroll-hint__label {
+  writing-mode: vertical-rl;
   font-family: var(--font-mono), monospace;
   font-size: 0.58rem;
   text-transform: uppercase;
@@ -501,17 +483,40 @@
   color: #E8FF47;
 }
 .scroll-hint__track {
-  width: 110px;
-  height: 2px;
+  width: 2px;
+  height: clamp(110px, 30vh, 260px);
   background: #1E1E1E;
 }
 .scroll-hint__bar {
   width: 100%;
   height: 100%;
   background: #E8FF47;
-  transform: scaleX(0);
-  transform-origin: left center;
+  transform: scaleY(0);
+  /* Fills from the top down, matching the scroll direction. */
+  transform-origin: center top;
   box-shadow: 0 0 8px rgba(232, 255, 71, 0.5);
+}
+.scroll-hint__cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #6B6860;
+  transition: opacity 0.3s ease;
+}
+.scroll-hint__cue > span:first-child {
+  writing-mode: vertical-rl;
+}
+.scroll-hint__arrow {
+  animation: scroll-bob 1.6s ease-in-out infinite;
+}
+@keyframes scroll-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
 }
 
 /* ── Restore button (shown when the static layout is chosen) ── */

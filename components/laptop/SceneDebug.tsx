@@ -13,7 +13,7 @@ import { useFrame } from "@react-three/fiber"
 import { useRef } from "react"
 import * as THREE from "three"
 
-import { MODEL } from "./config"
+import { MODEL, SPILL_LAYER } from "./config"
 import { contactState } from "./contact/state"
 
 type Props = {
@@ -65,7 +65,8 @@ export function SceneDebug({ progressRef, targetId }: Props) {
       `cam dir [${f(_dir.x)}, ${f(_dir.y)}, ${f(_dir.z)}] up [${f(cam.up.x)}, ${f(cam.up.y)}, ${f(cam.up.z)}]\n` +
       `${boxInfo}\n` +
       `lid ${lid ? "ok rotX " + f(lid.rotation.x) + " visible " + lid.visible : "MISSING"}\n` +
-      `surface ${surface ? "ok visible " + surface.visible : "MISSING"}\n` +
+      `surface ${surface ? "ok visible " + surface.visible : "MISSING"}` +
+      `${surface ? " spill-lit " + surface.layers.isEnabled(SPILL_LAYER) : ""}\n` +
       `scene children ${state.scene.children.length} · aspect ${f(state.viewport.aspect)}\n` +
       `contact overlay ${contactState.rect.visible ? "VISIBLE" : "hidden"} ` +
       `[${Math.round(contactState.rect.x)},${Math.round(contactState.rect.y)} ` +

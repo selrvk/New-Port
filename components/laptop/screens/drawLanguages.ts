@@ -7,11 +7,18 @@
 // About a README, Contact a terminal. It is also the honest place for this: input
 // sources are literally where you would switch a keyboard layout, which is what the
 // physical keys below are doing at the same moment.
+//
+// It is also why the greeting has somewhere to land. A keyboard settings pane is
+// exactly where you would expect a box that says "try the layout", so the loop can
+// type into a real control rather than a decoration bolted on. That field is what
+// makes the lit keys legible — the same trick that makes Skills readable, where
+// typed characters land in the palette's search box.
 
 import { changedKeys, languages, levelAccent } from "@/data/languages"
 
 import { COLORS } from "../config"
-import { clamp01, smoothstep } from "../lib/keyframes"
+import { greetingFrame, languageSlot } from "../languages/greeting"
+import { smoothstep } from "../lib/keyframes"
 import {
   clearScreen,
   drawScanlines,
@@ -26,11 +33,7 @@ export const drawLanguages: (s: ScreenCtx) => void = (s) => {
   const { ctx, w, h, t } = s
   clearScreen(s, "#07090B")
 
-  const raw = t * languages.length
-  const index = Math.min(languages.length - 1, Math.floor(raw))
-  const frac = clamp01(raw - index)
-  const active = languages[index]
-  const previous = index > 0 ? languages[index - 1] : null
+  const { index, frac, language: active, previous } = languageSlot(t)
   const changed = changedKeys(previous, active)
 
   // ── Window ──
@@ -186,11 +189,50 @@ export const drawLanguages: (s: ScreenCtx) => void = (s) => {
     ctx.fillText(ellipsize(ctx, active.note2, detW), detX, y)
   }
 
-  // Footer tying the panel to the hardware below.
-  ctx.font = mono(Math.round(h * 0.020), 400)
-  ctx.fillStyle = "rgba(240,237,230,0.24)"
-  const foot = "the keys below relabel to match"
-  ctx.fillText(foot, winX + winW / 2 - ctx.measureText(foot).width / 2, winY + winH - h * 0.032)
+  // ── Preview field ──
+  //
+  // Where the greeting types itself. Driven by the same call as the key glow, so
+  // the character that appears here and the key that lights below are the same
+  // one by construction rather than by two sets of timings kept in step by hand.
+  const fieldH = h * 0.115
+  const fieldY = winY + winH - h * 0.05 - fieldH
+  const fieldX = listX - padIn * 0.4
+  const fieldW = detX + detW - fieldX
+
+  ctx.textBaseline = "alphabetic"
+  ctx.font = mono(Math.round(h * 0.020), 500)
+  ctx.fillStyle = "rgba(240,237,230,0.30)"
+  ctx.fillText("TYPE TO TEST THE LAYOUT", fieldX, fieldY - h * 0.020)
+
+  ctx.fillStyle = "rgba(0,0,0,0.35)"
+  roundRect(ctx, fieldX, fieldY, fieldW, fieldH, 8)
+  ctx.fill()
+  // Reads as the focused control on the pane, because it is the only live one.
+  ctx.strokeStyle = "rgba(232,255,71,0.32)"
+  ctx.lineWidth = 1
+  roundRect(ctx, fieldX, fieldY, fieldW, fieldH, 8)
+  ctx.stroke()
+
+  const g = greetingFrame(active.greeting, performance.now())
+  const gSize = Math.round(h * 0.046)
+  const gx = fieldX + h * 0.026
+  const gy = fieldY + fieldH / 2
+
+  ctx.textBaseline = "middle"
+  ctx.font = mono(gSize, 500)
+  ctx.fillStyle = COLORS.paper
+  ctx.fillText(g.shown, gx, gy)
+
+  if (g.caretOn) {
+    ctx.fillStyle = COLORS.neon
+    ctx.fillRect(gx + ctx.measureText(g.shown).width + 3, gy - gSize * 0.55, 2, gSize * 1.1)
+  }
+
+  // The input source doing the typing, as a menu-bar indicator would show it.
+  ctx.font = mono(Math.round(h * 0.024), 600)
+  ctx.fillStyle = "rgba(240,237,230,0.26)"
+  const chip = active.code
+  ctx.fillText(chip, fieldX + fieldW - ctx.measureText(chip).width - h * 0.026, gy)
 
   drawScanlines(s, 0.04)
   drawVignette(s, 0.4)

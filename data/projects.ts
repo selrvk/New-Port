@@ -1,4 +1,38 @@
-export const projects = [
+// data/projects.ts
+//
+// Order is presentation order — index 0 leads the carousel and the browser's tab
+// strip. Both renderers derive their counts from this array, so adding an entry is
+// the only change needed.
+//
+// `source` is optional: not everything shipped here is open source, and pointing a
+// "Source" button at a profile page instead of a repo would be worse than omitting
+// it. `demoLabel` overrides "live demo" for things that aren't a live web demo.
+
+export type Project = {
+  id: number
+  title: string
+  description: string
+  stack: string[]
+  image: string
+  /** Where the thing actually lives. Typed into the address bar on the 3D screen. */
+  demo: string
+  /** Label for the primary link. Defaults to a live-demo wording. */
+  demoLabel?: string
+  /** Public repository, when there is one. */
+  source?: string
+}
+
+export const projects: Project[] = [
+  {
+    id: 6,
+    title: "Habbit: Habits & Finance",
+    description:
+      "An iOS habit and budget tracker with an AI companion, Bon, that reads the relationship between what you do and what you spend. On the App Store.",
+    stack: ["React Native", "TypeScript", "iOS"],
+    image: "/pictures/habbit.jpg",
+    demo: "https://apps.apple.com/ph/app/habbit-habits-finance/id6762041450",
+    demoLabel: "app store",
+  },
   {
     id: 1,
     title: "System Administration & Automation System",

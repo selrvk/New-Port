@@ -9,13 +9,22 @@
 // (100, 100, 88.235) and a 180° yaw. Parenting our own meshes to it would distort
 // their proportions and flip their axes. So we drive that node's rotation, and
 // mirror the same rotation onto a plain group we fully control.
+//
+// Why the authored pose is stashed on the node (see readLidBase): useGLTF caches by
+// URL and hands back the SAME Object3D instances on every mount. We overwrite the
+// lid's quaternion and position every frame, so on a remount — which is exactly what
+// toggling to the text layout and back does — the node no longer holds its authored
+// pose; it holds whatever we last wrote. Re-reading it as the base baked that frame's
+// rotation in permanently, and every round trip compounded another one. Hence lids
+// lying flat, standing upright, or sunk through the floor, while still tracking
+// scroll correctly, because only the base was wrong.
 
 import { useGLTF } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import { forwardRef, useImperativeHandle, useLayoutEffect, useMemo, useRef, type ReactNode } from "react"
 import * as THREE from "three"
 
-import { HINGE, LID, LID_EASE, LID_KEYFRAMES, LID_LIFT_KEYFRAMES, MODEL } from "./config"
+import { HINGE, LID, LID_EASE, LID_KEYFRAMES, LID_LIFT_KEYFRAMES, MODEL, SPILL_LAYER } from "./config"
 import { sampleScalar } from "./lib/keyframes"
 
 export type LaptopHandle = {
@@ -51,6 +60,31 @@ export type MeasureInfo = {
 const _q = new THREE.Quaternion()
 const _axisX = new THREE.Vector3(1, 0, 0)
 
+/** The lid's pose as the GLB authored it, before anything here touched it. */
+type LidBase = { quat: THREE.Quaternion; pos: THREE.Vector3 }
+
+/** Where we park it — on the node, so it shares the node's exact lifetime. */
+const BASE_KEY = "laptopLidBase"
+
+/**
+ * The authored pose, captured the first time this node is ever seen and reused
+ * afterwards.
+ *
+ * Storing it on the node rather than in component state is what makes this correct:
+ * the cached node and the mutations we make to it have the same lifetime, so the
+ * stash can never go stale relative to them. If drei's cache is ever cleared, the
+ * replacement node arrives unmutated and with no stash, and we capture it afresh.
+ */
+function readLidBase(lid: THREE.Object3D): LidBase {
+  const store = lid.userData as { [BASE_KEY]?: LidBase }
+  let base = store[BASE_KEY]
+  if (!base) {
+    base = { quat: lid.quaternion.clone(), pos: lid.position.clone() }
+    store[BASE_KEY] = base
+  }
+  return base
+}
+
 export const Laptop = forwardRef<LaptopHandle, Props>(function Laptop(
   { progressRef, lidChildren, children, onMeasure },
   ref
@@ -84,8 +118,11 @@ export const Laptop = forwardRef<LaptopHandle, Props>(function Laptop(
       )
       return
     }
-    baseQuat.copy(lid.quaternion)
-    basePos.copy(lid.position)
+    // NOT `lid.quaternion` — by now that may be a pose we wrote on a previous
+    // mount. See readLidBase.
+    const authored = readLidBase(lid)
+    baseQuat.copy(authored.quat)
+    basePos.copy(authored.pos)
 
     // Shadows on the model's own meshes.
     //
@@ -100,6 +137,9 @@ export const Laptop = forwardRef<LaptopHandle, Props>(function Laptop(
       m.castShadow = true
       m.receiveShadow = true
       m.frustumCulled = false
+      // Opt the machine into the screen's spill light. The screen plane itself
+      // deliberately does not opt in — see SPILL_LAYER.
+      m.layers.enable(SPILL_LAYER)
     })
 
     if (onMeasure && frame) {
