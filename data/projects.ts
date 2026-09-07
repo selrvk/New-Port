@@ -29,7 +29,7 @@ export const projects: Project[] = [
     description:
       "An iOS habit and budget tracker with an AI companion, Bon, that reads the relationship between what you do and what you spend. On the App Store.",
     stack: ["React Native", "TypeScript", "iOS"],
-    image: "/pictures/habbit.jpg",
+    image: "/pictures/habbit.webp",
     demo: "https://apps.apple.com/ph/app/habbit-habits-finance/id6762041450",
     demoLabel: "app store",
   },
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     title: "System Administration & Automation System",
     description: "Full-stack SADAS app with database from Supabase",
     stack: ["React", "Vite", "TypeScript", "Tailwind CSS", "Supabase"],
-    image: "/pictures/sadas-img.png",
+    image: "/pictures/sadas-img.webp",
     demo: "https://sadas.selrvk.dev",
     source: "https://github.com/selrvk/sadas"
   },
@@ -46,7 +46,7 @@ export const projects: Project[] = [
     id: 2,
     title: "Inventory Management System",
     description: "An Inventory Management System for a local business in Batangas.",
-    image: "/pictures/fnv-img.png",
+    image: "/pictures/fnv-img.webp",
     stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
     demo: "https://fnv-inventory.vercel.app",
     source: "https://github.com/selrvk/fnv-inventory"
@@ -55,7 +55,7 @@ export const projects: Project[] = [
     id: 3,
     title: "Majestic Balinese",
     description: "A luxury resort website for a resort in Calatagan, Batangas.",
-    image: "/pictures/majestic-img.png",
+    image: "/pictures/majestic-img.webp",
     stack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     demo: "https://majestic-balinese.vercel.app",
     source: "https://github.com/selrvk/Majestic-Balinese"
@@ -64,7 +64,7 @@ export const projects: Project[] = [
     id: 4,
     title: "Selrvk Skies",
     description: "A weather Next.js app with WeatherAPI.",
-    image: "/pictures/weather-img.png",
+    image: "/pictures/weather-img.webp",
     stack: ["React","HTML5", "CSS3", "Next.js"],
     demo: "https://skies.selrvk.dev",
     source: "https://github.com/selrvk/yoru-hotel"
@@ -73,7 +73,7 @@ export const projects: Project[] = [
     id: 5,
     title: "Para",
     description: "An all in one information hub for public transport for Batangas.",
-    image: "/pictures/para-img.png",
+    image: "/pictures/para-img.webp",
     stack: ["React", "NodeJS", "TypeScript"],
     demo: "https://para-ph.vercel.app/",
     source: "https://github.com/selrvk"

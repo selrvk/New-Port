@@ -217,7 +217,7 @@
               style={{ minHeight: "500px" }}
             >
               <Image
-                src="/pictures/my-closeup.png"
+                src="/pictures/my-closeup.webp"
                 alt="Charles Alcantara"
                 fill
                 className="object-cover object-top"

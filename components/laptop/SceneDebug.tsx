@@ -15,10 +15,13 @@ import * as THREE from "three"
 
 import { MODEL, SPILL_LAYER } from "./config"
 import { contactState } from "./contact/state"
+import type { PerfStats } from "./PerfGovernor"
 
 type Props = {
   progressRef: React.RefObject<number>
   targetId: string
+  /** Live frame timings, when the governor is mounted. */
+  statsRef?: React.RefObject<PerfStats>
 }
 
 const _box = new THREE.Box3()
@@ -26,7 +29,7 @@ const _size = new THREE.Vector3()
 const _center = new THREE.Vector3()
 const _dir = new THREE.Vector3()
 
-export function SceneDebug({ progressRef, targetId }: Props) {
+export function SceneDebug({ progressRef, targetId, statsRef }: Props) {
   const last = useRef(0)
 
   useFrame((state) => {
@@ -59,7 +62,15 @@ export function SceneDebug({ progressRef, targetId }: Props) {
     cam.getWorldDirection(_dir)
     const p = progressRef.current ?? 0
 
+    const perf = statsRef?.current
+    const perfLine = perf
+      ? `fps ${perf.fps.toFixed(1)} · frame ${perf.frameMs.toFixed(1)}ms · ` +
+        `worst ${perf.worstMs.toFixed(1)}ms · dpr ${perf.dpr.toFixed(2)}` +
+        `${perf.degraded ? " · DEGRADED" : ""}\n`
+      : ""
+
     el.textContent =
+      perfLine +
       `p ${p.toFixed(4)}\n` +
       `cam pos [${f(cam.position.x)}, ${f(cam.position.y)}, ${f(cam.position.z)}] fov ${f(cam.fov)}\n` +
       `cam dir [${f(_dir.x)}, ${f(_dir.y)}, ${f(_dir.z)}] up [${f(cam.up.x)}, ${f(cam.up.y)}, ${f(cam.up.z)}]\n` +

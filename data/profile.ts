@@ -15,7 +15,7 @@ export const profile = {
     "Full-stack developer & UI/UX designer from the Philippines. Building products that are technically solid and visually sharp.",
   /** Shown as chips in the hero aside. */
   focus: ["Next.js", "React", "TypeScript", "Node.js", "Figma", "UI/UX"] as const,
-  portrait: "/pictures/my-closeup.png",
+  portrait: "/pictures/my-closeup.webp",
   year: "2026",
 } as const
 

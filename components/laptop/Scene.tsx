@@ -10,6 +10,7 @@ import { useLayoutEffect, useRef } from "react"
 import * as THREE from "three"
 
 import { CameraRig } from "./CameraRig"
+import type { PerfStats } from "./PerfGovernor"
 import { ContactAnchor } from "./ContactAnchor"
 import { Floor } from "./Floor"
 import { Laptop } from "./Laptop"
@@ -24,7 +25,7 @@ type Props = {
   progressRef: React.RefObject<number>
 }
 
-type SceneProps = Props & { debug?: boolean }
+type SceneProps = Props & { debug?: boolean; statsRef?: React.RefObject<PerfStats> }
 
 /**
  * A point light in front of the screen, driven by the same boot curve as the
@@ -92,7 +93,7 @@ function LidBackLight({ progressRef }: Props) {
   )
 }
 
-export function Scene({ progressRef, debug = false }: SceneProps) {
+export function Scene({ progressRef, debug = false, statsRef }: SceneProps) {
   return (
     <>
       <color attach="background" args={[COLORS.bg]} />
@@ -133,7 +134,9 @@ export function Scene({ progressRef, debug = false }: SceneProps) {
       <ContactAnchor progressRef={progressRef} />
       <CameraRig progressRef={progressRef} />
 
-      {debug ? <SceneDebug progressRef={progressRef} targetId="scene-debug" /> : null}
+      {debug ? (
+        <SceneDebug progressRef={progressRef} targetId="scene-debug" statsRef={statsRef} />
+      ) : null}
     </>
   )
 }

@@ -279,7 +279,7 @@ export default function Hero() {
 
             <div className="photo-tint photo-vignette relative min-h-[280px] flex-1 overflow-hidden md:min-h-0">
               <Image
-                src="/pictures/my-closeup.png"
+                src="/pictures/my-closeup.webp"
                 alt="Charles Alcantara"
                 fill
                 className="photo-img object-cover object-top"

@@ -42,3 +42,7 @@ next-env.d.ts
 
 # compiled output for logic tests
 .tsbuild/
+
+# Full-resolution sources for public/pictures/*.webp. Kept locally, not shipped:
+# they are also recoverable from git history at their old public/pictures paths.
+assets/originals/

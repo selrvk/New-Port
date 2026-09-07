@@ -630,9 +630,16 @@ export const PERF = {
   dpr: [1, 2] as [number, number],
   /** Below this viewport width we serve the static DOM portfolio instead. */
   mobileBreakpoint: 768,
-  /** Drop to this dpr ceiling if we measure sustained low fps. */
+  /**
+   * Automatic step-down, enforced by PerfGovernor. Halving dpr quarters the pixels
+   * shaded, which is the single biggest lever available without changing the scene.
+   *
+   * The decision is one-way for the session: recovering would raise dpr, which
+   * lowers fps, which degrades again — a machine sitting near the threshold would
+   * visibly oscillate between resolutions instead of just running at the lower one.
+   */
   degradedDpr: 1,
-  /** fps below this for `degradeAfterMs` triggers the reduced path. */
+  /** Sustained fps below this for `degradeAfterMs` steps down to `degradedDpr`. */
   fpsFloor: 45,
   degradeAfterMs: 2500,
 } as const

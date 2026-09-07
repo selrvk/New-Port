@@ -7,13 +7,14 @@
 
 import { useProgress } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
-import { Suspense, useRef } from "react"
+import { Suspense, useCallback, useRef, useState } from "react"
 import * as THREE from "three"
 
 import { HeroHud } from "./hud/HeroHud"
 import { ContactInput } from "./hud/ContactInput"
 import { ScrollHint } from "./hud/ScrollHint"
 import { Scene } from "./Scene"
+import { PerfGovernor, createPerfStats } from "./PerfGovernor"
 import { CAMERA, COLORS, PERF, TOTAL_SCROLL_VH } from "./config"
 import { useScrollProgress } from "./useScrollProgress"
 
@@ -27,6 +28,12 @@ type Props = {
 export function ScrollStage({ onExit, onFatal }: Props) {
   const progressRef = useScrollProgress()
   const losses = useRef({ unrecovered: 0, timer: 0 })
+
+  // Changing dpr re-allocates the drawing buffer, so it goes through state on the
+  // Canvas rather than being poked into the renderer. One-way: see PerfGovernor.
+  const [degraded, setDegraded] = useState(false)
+  const perfStats = useRef(createPerfStats())
+  const onDegrade = useCallback(() => setDegraded(true), [])
   const debug =
     typeof window !== "undefined" && new URLSearchParams(window.location.search).has("debug")
 
@@ -35,7 +42,7 @@ export function ScrollStage({ onExit, onFatal }: Props) {
       {/* Fixed scene. aria-hidden: everything it shows also exists as real DOM. */}
       <div className="laptop-canvas" aria-hidden="true">
         <Canvas
-          dpr={PERF.dpr}
+          dpr={degraded ? PERF.degradedDpr : PERF.dpr}
           gl={{ antialias: true, powerPreference: "high-performance" }}
           camera={{
             fov: CAMERA.defaultFov,
@@ -75,8 +82,9 @@ export function ScrollStage({ onExit, onFatal }: Props) {
             canvas.addEventListener("webglcontextrestored", onRestored)
           }}
         >
+          <PerfGovernor statsRef={perfStats} onDegrade={onDegrade} degraded={degraded} />
           <Suspense fallback={null}>
-            <Scene progressRef={progressRef} debug={debug} />
+            <Scene progressRef={progressRef} debug={debug} statsRef={perfStats} />
           </Suspense>
         </Canvas>
       </div>
