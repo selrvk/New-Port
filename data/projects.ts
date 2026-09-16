@@ -39,7 +39,7 @@ export const projects: Project[] = [
     description: "Full-stack SADAS app with database from Supabase",
     stack: ["React", "Vite", "TypeScript", "Tailwind CSS", "Supabase"],
     image: "/pictures/sadas-img.webp",
-    demo: "https://sadas.selrvk.dev",
+    demo: "https://sadas.charlesalcantara.com",
     source: "https://github.com/selrvk/sadas"
   },
   {
@@ -48,7 +48,7 @@ export const projects: Project[] = [
     description: "An Inventory Management System for a local business in Batangas.",
     image: "/pictures/fnv-img.webp",
     stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
-    demo: "https://fnv-inventory.vercel.app",
+    demo: "https://ims.charlesalcantara.com",
     source: "https://github.com/selrvk/fnv-inventory"
   },
   {
@@ -57,7 +57,7 @@ export const projects: Project[] = [
     description: "A luxury resort website for a resort in Calatagan, Batangas.",
     image: "/pictures/majestic-img.webp",
     stack: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
-    demo: "https://majestic-balinese.vercel.app",
+    demo: "https://majesticbalinese.charlesalcantara.com",
     source: "https://github.com/selrvk/Majestic-Balinese"
   },
   {
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     description: "A weather Next.js app with WeatherAPI.",
     image: "/pictures/weather-img.webp",
     stack: ["React","HTML5", "CSS3", "Next.js"],
-    demo: "https://skies.selrvk.dev",
+    demo: "https://skies.charlesalcantara.com",
     source: "https://github.com/selrvk/yoru-hotel"
   },
   {
@@ -75,7 +75,7 @@ export const projects: Project[] = [
     description: "An all in one information hub for public transport for Batangas.",
     image: "/pictures/para-img.webp",
     stack: ["React", "NodeJS", "TypeScript"],
-    demo: "https://para-ph.vercel.app/",
+    demo: "https://para.charlesalcantara.com",
     source: "https://github.com/selrvk"
   },
 ];
