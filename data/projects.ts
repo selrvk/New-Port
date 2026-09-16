@@ -38,7 +38,7 @@ export const projects: Project[] = [
     title: "LifeTap: NFC ID",
     description: "LifeTap turns an NFC Tag into a personal lifeline.",
     stack: ["React Native", "TypeScript", "iOS"],
-    image: "/pictures/",
+    image: "/pictures/lifetap.webp",
     demo: "https://apps.apple.com/ph/app/lifetap-nfc-id/id6762006490",
     demoLabel: "app store",
   },
