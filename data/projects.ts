@@ -34,6 +34,15 @@ export const projects: Project[] = [
     demoLabel: "app store",
   },
   {
+    id: 7,
+    title: "LifeTap: NFC ID",
+    description: "LifeTap turns an NFC Tag into a personal lifeline.",
+    stack: ["React Native", "TypeScript", "iOS"],
+    image: "/pictures/",
+    demo: "https://apps.apple.com/ph/app/lifetap-nfc-id/id6762006490",
+    demoLabel: "app store",
+  },
+  {
     id: 1,
     title: "System Administration & Automation System",
     description: "Full-stack SADAS app with database from Supabase",
