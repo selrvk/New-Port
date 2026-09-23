@@ -39,7 +39,7 @@ const SOCIALS = [
   {
     label: "Instagram",
     value: "instagram.com/selrvk",
-    href:  "https://instagram.com/selrvk",
+    href:  "https://instagram.com/ihycharles",
     code:  "IG",
   },
   {
@@ -243,7 +243,7 @@ export default function Contact() {
                 href={
                   label === "GitHub" ? "https://github.com/selrvk"
                   : label === "LinkedIn" ? "https://linkedin.com/in/charles-alcantara"
-                  : "https://instagram.com/selrvk"
+                  : "https://instagram.com/ihycharles"
                 }
                 target="_blank"
                 rel="noopener noreferrer"

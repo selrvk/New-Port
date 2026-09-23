@@ -310,7 +310,7 @@ export default function Hero() {
                 {[
                   { label: "GH", href: "https://github.com/selrvk",                 title: "GitHub"    },
                   { label: "LI", href: "https://linkedin.com/in/charles-alcantara", title: "LinkedIn"  },
-                  { label: "IG", href: "https://instagram.com/selrvk",              title: "Instagram" },
+                  { label: "IG", href: "https://instagram.com/ihycharles",              title: "Instagram" },
                 ].map(({ label, href, title }, i) => (
                   <a
                     key={label}
