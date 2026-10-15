@@ -2,19 +2,29 @@
 
 // components/laptop/LaptopExperienceLoader.tsx
 //
-// Keeps three.js out of the server bundle and off the critical path.
+// Mounts the presentation gate — but only once hydration is over.
 //
-// This wrapper exists because `next/dynamic({ ssr: false })` is not allowed inside a
-// Server Component, and three.js touches `window` on import — so the whole 3D layer
-// is loaded lazily, client-side only.
+// The gate is light (it imports no three.js; the scene itself is a separate lazy
+// chunk, see LaptopExperience). What matters here is WHEN it first renders. During
+// hydration React must render what the server rendered, so a gate hydrated with the
+// page would first see the server's placeholder answer — "text" — and remove the
+// boot flag the inline script set, flashing the text layout for a frame before
+// correcting itself. Mounting it after hydration means its first render already
+// reads the real mode.
+//
+// `isClient` is false on the server and during hydration, true from then on.
 
-import dynamic from "next/dynamic"
+import { useSyncExternalStore } from "react"
 
-const LaptopExperience = dynamic(() => import("./LaptopExperience"), {
-  ssr: false,
-  loading: () => null,
-})
+import LaptopExperience from "./LaptopExperience"
+
+const noopSubscribe = () => () => {}
 
 export function LaptopExperienceLoader() {
-  return <LaptopExperience />
+  const isClient = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false
+  )
+  return isClient ? <LaptopExperience /> : null
 }

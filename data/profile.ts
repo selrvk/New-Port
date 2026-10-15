@@ -22,7 +22,7 @@ export const profile = {
 export const socials = [
   { code: "GH", label: "GitHub", value: "github.com/selrvk", href: "https://github.com/selrvk" },
   { code: "LI", label: "LinkedIn", value: "linkedin.com/in/charles-alcantara", href: "https://linkedin.com/in/charles-alcantara" },
-  { code: "IG", label: "Instagram", value: "instagram.com/selrvk", href: "https://instagram.com/selrvk" },
+  { code: "IG", label: "Instagram", value: "instagram.com/ihycharles", href: "https://instagram.com/ihycharles" },
   { code: "DC", label: "Discord", value: "selrvk", href: "https://discord.com/users/selrvk" },
 ] as const
 

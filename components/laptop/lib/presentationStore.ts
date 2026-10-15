@@ -16,7 +16,7 @@ import {
   storeMode,
   type PresentationMode,
 } from "./capability"
-import { PERF } from "../config"
+import { PERF } from "../perf"
 
 let cached: PresentationMode | null = null
 const listeners = new Set<() => void>()
@@ -64,11 +64,19 @@ export function subscribe(listener: () => void): () => void {
   }
 }
 
-/** Explicit user choice. Persisted, and beats detection from then on. */
-export function setPresentation(next: PresentationMode): void {
+/**
+ * Switch presentation. An explicit choice — the toggle buttons — is persisted and
+ * beats detection from then on. `persist: false` is for switches the visitor did
+ * not ask for by name (keyboard focus landing in the hidden text layout): those
+ * apply to this visit only, so they never overwrite a preference someone did set.
+ */
+export function setPresentation(
+  next: PresentationMode,
+  { persist = true }: { persist?: boolean } = {}
+): void {
+  if (persist) storeMode(next)
   if (cached === next) return
   cached = next
-  storeMode(next)
   notify()
 }
 

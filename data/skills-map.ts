@@ -19,6 +19,12 @@ export type SkillSource = "skills" | "projects" | "certifications" | "profile"
 export type SkillEntry = {
   name: string
   from: SkillSource
+  /**
+   * Still being learned. Set only where data/skills.ts itself says so ("Currently
+   * expanding my skills in…"), so a spec-sheet rendering never presents something
+   * in progress as finished.
+   */
+  learning?: true
 }
 
 export type SkillCategory = {
@@ -67,8 +73,8 @@ export const skillCategories: SkillCategory[] = [
       { name: "MongoDB", from: "skills" },
       { name: "Supabase", from: "projects" },
       { name: "Linux", from: "skills" },
-      { name: "AWS", from: "skills" },
-      { name: "Azure", from: "skills" },
+      { name: "AWS", from: "skills", learning: true },
+      { name: "Azure", from: "skills", learning: true },
       { name: "AJAX", from: "certifications" },
     ],
   },
@@ -82,8 +88,8 @@ export const skillCategories: SkillCategory[] = [
       { name: "Flutter", from: "skills" },
       { name: "Dart", from: "skills" },
       { name: "Kotlin", from: "skills" },
-      { name: "Swift", from: "skills" },
-      { name: "SwiftUI", from: "skills" },
+      { name: "Swift", from: "skills", learning: true },
+      { name: "SwiftUI", from: "skills", learning: true },
     ],
   },
   {

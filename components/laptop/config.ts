@@ -624,25 +624,11 @@ export const LIGHTS = {
 } as const
 
 // ─── Performance / capability ────────────────────────────────────────────────
+//
+// Lives in its own module because the layout gate reads it too, and that gate ships
+// to every visitor. This file imports three.js; perf.ts imports nothing.
 
-export const PERF = {
-  /** Cap devicePixelRatio at 2 per the budget. */
-  dpr: [1, 2] as [number, number],
-  /** Below this viewport width we serve the static DOM portfolio instead. */
-  mobileBreakpoint: 768,
-  /**
-   * Automatic step-down, enforced by PerfGovernor. Halving dpr quarters the pixels
-   * shaded, which is the single biggest lever available without changing the scene.
-   *
-   * The decision is one-way for the session: recovering would raise dpr, which
-   * lowers fps, which degrades again — a machine sitting near the threshold would
-   * visibly oscillate between resolutions instead of just running at the lower one.
-   */
-  degradedDpr: 1,
-  /** Sustained fps below this for `degradeAfterMs` steps down to `degradedDpr`. */
-  fpsFloor: 45,
-  degradeAfterMs: 2500,
-} as const
+export { PERF } from "./perf"
 
 // ─── Easing ──────────────────────────────────────────────────────────────────
 

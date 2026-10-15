@@ -1,68 +1,67 @@
-"use client"
+// components/sections/projects.tsx
+//
+// Side A — Contents: what's in the box, as a numbered contents list. The screenshots
+// are the real projects; the crop marks around them are the only decoration.
 
-import { motion } from "motion/react"
-import { CarouselUI } from "../carousel-ui"
+import Image from "next/image"
 
-const SPRING = [0.16, 1, 0.3, 1] as const
+import { Panel } from "@/components/box/Panel"
+import { projects } from "@/data/projects"
+
+const newTab = { target: "_blank", rel: "noopener noreferrer" } as const
 
 export default function Projects() {
   return (
-    <section
-      id="projects"
-      className="relative min-h-screen overflow-hidden bg-ca-bg"
-      style={{
-        backgroundImage:
-          "linear-gradient(#1E1E1E 1px, transparent 1px), linear-gradient(90deg, #1E1E1E 1px, transparent 1px)",
-        backgroundSize: "60px 60px",
-      }}
-    >
+    <Panel id="projects" labelledBy="projects-title">
+      <h2 id="projects-title" className="box-display box-h2">
+        What&rsquo;s in the box
+      </h2>
+      <p className="box-lede">
+        {projects.length} items, each with a link to the real thing.
+      </p>
 
-      <div className="flex items-stretch border-b border-ca-rule">
-        <div className="flex items-center border-r border-ca-rule px-5 py-4">
-          <span className="font-mono text-[0.6rem] tracking-[0.14em] text-ca-muted">002</span>
-        </div>
-        <div className="flex flex-1 items-center justify-center px-6 py-4">
-          <span className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.28em] text-ca-muted">
-            Selected Work
-          </span>
-        </div>
-        <div className="flex items-center border-l border-ca-rule px-5 py-4">
-          <span className="font-mono text-[0.6rem] tracking-[0.14em] text-ca-muted">2026</span>
-        </div>
-      </div>
-
-      {/* ── Headline ── */}
-      <div className="px-6 pt-12 pb-2 md:px-14 lg:px-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.7, ease: SPRING }}
-        >
-          <div className="flex items-center gap-4 mb-3">
-            <span className="h-px w-8 bg-ca-neon opacity-60" />
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-ca-neon">
-              Projects
-            </span>
-          </div>
-          <h2 className="font-syne text-[clamp(2.4rem,7vw,6rem)] font-extrabold leading-[0.9] tracking-[-0.03em] text-ca-paper">
-            THINGS I'VE
-            <br />
-            <span
-              className="font-syne font-extrabold"
-              style={{
-                WebkitTextStroke: "2px #F0EDE6",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              BUILT.
-            </span>
-          </h2>
-        </motion.div>
-      </div>
-
-      {/* ── Carousel ── */}
-      <CarouselUI />
-    </section>
+      <ol className="box-contents">
+        {projects.map((p, i) => (
+          <li key={p.id}>
+            <div className="box-crop">
+              <div className="box-item__shot">
+                <Image
+                  src={p.image}
+                  alt={`Screenshot of ${p.title}`}
+                  fill
+                  sizes="(min-width: 760px) 34rem, 90vw"
+                />
+              </div>
+            </div>
+            <div className="box-item__head">
+              {/* The list already conveys order to assistive tech. */}
+              <span className="box-item__no" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="box-item__title">{p.title}</h3>
+            </div>
+            <p className="box-item__desc">{p.description}</p>
+            <p className="box-item__stack box-mono">
+              <span className="box-label">Built with </span>
+              {p.stack.join(" · ")}
+            </p>
+            <div className="box-tabs">
+              <a className="box-tab box-tab--sm box-tab--spot" href={p.demo} {...newTab}>
+                {p.demoLabel ?? "Live demo"}
+                <span className="sr-only"> for {p.title} (opens in a new tab)</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+              {p.source ? (
+                <a className="box-tab box-tab--sm" href={p.source} {...newTab}>
+                  Source
+                  <span className="sr-only"> code for {p.title} (opens in a new tab)</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Panel>
   )
 }

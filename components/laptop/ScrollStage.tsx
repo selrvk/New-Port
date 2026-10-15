@@ -6,8 +6,8 @@
 // spacer that gives the page its scroll range, and the DOM that sits over the scene.
 
 import { useProgress } from "@react-three/drei"
-import { Canvas } from "@react-three/fiber"
-import { Suspense, useCallback, useRef, useState } from "react"
+import { Canvas, useFrame } from "@react-three/fiber"
+import { Suspense, useCallback, useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 
 import { HeroHud } from "./hud/HeroHud"
@@ -15,7 +15,8 @@ import { ContactInput } from "./hud/ContactInput"
 import { ScrollHint } from "./hud/ScrollHint"
 import { Scene } from "./Scene"
 import { PerfGovernor, createPerfStats } from "./PerfGovernor"
-import { CAMERA, COLORS, PERF, TOTAL_SCROLL_VH } from "./config"
+import { CAMERA, PERF, TOTAL_SCROLL_VH } from "./config"
+import { reportBootProgress, resetBootProgress } from "./lib/bootProgress"
 import { useScrollProgress } from "./useScrollProgress"
 
 type Props = {
@@ -85,6 +86,8 @@ export function ScrollStage({ onExit, onFatal }: Props) {
           <PerfGovernor statsRef={perfStats} onDegrade={onDegrade} degraded={degraded} />
           <Suspense fallback={null}>
             <Scene progressRef={progressRef} debug={debug} statsRef={perfStats} />
+            {/* Inside the same boundary, so it cannot mount before the model has. */}
+            <ReadySignal />
           </Suspense>
         </Canvas>
       </div>
@@ -109,7 +112,7 @@ export function ScrollStage({ onExit, onFatal }: Props) {
         />
       ) : null}
 
-      <Loader />
+      <ProgressReporter />
 
       {/* DOM over the scene. */}
       <HeroHud progressRef={progressRef} onExit={onExit} />
@@ -127,27 +130,59 @@ export function ScrollStage({ onExit, onFatal }: Props) {
 }
 
 /**
- * Real loading state rather than a blank screen. Reads drei's shared loader store,
- * so it reports actual GLB + texture progress.
+ * Feeds real load progress to the boot screen (components/laptop/BootScreen.tsx).
+ * The boot screen itself is server-rendered so it can be on screen before any
+ * JavaScript runs; this only moves its bar.
  */
-function Loader() {
-  const { progress, active } = useProgress()
+function ProgressReporter() {
+  const { progress } = useProgress()
 
-  // No local dismissal state: the panel simply fades out via CSS once loading
-  // finishes and stops receiving pointer events. Tracking "dismissed" in state
-  // would mean calling setState from an effect for no visible benefit.
-  return (
-    <div className={`laptop-loader${active ? "" : " is-done"}`} role="status" aria-live="polite">
-      <div className="laptop-loader__inner">
-        <span className="laptop-loader__label">booting</span>
-        <div className="laptop-loader__track">
-          <div
-            className="laptop-loader__bar"
-            style={{ width: `${Math.round(progress)}%`, background: COLORS.neon }}
-          />
-        </div>
-        <span className="laptop-loader__pct">{Math.round(progress)}%</span>
-      </div>
-    </div>
-  )
+  useEffect(() => {
+    // This chunk arriving and the canvas existing is itself a stage — the largest
+    // download of the whole boot.
+    reportBootProgress(35 + progress * 0.55)
+  }, [progress])
+
+  return null
+}
+
+/**
+ * Marks <html> with data-laptop-ready once the scene is genuinely presentable,
+ * which is what fades the boot screen out.
+ *
+ * "The model has loaded" is not enough. Revealing on that alone showed the laptop
+ * with its screen painted in fallback fonts, then visibly re-painted a moment later
+ * — one of the things that made the first second look broken. So: wait for web
+ * fonts, then let a few complete frames render (the screen texture repaints on
+ * fonts.ready), and only then reveal.
+ */
+const READY_FRAMES = 3
+
+function ReadySignal() {
+  /** -1 while waiting for fonts; then counts rendered frames. */
+  const frames = useRef(-1)
+
+  useEffect(() => {
+    let alive = true
+    const fontsReady = document.fonts?.ready ?? Promise.resolve()
+    fontsReady.then(() => {
+      if (alive) frames.current = 0
+    })
+    return () => {
+      alive = false
+      delete document.documentElement.dataset.laptopReady
+      resetBootProgress()
+    }
+  }, [])
+
+  useFrame(() => {
+    if (frames.current < 0 || frames.current >= READY_FRAMES) return
+    frames.current += 1
+    if (frames.current === READY_FRAMES) {
+      reportBootProgress(100)
+      document.documentElement.dataset.laptopReady = ""
+    }
+  })
+
+  return null
 }

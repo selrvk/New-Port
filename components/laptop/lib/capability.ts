@@ -6,7 +6,8 @@
 // rendered and is the baseline. If anything here says no, that baseline is simply
 // left visible and no WebGL context is ever created.
 
-import { PERF } from "../config"
+import { PRESENTATION_KEY as STORAGE_KEY } from "../boot"
+import { PERF } from "../perf"
 
 export type PresentationMode = "3d" | "text"
 
@@ -69,7 +70,6 @@ export function detectCapability(): Capability {
   }
 }
 
-const STORAGE_KEY = "portfolio:presentation"
 
 /** An explicit user choice always beats capability detection. */
 export function readStoredMode(): PresentationMode | null {

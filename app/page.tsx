@@ -10,6 +10,9 @@
 //
 // Anything that stops layer 2 — no JS, no WebGL, prefers-reduced-motion, a narrow
 // viewport, or a load failure — simply leaves layer 1 visible.
+//
+// Which layer a visitor gets is decided before first paint by an inline script
+// (components/laptop/boot.ts), so a 3D visitor never sees layer 1 flash up first.
 
 import Hero from "@/components/sections/hero";
 import Projects from "@/components/sections/projects";
@@ -20,8 +23,12 @@ import AboutMe from "@/components/sections/about-me";
 import Languages from "@/components/sections/languages";
 import Contact from "@/components/sections/contact";
 
+import { BoxFooter } from "@/components/box/BoxFooter";
+import { BoxHeader } from "@/components/box/BoxHeader";
+import { PrintStrip } from "@/components/box/PrintStrip";
 import { DomActivityProvider } from "@/components/portfolio-dom/DomActivity";
 import { LaptopExperienceLoader } from "@/components/laptop/LaptopExperienceLoader";
+import { BootScreen } from "@/components/laptop/BootScreen";
 
 export default function Home() {
   return (
@@ -30,22 +37,34 @@ export default function Home() {
         Skip to content
       </a>
 
+      {/* Invisible unless the boot script chose 3D — see components/laptop/boot.ts. */}
+      <BootScreen />
+
       <LaptopExperienceLoader />
 
-      {/* Wrapped so this tree can stand its timers and animation loops down while
-          the 3D layer is covering it. The markup is identical either way. */}
-      <main id="main" data-portfolio-dom>
+      {/* Layer 1 — "the box it came in" (app/box.css). Everything the 3D layer
+          hides lives inside data-portfolio-dom, header and footer included.
+          DomActivityProvider lets it stand its scroll work down while covered.
+          <main> takes tabIndex -1 so "Skip to content" can move focus into it; in
+          3D mode, focus arriving anywhere in this layer is what reveals it — see
+          LaptopExperience. */}
+      <div className="box" data-portfolio-dom>
         <DomActivityProvider>
-          <Hero />
-          <Projects />
-          <Skills />
-          <Certifications />
-          <Education />
-          <AboutMe />
-          <Languages />
-          <Contact />
+          <PrintStrip />
+          <BoxHeader />
+          <main id="main" tabIndex={-1}>
+            <Hero />
+            <Projects />
+            <Skills />
+            <Certifications />
+            <Education />
+            <AboutMe />
+            <Languages />
+            <Contact />
+          </main>
+          <BoxFooter />
         </DomActivityProvider>
-      </main>
+      </div>
     </>
   );
 }

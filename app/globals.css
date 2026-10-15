@@ -11,7 +11,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-sans: var(--font-be-vietnam-pro);
+  --font-sans: var(--font-archivo);
   --radius: 0.625rem;
   --background: #FFF4EA;
   --foreground: oklch(0.145 0 0);
@@ -70,13 +70,9 @@
   --font-syne:    'Syne', sans-serif;
   --font-jakarta: 'Plus Jakarta Sans', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
-  --font-zen: 'Zen Dots', monospace;
   
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-bebas: var(--font-bebas-neue);
-  --font-vietnam: var(--font-be-vietnam-pro);
-  --font-calistoga: var(--font-calistoga);
 
   --color-palette-one: #F0F0DB;
   --color-palette-two: #E1D9BC;
@@ -248,9 +244,15 @@
     @apply border-border outline-ring/50;
 
   }
+  /* The text version's box board, set on html and body as well as the panels, so
+     the overscroll bounce on trackpads and iOS shows board rather than a different
+     colour. The 3D layer overrides this with [data-laptop] before first paint. */
+  html,
   body {
-    @apply bg-background text-foreground;
-
+    background-color: #F7F6F2;
+  }
+  body {
+    @apply text-foreground;
   }
 
 }
@@ -276,10 +278,11 @@
   left: 0;
 }
 
-/* While the 3D layer runs, the DOM portfolio stays in the document — present,
-   crawlable and in source order — but is visually collapsed. Page height then
-   comes from .laptop-spacer. */
-[data-laptop="on"] [data-portfolio-dom] {
+/* While the 3D layer runs — or is booting — the DOM portfolio stays in the
+   document, present, crawlable and in source order, but is visually collapsed.
+   Page height then comes from .laptop-spacer. "boot" is set by the inline script
+   in <head> before first paint (components/laptop/boot.ts). */
+[data-laptop] [data-portfolio-dom] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -289,8 +292,8 @@
   white-space: nowrap;
 }
 
-[data-laptop="on"] body,
-[data-laptop="on"] {
+[data-laptop] body,
+[data-laptop] {
   background: #0A0A0A;
 }
 
@@ -311,45 +314,95 @@
   pointer-events: none;
 }
 
-/* ── Loader ── */
-.laptop-loader {
+/* ── Boot screen ──
+   Server-rendered and always present; shown only while booting, or while the scene
+   is mounted but has not drawn yet. Visibility is CSS-only so it is right from the
+   first frame. Fading out uses visibility with a delay rather than display, so the
+   opacity transition actually plays and the element then leaves the Tab order. */
+.boot-screen {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: 45;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2.5rem;
   background: #0A0A0A;
-  transition: opacity 0.4s ease;
-}
-.laptop-loader.is-done {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
 }
-.laptop-loader__inner {
+[data-laptop="boot"] .boot-screen,
+[data-laptop="on"]:not([data-laptop-ready]) .boot-screen {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+.boot-screen__inner {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
   color: #6B6860;
 }
-.laptop-loader__track {
+.boot-screen__track {
+  position: relative;
   width: 180px;
   height: 2px;
   background: #1E1E1E;
   overflow: hidden;
 }
-.laptop-loader__bar {
-  height: 100%;
-  transition: width 0.2s ease;
+.boot-screen__bar {
+  position: absolute;
+  inset: 0;
+  background: #E8FF47;
   box-shadow: 0 0 10px rgba(232, 255, 71, 0.5);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
 }
-.laptop-loader__pct {
+/* Before the first real number arrives (React still loading), a short segment
+   sweeps the track so the screen never looks frozen at 0. */
+.boot-screen:not([data-started]) .boot-screen__bar {
+  transform: scaleX(0.22) !important;
+  animation: boot-sweep 1.1s ease-in-out infinite;
+}
+@keyframes boot-sweep {
+  from { translate: -100% 0; }
+  to   { translate: 460% 0; }
+}
+.boot-screen__pct {
   color: #E8FF47;
-  min-width: 3ch;
+  min-width: 4ch;
+}
+/* The escape hatch only surfaces if booting is genuinely slow — but is visible the
+   moment it receives keyboard focus, whenever that is. */
+.boot-screen__escape {
+  font-family: var(--font-mono), ui-monospace, Menlo, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: #6B6860;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0;
+  animation: boot-escape 0.4s ease 4s forwards;
+}
+.boot-screen__escape:hover,
+.boot-screen__escape:focus-visible {
+  color: #E8FF47;
+  opacity: 1;
+}
+@keyframes boot-escape {
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen:not([data-started]) .boot-screen__bar { animation: none; }
+  .boot-screen__escape { animation-duration: 0s; }
 }
 
 /* ── Hero HUD ── */

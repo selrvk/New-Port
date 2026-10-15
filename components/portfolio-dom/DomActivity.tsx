@@ -6,17 +6,13 @@
 //
 // While the 3D experience runs, the semantic portfolio is only VISUALLY clipped —
 // it stays in the document for crawlers and screen readers, which means every
-// component in it is still mounted and still running. That was a second animation
-// system competing for frames while producing nothing visible: one
-// requestAnimationFrame loop per project card, a carousel autoplay timer, and
-// framer-motion animating elements clipped to a single pixel.
+// component in it is still mounted. Anything in it that does ongoing work (today,
+// the print strip's scroll listener) reads useDomPaused() and stands down, rather
+// than competing with the scene for frames while producing nothing visible.
 //
-// Unmounting is not an option — the content has to stay in the DOM. So instead the
-// markup is left exactly as it is and only the WORK is paused. Nothing here changes
-// what is rendered, so there is no hydration risk: the server and the first client
-// render agree by construction.
+// Nothing here changes what is rendered, so there is no hydration risk: the server
+// and the first client render agree by construction.
 
-import { MotionConfig } from "motion/react"
 import { createContext, useContext, useEffect, useSyncExternalStore, type ReactNode } from "react"
 
 import {
@@ -49,13 +45,6 @@ export function DomActivityProvider({ children }: { children: ReactNode }) {
   }, [paused])
 
   return (
-    <PausedContext.Provider value={paused}>
-      {paused ? (
-        // Motion components resolve to their end state instead of animating.
-        <MotionConfig reducedMotion="always">{children}</MotionConfig>
-      ) : (
-        children
-      )}
-    </PausedContext.Provider>
+    <PausedContext.Provider value={paused}>{children}</PausedContext.Provider>
   )
 }
