@@ -574,18 +574,10 @@ export const STICKERS = {
 // ─── Colours ─────────────────────────────────────────────────────────────────
 // Mirrors the --color-ca-* tokens in app/globals.css. Keep in sync.
 
-export const COLORS = {
-  bg: "#0A0A0A",
-  paper: "#F0EDE6",
-  neon: "#E8FF47",
-  hot: "#FF2D6B",
-  muted: "#3A3A3A",
-  rule: "#1E1E1E",
-  /** Screen-only shades. */
-  screenBg: "#0B0D0F",
-  screenChrome: "#16191C",
-  screenDim: "#6B6860",
-} as const
+// Lives in palette.ts so the text version and the sticker colourways can use it
+// without importing three.js through this file.
+import { COLORS } from "./palette"
+export { COLORS }
 
 export const FONTS = {
   mono: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace",

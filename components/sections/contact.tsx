@@ -1,60 +1,42 @@
 // components/sections/contact.tsx
 //
-// Side E — Customer care: the panel on every box that says who to contact. Getting
-// in touch is one of the page's three jobs, so the email and phone are the largest
-// targets on the face and the email carries the spot colour.
+// F7 — Contact. Getting in touch is one of the page's three jobs, so email and phone
+// are the biggest keys on the page — email is the lit Return key. The terminal form
+// beside them composes the same message the 3D version's form does.
 
-import { Panel } from "@/components/box/Panel"
+import { Mailer } from "@/components/keys/Mailer"
+import { Section } from "@/components/keys/Section"
+import { SectionHead } from "@/components/keys/SectionHead"
 import { contact, directContact } from "@/data/contact"
-import { profile, socials } from "@/data/profile"
+import { profile } from "@/data/profile"
 
 export default function Contact() {
   return (
-    <Panel id="contact" labelledBy="contact-title">
-      <div className="box-care">
-        <div>
-          <h2 id="contact-title" className="box-display box-h2">
-            Questions? Get in touch.
-          </h2>
-          {profile.available ? <p className="box-status">{contact.availabilityNote}</p> : null}
-          <p className="box-lede">{contact.blurb}</p>
-        </div>
+    <Section id="contact" labelledBy="contact-title">
+      <SectionHead
+        id="contact"
+        headingId="contact-title"
+        meta={profile.available ? <span>{contact.availabilityNote}</span> : undefined}
+      >
+        {contact.blurb}
+      </SectionHead>
 
-        <div>
-          <ul className="box-care__direct">
-            {directContact.map((d, i) => (
-              <li key={d.label}>
-                <a className={`box-tab${i === 0 ? " box-tab--spot" : ""}`} href={d.href}>
-                  <span>
-                    <span className="box-care__kind">{d.label}</span>
-                    {d.value}
-                  </span>
-                  <span aria-hidden="true">→</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <p className="box-label">Elsewhere</p>
-          <ul className="box-socials">
-            {socials.map((s) => (
-              <li key={s.code}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer">
-                  <span className="box-label" aria-hidden="true">
-                    {s.code}
-                  </span>
-                  <span className="box-socials__value">
-                    <span className="sr-only">{s.label}: </span>
-                    {s.value}
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </span>
-                  <span aria-hidden="true">↗</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="contact">
+        <ul className="contact__direct">
+          {directContact.map((d, i) => (
+            <li key={d.label}>
+              <a className={`kc kc--word${i === 0 ? " kc--enter" : ""}`} href={d.href}>
+                <span>
+                  <span className="contact__kind">{d.label}</span>
+                  <span className="contact__value">{d.value}</span>
+                </span>
+                <span aria-hidden="true">{i === 0 ? "↵" : "→"}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <Mailer />
       </div>
-    </Panel>
+    </Section>
   )
 }

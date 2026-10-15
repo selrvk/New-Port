@@ -14,35 +14,11 @@
 import * as THREE from "three"
 
 import { issuedYear, issuerCode, type Certification } from "@/data/certifications"
-import { COLORS } from "../config"
 import { display, fitFontSize, mono, roundRect } from "./canvas2d"
+import { stickerStyle } from "./stickerStyles"
 
 const W = 512
 const H = 340
-
-type Style = {
-  fill: string
-  text: string
-  accent: string
-  /** Border drawn just inside the die-cut edge. */
-  rule?: string
-}
-
-/**
- * A small palette so the lid looks collected-over-time rather than art-directed.
- * Featured certs get the loud ones.
- */
-const FEATURED_STYLES: Style[] = [
-  { fill: COLORS.neon, text: "#0A0A0A", accent: "#0A0A0A" },
-  { fill: "#101316", text: COLORS.neon, accent: COLORS.neon, rule: COLORS.neon },
-  { fill: COLORS.hot, text: COLORS.paper, accent: COLORS.paper },
-]
-
-const PLAIN_STYLES: Style[] = [
-  { fill: COLORS.paper, text: "#0A0A0A", accent: "#0A0A0A" },
-  { fill: "#171A1E", text: COLORS.paper, accent: COLORS.hot, rule: "rgba(240,237,230,0.25)" },
-  { fill: "#232830", text: COLORS.paper, accent: COLORS.neon },
-]
 
 export function makeStickerTexture(cert: Certification, index: number): THREE.CanvasTexture {
   const canvas = document.createElement("canvas")
@@ -50,8 +26,7 @@ export function makeStickerTexture(cert: Certification, index: number): THREE.Ca
   canvas.height = H
   const ctx = canvas.getContext("2d")!
 
-  const pool = cert.featured ? FEATURED_STYLES : PLAIN_STYLES
-  const style = pool[index % pool.length]
+  const style = stickerStyle(cert, index)
 
   ctx.clearRect(0, 0, W, H)
 

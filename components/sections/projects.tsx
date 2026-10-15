@@ -1,67 +1,97 @@
 // components/sections/projects.tsx
 //
-// Side A — Contents: what's in the box, as a numbered contents list. The screenshots
-// are the real projects; the crop marks around them are the only decoration.
+// F1 — Projects: each one a browser window, as the 3D laptop's screen shows them,
+// with its real address in the URL bar. The number key beside each title is the
+// one that lights if you press it.
 
 import Image from "next/image"
 
-import { Panel } from "@/components/box/Panel"
+import { Section } from "@/components/keys/Section"
+import { SectionHead } from "@/components/keys/SectionHead"
 import { projects } from "@/data/projects"
 
 const newTab = { target: "_blank", rel: "noopener noreferrer" } as const
 
-export default function Projects() {
-  return (
-    <Panel id="projects" labelledBy="projects-title">
-      <h2 id="projects-title" className="box-display box-h2">
-        What&rsquo;s in the box
-      </h2>
-      <p className="box-lede">
-        {projects.length} items, each with a link to the real thing.
-      </p>
+/** "https://apps.apple.com/ph/app/x" → host and the rest, as an address bar shows them. */
+function splitUrl(href: string): { host: string; rest: string } {
+  try {
+    const u = new URL(href)
+    const rest = `${u.pathname === "/" ? "" : u.pathname}${u.search}`
+    return { host: u.host, rest }
+  } catch {
+    return { host: href, rest: "" }
+  }
+}
 
-      <ol className="box-contents">
-        {projects.map((p, i) => (
-          <li key={p.id}>
-            <div className="box-crop">
-              <div className="box-item__shot">
-                <Image
-                  src={p.image}
-                  alt={`Screenshot of ${p.title}`}
-                  fill
-                  sizes="(min-width: 760px) 34rem, 90vw"
-                />
-              </div>
-            </div>
-            <div className="box-item__head">
-              {/* The list already conveys order to assistive tech. */}
-              <span className="box-item__no" aria-hidden="true">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="box-item__title">{p.title}</h3>
-            </div>
-            <p className="box-item__desc">{p.description}</p>
-            <p className="box-item__stack box-mono">
-              <span className="box-label">Built with </span>
-              {p.stack.join(" · ")}
-            </p>
-            <div className="box-tabs">
-              <a className="box-tab box-tab--sm box-tab--spot" href={p.demo} {...newTab}>
-                {p.demoLabel ?? "Live demo"}
-                <span className="sr-only"> for {p.title} (opens in a new tab)</span>
-                <span aria-hidden="true">↗</span>
-              </a>
-              {p.source ? (
-                <a className="box-tab box-tab--sm" href={p.source} {...newTab}>
-                  Source
-                  <span className="sr-only"> code for {p.title} (opens in a new tab)</span>
-                  <span aria-hidden="true">↗</span>
-                </a>
-              ) : null}
-            </div>
-          </li>
-        ))}
+export default function Projects() {
+  const onStore = projects.filter((p) => p.demoLabel === "app store").length
+  return (
+    <Section id="projects" labelledBy="projects-title">
+      <SectionHead id="projects" headingId="projects-title" meta={<span>{projects.length} open tabs</span>}>
+        Apps, systems and sites — every one links to the real thing
+        {onStore ? `, and ${onStore} are on the App Store` : ""}.
+      </SectionHead>
+
+      <ol className="wins">
+        {projects.map((p, i) => {
+          const url = splitUrl(p.demo)
+          const titleId = `project-${p.id}`
+          return (
+            <li key={p.id}>
+              <article className="win" aria-labelledby={titleId}>
+                <div className="win__bar" aria-hidden="true">
+                  <span className="win__tab">
+                    <span className="win__dot" />
+                    <span>{p.title}</span>
+                  </span>
+                </div>
+                <p className="win__url" aria-hidden="true">
+                  <span>
+                    <b>{url.host}</b>
+                    {url.rest}
+                  </span>
+                </p>
+                <div className="win__shot">
+                  <Image
+                    src={p.image}
+                    alt={`Screenshot of ${p.title}`}
+                    fill
+                    sizes="(min-width: 820px) 34rem, 92vw"
+                  />
+                </div>
+                <div className="win__body">
+                  <h3 className="win__title" id={titleId}>
+                    <span className="kc kc--xs" aria-hidden="true" data-legend={String(i + 1)}>
+                      {i + 1}
+                    </span>
+                    {p.title}
+                  </h3>
+                  <p className="win__desc">{p.description}</p>
+                  <ul className="chips" aria-label="Built with">
+                    {p.stack.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                  <div className="win__links">
+                    <a className="kc kc--enter kc--word" href={p.demo} {...newTab}>
+                      <span>{p.demoLabel ?? "Live demo"}</span>
+                      <span aria-hidden="true">↗</span>
+                      <span className="sr-only"> for {p.title} (opens in a new tab)</span>
+                    </a>
+                    {p.source ? (
+                      <a className="kc kc--word" href={p.source} {...newTab}>
+                        <span>Source</span>
+                        <span aria-hidden="true">↗</span>
+                        <span className="sr-only"> code for {p.title} (opens in a new tab)</span>
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
+              </article>
+            </li>
+          )
+        })}
       </ol>
-    </Panel>
+    </Section>
   )
 }

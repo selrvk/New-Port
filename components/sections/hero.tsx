@@ -1,60 +1,86 @@
 // components/sections/hero.tsx
 //
-// Front panel: the product name, the product line reversed out of an ink band, and
-// the product itself shown through a die-cut window — with the neon seal stuck on.
+// The name, struck on keycaps as the page loads; under it, the role those keys type
+// out, in mono with a caret; beside it the portrait as a sticker with the "open to
+// work" seal slapped over its corner. One display voice — the keys.
 
 import Image from "next/image"
 
-import { Panel } from "@/components/box/Panel"
-import { Seal } from "@/components/box/Seal"
+import { KeyWord } from "@/components/keys/KeyWord"
+import { Seal } from "@/components/keys/Seal"
+import { Section } from "@/components/keys/Section"
+import { TypedRole, type RoleSegment } from "@/components/keys/TypedRole"
 import { profile } from "@/data/profile"
 
+/** One keystroke on the keycaps — --k-stroke in app/keys.css, GREETING.typeMs. */
+const STROKE_MS = 118
+
+/** "Full-Stack Developer & UI/UX Designer", with the second role in neon. */
+function roleSegments(title: string): RoleSegment[] {
+  const [a, b] = title.split(" & ")
+  return b ? [{ text: a }, { text: " & ", tone: "dim" }, { text: b, tone: "neon" }] : [{ text: title }]
+}
+
 export default function Hero() {
-  const [first, ...rest] = profile.name.split(" ")
+  const [first, ...rest] = profile.name.toUpperCase().split(" ")
+  const last = rest.join(" ")
   return (
-    <Panel id="hero" labelledBy="hero-title">
-      <div className="box-front">
-        <div className="box-front__copy">
-          <h1 id="hero-title" className="box-display box-front__name">
-            <span>{first}</span>
-            <span>{rest.join(" ")}</span>
-          </h1>
-          <p className="box-band">{profile.title}</p>
-          <p className="box-front__tagline">{profile.tagline}</p>
+    <Section id="hero" labelledBy="hero-title" className="ks--hero" innerClassName="hero">
+      <div className="hero__copy">
+        {profile.available ? (
+          <p className="status">
+            <span className="status__led" aria-hidden="true" />
+            {profile.availableLabel} · {profile.location}
+          </p>
+        ) : null}
 
-          <p className="box-label">Works with</p>
-          <ul className="box-works">
-            {profile.focus.map((tool) => (
-              <li key={tool} className="box-chip">
-                {tool}
-              </li>
-            ))}
-          </ul>
+        <h1 id="hero-title" className="hero__name">
+          <span className="sr-only">{profile.name}</span>
+          <KeyWord word={first} typeOnView />
+          <KeyWord word={last} typeOnView offset={first.length} />
+        </h1>
 
-          <div className="box-tabs">
-            <a className="box-tab box-tab--spot" href="#projects">
-              See what&rsquo;s inside <span aria-hidden="true">→</span>
-            </a>
-            <a className="box-tab" href="#contact">
-              Get in touch
-            </a>
-          </div>
+        <TypedRole
+          segments={roleSegments(profile.title)}
+          delayMs={(first.length + last.length) * STROKE_MS + 250}
+        />
+
+        <p className="hero__tagline">{profile.tagline}</p>
+
+        <div className="hero__ctas">
+          <a className="kc kc--enter kc--word" href="#projects">
+            <span className="kc__mod" aria-hidden="true">
+              ↵
+            </span>
+            <span>See the work</span>
+          </a>
+          <a className="kc kc--word" href="#contact">
+            Get in touch
+          </a>
         </div>
 
-        <figure className="box-window-wrap">
-          <div className="box-window">
-            <Image
-              src={profile.portrait}
-              alt={`Portrait of ${profile.name}`}
-              fill
-              priority
-              sizes="(min-width: 900px) 26rem, 90vw"
-            />
-          </div>
-          <Seal />
-          <figcaption className="box-label box-window-caption">{profile.location}</figcaption>
-        </figure>
+        <p className="hero__hint" aria-hidden="true">
+          <span className="hint-desk">
+            <kbd>⌘K</kbd> for everything — or just type, and watch the keys.
+          </span>
+          <span className="hint-touch">
+            Tap <kbd>⌘K</kbd> up top for everything.
+          </span>
+        </p>
       </div>
-    </Panel>
+
+      <figure className="peel">
+        <div className="peel__portrait">
+          <Image
+            src={profile.portrait}
+            alt={`Portrait of ${profile.name}`}
+            fill
+            priority
+            sizes="(min-width: 960px) 22rem, 80vw"
+          />
+        </div>
+        <Seal />
+      </figure>
+    </Section>
   )
 }

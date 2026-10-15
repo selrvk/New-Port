@@ -1,0 +1,1588 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   KEYSTROKES
+   The text version of the portfolio — what phones, reduced-motion visitors and
+   "view as text" get. The 3D version is the laptop; this is its keyboard.
+
+   Everything memorable in the 3D version happens on that keyboard: skills are
+   typed on it key by key with a neon flash that decays, each language types its
+   greeting on it, the contact form is typed into it. So here every section title
+   is typed out on keycaps, the navigation is the function row, the buttons are
+   keys with real travel, the languages section is the laptop's own Spanish ISO
+   board (data/keyboard.ts) relabelling itself per input source, the certificates
+   are the same stickers as on the 3D lid, and the footer is the bottom row.
+
+   Same world as the 3D: the black void, the neon backlight, the floor grid, and
+   the same three typefaces.
+
+   Colours mirror COLORS in components/laptop/palette.ts — change one, change both.
+     bg     #0A0A0A  the void the laptop floats in
+     paper  #F0EDE6  text
+     neon   #E8FF47  backlight: lit keys, primary actions, the current section
+     hot    #FF2D6B  second accent, used sparingly (relabelled keys, HEAD)
+     dim    #9A968C  small text — the 3D screen's #6B6860 lifted until it passes
+                     4.5:1 on the black
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --k-bg: #0A0A0A;
+  --k-paper: #F0EDE6;
+  --k-neon: #E8FF47;
+  --k-hot: #FF2D6B;
+  --k-dim: #9A968C;
+  --k-rule: #1E1E1E;
+  --k-panel: #111213;
+  --k-panel-2: #16191C;
+
+  --k-gutter: clamp(1.25rem, 5vw, 3.5rem);
+  --k-max: 72rem;
+  /* One keystroke. The same 118ms the 3D keyboard types at (GREETING.typeMs). */
+  --k-stroke: 118ms;
+}
+
+/* On <body>, not :root: next/font defines the --font-* variables through classes
+   on <body>, and a custom property referencing another resolves where it is
+   declared. */
+body {
+  --k-display: var(--font-syne), "Syne", system-ui, sans-serif;
+  --k-body: var(--font-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  --k-mono: var(--font-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ── Slot 2 — backdrop: the same void, screen light and floor grid as the 3D ── */
+.keys {
+  /* Keycap height. Declared here rather than on .kc so a key inherits the size
+     its context sets (a section title, the hero name); on .kc itself it would
+     override every inherited size with the default. Modifiers set it per key. */
+  --kh: 2.5rem;
+  position: relative;
+  isolation: isolate;
+  color: var(--k-paper);
+  background: var(--k-bg);
+  font-family: var(--k-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-x: clip;
+}
+.keys::before,
+.keys::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+}
+/* The pool of light a screen throws in a dark room. */
+.keys::before {
+  inset: 0;
+  background:
+    radial-gradient(70% 45% at 50% -5%, rgba(232, 255, 71, 0.075), transparent 70%),
+    radial-gradient(50% 35% at 85% 105%, rgba(255, 45, 107, 0.045), transparent 70%);
+}
+/* The floor the laptop stands on, receding into the dark. */
+.keys::after {
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  height: 48vh;
+  background-image:
+    linear-gradient(rgba(240, 237, 230, 0.075) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 237, 230, 0.075) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: center bottom;
+  transform: perspective(420px) rotateX(62deg);
+  transform-origin: 50% 100%;
+  mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.6) 35%, transparent 80%);
+}
+[data-laptop] .keys::before,
+[data-laptop] .keys::after {
+  display: none;
+}
+
+/* :where keeps this at element specificity, so a key's own colour always wins —
+   otherwise the lit Return key inherited light text onto its neon face. */
+:where(.keys) a {
+  color: inherit;
+}
+.keys :focus-visible {
+  outline: 2px solid var(--k-neon);
+  outline-offset: 3px;
+}
+#main:focus {
+  outline: none;
+}
+
+/* ═══ The keycap — the unit everything is built from ═══
+   A dark key with a lit top edge, a skirt underneath for travel, and a backlight
+   (::after) that fades in when the key is lit — the neon under-glow of the 3D
+   keyboard. Only transform and opacity ever animate, so it stays on the GPU. */
+.kc {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  height: var(--kh);
+  min-width: var(--kh);
+  padding: 0 calc(var(--kh) * 0.26);
+  border: 0;
+  border-radius: calc(var(--kh) * 0.17);
+  background: linear-gradient(180deg, #2B2B2B 0%, #1B1B1B 48%, #151515 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 calc(var(--kh) * 0.08) 0 #040404,
+    0 calc(var(--kh) * 0.12) calc(var(--kh) * 0.3) rgba(0, 0, 0, 0.55);
+  color: var(--k-paper);
+  font-family: var(--k-mono);
+  font-weight: 600;
+  font-size: calc(var(--kh) * 0.4);
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, color 0.2s ease;
+}
+.kc::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1px rgba(232, 255, 71, 0.6),
+    0 0 calc(var(--kh) * 0.45) rgba(232, 255, 71, 0.45),
+    0 calc(var(--kh) * 0.2) calc(var(--kh) * 0.7) rgba(232, 255, 71, 0.3);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.kc[data-lit],
+.kc[aria-current="true"],
+.kc[aria-selected="true"],
+.kc[aria-checked="true"] {
+  color: var(--k-neon);
+  text-shadow: 0 0 10px rgba(232, 255, 71, 0.55);
+}
+.kc[data-lit]::after,
+.kc[aria-current="true"]::after,
+.kc[aria-selected="true"]::after,
+.kc[aria-checked="true"]::after {
+  opacity: 1;
+}
+/* Interactive keys: hover warms the legend, press is real key travel. */
+a.kc,
+button.kc {
+  cursor: pointer;
+}
+a.kc:hover,
+button.kc:hover {
+  color: var(--k-neon);
+}
+a.kc:active,
+button.kc:active,
+.kc[data-strike] {
+  transform: translateY(calc(var(--kh) * 0.07));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 calc(var(--kh) * 0.02) 0 #040404,
+    0 calc(var(--kh) * 0.04) calc(var(--kh) * 0.12) rgba(0, 0, 0, 0.5);
+}
+/* Decorative keycaps are pressable too (Chrome.tsx, usePressKeys). No text
+   selection or double-tap zoom getting in the way of a quick run of taps. */
+.keys span.kc {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.keys .kc {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.kc--sm { --kh: 2rem; }
+.kc--xs { --kh: 1.6rem; }
+.kc--lg { --kh: 3.25rem; }
+/* The primary action is always the Return key, lit. */
+.kc--enter {
+  color: #0A0A0A;
+  background: linear-gradient(180deg, #F2FF7A 0%, #E8FF47 55%, #D4EB2E 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.15),
+    0 calc(var(--kh) * 0.08) 0 #8C9A1C,
+    0 calc(var(--kh) * 0.16) calc(var(--kh) * 0.6) rgba(232, 255, 71, 0.28);
+}
+.kc--enter::after {
+  display: none;
+}
+a.kc--enter:hover,
+button.kc--enter:hover {
+  color: #0A0A0A;
+}
+a.kc--enter:active,
+button.kc--enter:active {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 calc(var(--kh) * 0.02) 0 #8C9A1C,
+    0 calc(var(--kh) * 0.06) calc(var(--kh) * 0.3) rgba(232, 255, 71, 0.25);
+}
+/* Keys with words on them read better in the body face, mixed case. */
+.kc--word {
+  font-family: var(--k-body);
+  font-weight: 700;
+  font-size: calc(var(--kh) * 0.34);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  gap: 0.55em;
+  grid-auto-flow: column;
+}
+.kc__mod {
+  font-family: var(--k-mono);
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+/* ═══ Slot 3 — section transitions: titles typed out on keycaps ═══
+   When a title scrolls into view, its keys strike in order at the 3D keyboard's
+   typing speed, each flashing its backlight and fading out again — the same
+   strike-and-decay as the 3D skills section. The letters are on the keys from the
+   start: the animation adds light, it never hides content. */
+.kw {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--kh) * 0.14);
+}
+.kw .kc {
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: calc(var(--kh) * 0.5);
+  padding: 0;
+}
+.kw[data-typed] .kc {
+  animation: kc-strike 0.32s ease-out both;
+  animation-delay: calc(var(--i) * var(--k-stroke));
+}
+.kw[data-typed] .kc::after {
+  animation: kc-flash 1.5s ease-out both;
+  animation-delay: calc(var(--i) * var(--k-stroke));
+}
+@keyframes kc-strike {
+  0%   { transform: translateY(0); }
+  18%  { transform: translateY(calc(var(--kh) * 0.07)); color: var(--k-neon); }
+  100% { transform: translateY(0); }
+}
+@keyframes kc-flash {
+  0%   { opacity: 0; }
+  8%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Sections ── */
+.ks {
+  position: relative;
+  padding: clamp(4rem, 11vw, 8rem) var(--k-gutter);
+  scroll-margin-top: 3.5rem;
+}
+.ks__inner {
+  max-width: var(--k-max);
+  margin: 0 auto;
+}
+/* Slot 4 — dividers: the groove between two rows of keys. */
+.ks + .ks::before {
+  content: "";
+  position: absolute;
+  inset: 0 var(--k-gutter) auto;
+  max-width: var(--k-max);
+  margin-inline: auto;
+  height: 2px;
+  background: linear-gradient(#000 0 1px, #1C1C1C 1px 2px);
+}
+.sh {
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+.sh__fkey {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  font-family: var(--k-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--k-dim);
+}
+.sh__title {
+  --kh: clamp(1.85rem, 8.2vw, 3.6rem);
+  margin: 0;
+}
+.sh__lede {
+  max-width: 40rem;
+  margin: 1.5rem 0 0;
+  font-size: 1.05rem;
+  color: var(--k-paper);
+}
+.k-dim {
+  color: var(--k-dim);
+}
+.k-mono {
+  font-family: var(--k-mono);
+}
+
+/* ═══ Slot 1 + 5 — the function row ═══
+   Fixed along the top: esc goes home, F1–F7 are the sections and stay backlit as
+   you pass them, ⌘K opens the command palette. It is both the navigation and the
+   scroll indicator, the way the 3D version's right-hand rail is. */
+.frow {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem max(0.6rem, calc((100vw - var(--k-max)) / 2));
+  background: linear-gradient(rgba(10, 10, 10, 0.92), rgba(10, 10, 10, 0.78));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid #161616;
+}
+.frow__keys {
+  display: flex;
+  flex: 1;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.frow__keys .kc {
+  --kh: 1.95rem;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0;
+  font-size: 0.66rem;
+  font-weight: 500;
+}
+.frow .kc--esc,
+.frow .kc--cmd {
+  --kh: 1.95rem;
+  font-size: 0.66rem;
+  font-weight: 500;
+  text-transform: none;
+}
+.frow__label {
+  display: none;
+}
+/* On wider screens the F-keys say what they are. */
+@media (min-width: 760px) {
+  .frow__keys .kc {
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: 0.5rem;
+    padding: 0 0.6rem;
+  }
+  .frow__label {
+    display: inline;
+    font-family: var(--k-body);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+/* Passed sections stay faintly backlit; the current one is fully lit. */
+.frow__keys .kc[data-passed] {
+  color: rgba(232, 255, 71, 0.6);
+}
+[data-laptop] .frow {
+  display: none;
+}
+
+/* ═══ Hero ═══ */
+.ks--hero {
+  padding-top: clamp(6rem, 16vw, 9rem);
+}
+.hero {
+  display: grid;
+  gap: 3rem;
+}
+/* Grid items default to min-width: auto, so one unbreakable thing — a long word,
+   a URL bar — stretched a whole column past the screen edge. Every grid in the
+   design opts out. */
+.hero > *,
+.wins > li,
+.pal > *,
+.about > *,
+.lang > *,
+.contact > *,
+.certs li > *,
+.glog li > *,
+.kfoot__board > * {
+  min-width: 0;
+}
+.hero__copy {
+  container-type: inline-size;
+}
+@media (min-width: 960px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: center;
+    gap: 4rem;
+  }
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 2rem;
+  font-family: var(--k-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--k-dim);
+}
+.status__led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--k-neon);
+  box-shadow: 0 0 8px 2px rgba(232, 255, 71, 0.85);
+}
+.hero__name {
+  display: grid;
+  gap: calc(var(--kh) * 0.22);
+  margin: 0 0 2.25rem;
+  /* Sized so ALCANTARA — nine keys — always fits its column. */
+  --kh: clamp(1.9rem, 8.3vw, 3.9rem);
+}
+@media (min-width: 960px) {
+  .hero__name {
+    --kh: clamp(2.8rem, 4.6vw, 4.1rem);
+  }
+}
+/* The role: what the keys typed. Mono, a prompt, a caret — output, not a second
+   headline. */
+.role {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin: 0 0 1.5rem;
+  font-family: var(--k-mono);
+  font-weight: 500;
+  font-size: clamp(1.1rem, 4.6vw, 1.75rem);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+.role__prompt {
+  color: var(--k-neon);
+}
+.role__line {
+  display: grid;
+}
+.role__ghost,
+.role__typed {
+  grid-area: 1 / 1;
+}
+.role__ghost {
+  visibility: hidden;
+}
+.role--dim {
+  color: var(--k-dim);
+}
+.role--neon {
+  color: var(--k-neon);
+  text-shadow: 0 0 18px rgba(232, 255, 71, 0.4);
+}
+.role__caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 0.08em;
+  vertical-align: -0.15em;
+  background: var(--k-neon);
+  box-shadow: 0 0 10px rgba(232, 255, 71, 0.7);
+  animation: caret 1.04s steps(1) infinite;
+}
+.hero__tagline {
+  max-width: 34rem;
+  margin: 0 0 2.25rem;
+  font-size: 1.1rem;
+}
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.hero__ctas .kc {
+  --kh: 3.25rem;
+}
+.hero__hint {
+  margin: 1.75rem 0 0;
+  font-family: var(--k-mono);
+  font-size: 0.74rem;
+  color: var(--k-dim);
+}
+.hero__hint kbd {
+  font-family: inherit;
+  color: var(--k-paper);
+}
+
+/* Stickers, peeled straight off the 3D lid. */
+.peel {
+  position: relative;
+  width: min(78%, 22rem);
+  margin-inline: auto;
+}
+.peel__portrait {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 7px solid #F4F1EA;
+  background: #F4F1EA;
+  rotate: -4deg;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.3);
+}
+.peel__portrait img {
+  object-fit: cover;
+}
+.seal {
+  position: absolute;
+  top: -1.25rem;
+  right: -0.5rem;
+  width: clamp(6.5rem, 30vw, 9rem);
+  height: auto;
+  rotate: 11deg;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.6));
+}
+.seal text {
+  font-family: var(--k-display);
+  fill: #0A0A0A;
+}
+@media (min-width: 600px) {
+  .seal { right: -1.5rem; }
+}
+
+/* ═══ Projects — browser windows, as on the 3D screen ═══ */
+.wins {
+  display: grid;
+  gap: 2.5rem 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 820px) {
+  .wins { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.win {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--k-panel);
+  border: 1px solid #222;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+}
+.win__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem 0;
+  background: var(--k-panel-2);
+}
+.win__tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px 8px 0 0;
+  background: var(--k-panel);
+  border-top: 2px solid var(--k-neon);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.win__tab span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.win__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--k-neon);
+  box-shadow: 0 0 6px rgba(232, 255, 71, 0.8);
+}
+.win__url {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.65rem 0.75rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: #0B0D0F;
+  font-family: var(--k-mono);
+  font-size: 0.72rem;
+  color: var(--k-dim);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.win__url span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.win__url b {
+  font-weight: 500;
+  color: var(--k-paper);
+}
+.win__shot {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin: 0 0.75rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0B0D0F;
+}
+.win__shot img {
+  object-fit: cover;
+  object-position: top center;
+}
+.win__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.25rem 1.25rem 1.4rem;
+}
+.win__title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.6rem;
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: clamp(1.2rem, 4.2vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.win__desc {
+  margin: 0 0 1rem;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.4rem;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  padding: 0.22rem 0.55rem;
+  border: 1px solid #2A2A2A;
+  border-radius: 6px;
+  font-family: var(--k-mono);
+  font-size: 0.72rem;
+  color: var(--k-dim);
+}
+.win__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: auto;
+}
+.win__links .kc {
+  --kh: 2.6rem;
+}
+
+/* ═══ Skills — the command palette ═══ */
+.pal {
+  display: grid;
+  gap: 1.75rem;
+}
+@media (min-width: 900px) {
+  .pal { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: start; }
+}
+.pal__keys {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 0.7rem;
+}
+@media (min-width: 560px) and (max-width: 899px) {
+  .pal__keys { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.pal__keys .kc {
+  --kh: 3rem;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 0.85rem;
+}
+.pal__win {
+  border-radius: 14px;
+  background: var(--k-panel);
+  border: 1px solid #222;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+}
+.pal__search {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid #1F1F1F;
+  font-family: var(--k-mono);
+  font-size: 1rem;
+}
+.pal__query {
+  color: var(--k-paper);
+}
+.pal__caret {
+  width: 0.55em;
+  height: 1.15em;
+  background: var(--k-neon);
+  box-shadow: 0 0 8px rgba(232, 255, 71, 0.7);
+  animation: caret 1.04s steps(1) infinite;
+}
+@keyframes caret {
+  50% { opacity: 0; }
+}
+.pal__count {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--k-dim);
+}
+.pal__group {
+  margin: 0;
+  padding: 0.9rem 1.1rem 0.4rem;
+  font-family: var(--k-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--k-dim);
+}
+.pal__results {
+  margin: 0;
+  padding: 0 0.5rem 0.6rem;
+  list-style: none;
+}
+.pal__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.6rem;
+  border-radius: 8px;
+}
+.pal__item:first-child {
+  background: #1A1C1F;
+}
+.pal__glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 6px;
+  background: #1F2226;
+  font-family: var(--k-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--k-neon);
+}
+.pal__name {
+  font-weight: 600;
+}
+.pal__tag {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid rgba(255, 45, 107, 0.6);
+  border-radius: 999px;
+  font-family: var(--k-mono);
+  font-size: 0.64rem;
+  color: var(--k-hot);
+}
+.pal__src {
+  margin-left: auto;
+  font-family: var(--k-mono);
+  font-size: 0.66rem;
+  color: var(--k-dim);
+}
+
+/* ═══ Certifications — the stickers off the 3D lid ═══ */
+.lid {
+  position: relative;
+  display: grid;
+  /* Two across on a phone, more as room allows. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
+  gap: 0 0.6rem;
+  padding: clamp(1.4rem, 4vw, 2.5rem);
+  border-radius: 22px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px),
+    linear-gradient(145deg, #1C1D20 0%, #131416 55%, #0F1012 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  margin-bottom: 2.5rem;
+}
+/* The outer element is only the container and the hand-stuck tilt. Container
+   units (cqi) resolve against the nearest container ANCESTOR, never the element
+   itself — so the die-cut padding lives one level down, on .stk__paper, where it
+   measures against the sticker. On .stk it fell back to the viewport, which
+   matched a sticker's width on a phone and swallowed the face on a desktop. */
+.stk {
+  container-type: inline-size;
+  position: relative;
+  aspect-ratio: 512 / 340;
+  rotate: var(--tilt, 0deg);
+  translate: 0 var(--drop, 0);
+  /* Pulls the next row up a little so tilted stickers overlap, as on the 3D lid
+     (grid gaps cannot be negative; item margins can). */
+  margin-bottom: calc(-1 * clamp(0.15rem, 1.4vw, 0.6rem));
+  transition: rotate 0.25s ease, scale 0.25s ease;
+}
+.stk:hover {
+  z-index: 1;
+  rotate: 0deg;
+  scale: 1.05;
+}
+.stk__paper {
+  height: 100%;
+  padding: 3.5cqi;
+  border-radius: 9cqi;
+  background: #F4F1EA;
+  box-shadow: 0 6px 14px -4px rgba(0, 0, 0, 0.75), 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+.stk__face {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding: 6cqi 7cqi 5.5cqi;
+  border-radius: 6.5cqi;
+  background: var(--fill);
+  color: var(--text);
+}
+.stk__face[data-rule]::before {
+  content: "";
+  position: absolute;
+  inset: 3cqi;
+  border: 1px solid var(--rule);
+  border-radius: 4.5cqi;
+  pointer-events: none;
+}
+.stk__issuer {
+  font-family: var(--k-mono);
+  font-weight: 700;
+  font-size: 5.5cqi;
+  letter-spacing: 0.35em;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.stk__name {
+  align-self: center;
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: calc(var(--fit) * 1cqi);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.stk__foot {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 3cqi;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  font-family: var(--k-mono);
+  font-size: 5cqi;
+}
+.stk__foot span:first-child {
+  opacity: 0.75;
+}
+.stk__foot span:last-child {
+  color: var(--accent);
+}
+.certs {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--k-rule);
+}
+@media (min-width: 820px) {
+  .certs { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; }
+}
+.certs li {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--k-rule);
+}
+.certs__star {
+  font-family: var(--k-mono);
+  color: var(--k-neon);
+  padding-top: 0.1rem;
+}
+.certs h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.certs p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--k-dim);
+}
+
+/* ═══ Schools — git log ═══ */
+.glog {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--k-mono);
+}
+.glog li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: 0.9rem;
+  padding-bottom: 1.6rem;
+}
+/* The branch line, drawn through every commit but the last. */
+.glog li::before {
+  content: "";
+  position: absolute;
+  left: calc(0.875rem - 1px);
+  top: 1.1rem;
+  bottom: -0.3rem;
+  width: 2px;
+  background: #2A2A2A;
+}
+.glog li:last-child::before {
+  display: none;
+}
+.glog__node {
+  position: relative;
+  z-index: 1;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin: 0.35rem auto 0;
+  border-radius: 50%;
+  background: var(--k-bg);
+  border: 2px solid var(--k-dim);
+}
+.glog li[data-head] .glog__node {
+  border-color: var(--k-neon);
+  background: var(--k-neon);
+  box-shadow: 0 0 12px rgba(232, 255, 71, 0.8);
+}
+.glog__refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 0.3rem;
+  font-size: 0.74rem;
+}
+.glog__tag {
+  color: #E8C547;
+}
+.glog__head {
+  color: var(--k-hot);
+  font-weight: 700;
+}
+.glog__msg {
+  margin: 0;
+  font-family: var(--k-body);
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+.glog__sub {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--k-dim);
+}
+
+/* ═══ About — whoami, then the README ═══ */
+.about {
+  display: grid;
+  gap: 1.75rem;
+}
+@media (min-width: 960px) {
+  .about { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: start; }
+}
+.term {
+  border-radius: 14px;
+  background: #0B0D0F;
+  border: 1px solid #222;
+  overflow: hidden;
+  font-family: var(--k-mono);
+  font-size: 0.84rem;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+}
+.term__bar {
+  padding: 0.6rem 1rem;
+  background: var(--k-panel-2);
+  border-bottom: 1px solid #1F1F1F;
+  font-size: 0.72rem;
+  color: var(--k-dim);
+}
+.term__body {
+  margin: 0;
+  padding: 1rem 1.1rem 1.25rem;
+}
+.term__cmd {
+  margin: 0 0 0.6rem;
+}
+.term__cmd::before {
+  content: "$ ";
+  color: var(--k-neon);
+}
+.term__kv {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0 0.75rem;
+  margin: 0;
+}
+.term__kv dt {
+  color: var(--k-dim);
+}
+.term__kv dd {
+  margin: 0;
+}
+.readme {
+  border-radius: 14px;
+  background: var(--k-panel);
+  border: 1px solid #222;
+  overflow: hidden;
+}
+.readme__tab {
+  display: inline-block;
+  margin: 0.55rem 0 0 0.7rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px 8px 0 0;
+  border-top: 2px solid var(--k-neon);
+  background: var(--k-panel-2);
+  font-family: var(--k-mono);
+  font-size: 0.74rem;
+}
+.readme__body {
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+  border-top: 1px solid #1F1F1F;
+}
+.readme__h {
+  margin: 0 0 1rem;
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 5vw, 2.1rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.readme__h::before {
+  content: "# ";
+  color: var(--k-neon);
+  font-family: var(--k-mono);
+  font-weight: 500;
+}
+.readme__lead {
+  margin: 0 0 1.25rem;
+  font-size: 1.12rem;
+}
+.readme__lead strong {
+  color: var(--k-neon);
+}
+.readme__body p {
+  margin: 0 0 1rem;
+  max-width: 42rem;
+}
+
+/* ═══ Languages — the laptop's own keyboard ═══ */
+.lang {
+  display: grid;
+  gap: 1.75rem;
+}
+@media (min-width: 960px) {
+  .lang { grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr); align-items: center; }
+}
+.lang__sources {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.lang__sources .kc {
+  --kh: 3.1rem;
+  min-width: 4.4rem;
+}
+.lang__name {
+  margin: 0;
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+.lang__meta {
+  margin: 0.35rem 0 0;
+  color: var(--k-dim);
+}
+.lang__field {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  min-height: 3.6rem;
+  margin: 1.4rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 255, 71, 0.45);
+  box-shadow: 0 0 0 3px rgba(232, 255, 71, 0.06), 0 0 24px -6px rgba(232, 255, 71, 0.35);
+  background: #0B0D0F;
+  font-family: var(--k-mono);
+  font-size: 1.6rem;
+}
+.lang__caret {
+  width: 0.12em;
+  height: 1.1em;
+  background: var(--k-neon);
+}
+.lang__caret[data-off] {
+  opacity: 0;
+}
+.lang__fieldlabel {
+  margin: 1.4rem 0 0;
+  font-family: var(--k-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--k-dim);
+}
+.lang__fieldlabel + .lang__field {
+  margin-top: 0.5rem;
+}
+/* The board: every key placed from data/keyboard.ts in key units. */
+.board {
+  position: relative;
+  /* --cols / --rows come from data/keyboard.ts (GRID_UNITS_X / GRID_UNITS_Y). */
+  aspect-ratio: var(--cols) / var(--rows);
+  padding: 2.2%;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #121315, #0C0D0E);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  container-type: inline-size;
+}
+.board__plate {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.board .kc {
+  --kh: 1em;
+  position: absolute;
+  left: calc(var(--x) / var(--cols) * 100% + 0.25cqi);
+  top: calc(var(--y) / var(--rows) * 100% + 0.25cqi);
+  width: calc(var(--w) / var(--cols) * 100% - 0.5cqi);
+  height: calc(var(--h) / var(--rows) * 100% - 0.5cqi);
+  min-width: 0;
+  padding: 0;
+  border-radius: 0.9cqi;
+  font-size: 2.05cqi;
+  font-weight: 500;
+  text-transform: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0.35cqi 0 #040404;
+}
+.board .kc::after {
+  box-shadow: 0 0 0 1px rgba(232, 255, 71, 0.7), 0 0 3cqi rgba(232, 255, 71, 0.55);
+  opacity: var(--g, 0);
+  transition: none;
+}
+.board .kc[data-glow] {
+  color: var(--k-neon);
+}
+/* A real keystroke (Chrome.tsx's key echo) or a tap lights a key fully, and a
+   held modifier — shift, caps lock — stays lit while it is on. */
+.board .kc[data-lit]::after,
+.board .kc[data-held]::after {
+  opacity: 1;
+}
+.board .kc[data-held] {
+  color: var(--k-neon);
+}
+/* A key whose legend just changed with the input source flashes hot pink. */
+.board .kc[data-relabel] {
+  animation: relabel 0.9s ease-out;
+}
+@keyframes relabel {
+  0%   { color: var(--k-hot); text-shadow: 0 0 10px rgba(255, 45, 107, 0.8); }
+  100% { color: var(--k-paper); text-shadow: none; }
+}
+/* The ISO Return: one key, L-shaped, spanning two rows. */
+.board .kc--iso-enter {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 16.7% 100%, 16.7% 50%, 0 50%);
+  border-radius: 0.9cqi;
+  align-items: start;
+  padding-top: 1.4cqi;
+}
+.board .kc--fn {
+  font-size: 1.6cqi;
+}
+
+/* ═══ Contact — the terminal ═══ */
+.contact {
+  display: grid;
+  gap: 2rem;
+}
+@media (min-width: 960px) {
+  .contact { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+}
+.contact__direct {
+  display: grid;
+  gap: 1.1rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+.contact__direct .kc {
+  --kh: 4.1rem;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  font-size: 1rem;
+}
+.contact__kind {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: var(--k-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.contact__value {
+  font-size: clamp(0.95rem, 4vw, 1.1rem);
+  overflow-wrap: anywhere;
+  white-space: normal;
+  text-align: left;
+}
+.mailer .term__body {
+  display: grid;
+  gap: 0.9rem;
+}
+.mailer label {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.5rem;
+}
+.mailer label span {
+  padding-top: 0.15rem;
+  color: var(--k-neon);
+}
+.mailer input,
+.mailer textarea {
+  width: 100%;
+  padding: 0.1rem 0 0.35rem;
+  border: 0;
+  border-bottom: 1px solid #2A2A2A;
+  border-radius: 0;
+  background: transparent;
+  color: var(--k-paper);
+  font: inherit;
+  caret-color: var(--k-neon);
+  resize: vertical;
+}
+.mailer input:focus,
+.mailer textarea:focus {
+  outline: none;
+  border-bottom-color: var(--k-neon);
+}
+.mailer input::placeholder,
+.mailer textarea::placeholder {
+  color: #6B6860;
+}
+.mailer__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+.mailer__err {
+  margin: 0;
+  color: var(--k-hot);
+  font-size: 0.8rem;
+}
+.mailer__note {
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--k-dim);
+}
+
+/* ═══ Slot 7 — the footer: the keyboard's bottom row ═══ */
+.kfoot {
+  padding: 3rem var(--k-gutter) 3.5rem;
+}
+.kfoot__board {
+  display: grid;
+  gap: 0.6rem;
+  max-width: var(--k-max);
+  margin: 0 auto;
+}
+@media (min-width: 760px) {
+  .kfoot__board {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}
+.kfoot__mods {
+  display: flex;
+  gap: 0.5rem;
+}
+.kfoot__mods .kc {
+  --kh: 3rem;
+  flex: 1;
+  min-width: 3rem;
+}
+.kfoot__space {
+  --kh: 3rem;
+  justify-content: center;
+  width: 100%;
+  font-family: var(--k-body);
+  font-weight: 500;
+  font-size: 0.74rem;
+  text-transform: none;
+  color: var(--k-dim);
+  white-space: normal;
+  text-align: center;
+  line-height: 1.35;
+}
+/* The inverted-T arrow cluster; ↑ is the way back to the top. */
+.kfoot__arrows {
+  display: grid;
+  grid-template-columns: repeat(3, 2.4rem);
+  grid-template-rows: repeat(2, 1.45rem);
+  gap: 0.25rem;
+  justify-content: end;
+}
+.kfoot__arrows .kc {
+  --kh: 1.45rem;
+  min-width: 0;
+  font-size: 0.7rem;
+}
+/* Placed explicitly — auto-placement put ↓ in the top row beside ↑. */
+.kfoot__arrows .kc:nth-child(1) { grid-area: 1 / 2; }
+.kfoot__arrows .kc:nth-child(2) { grid-area: 2 / 1; }
+.kfoot__arrows .kc:nth-child(3) { grid-area: 2 / 2; }
+.kfoot__arrows .kc:nth-child(4) { grid-area: 2 / 3; }
+
+/* ═══ ⌘K — the command palette ═══ */
+.cmdk {
+  width: min(36rem, calc(100vw - 2rem));
+  max-height: min(34rem, calc(100svh - 4rem));
+  margin: 12svh auto auto;
+  padding: 0;
+  border: 1px solid #262626;
+  border-radius: 16px;
+  background: var(--k-panel);
+  color: var(--k-paper);
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(232, 255, 71, 0.06);
+  overflow: hidden;
+}
+.cmdk::backdrop {
+  background: rgba(5, 5, 5, 0.72);
+  backdrop-filter: blur(4px);
+}
+.cmdk__field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  border-bottom: 1px solid #1F1F1F;
+}
+.cmdk__field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--k-paper);
+  font-family: var(--k-mono);
+  font-size: 1rem;
+  caret-color: var(--k-neon);
+}
+.cmdk__field input:focus {
+  outline: none;
+}
+.cmdk__list {
+  max-height: calc(min(34rem, 100svh - 4rem) - 7rem);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+}
+.cmdk__opt {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 44px;
+  padding: 0.55rem 0.7rem;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.cmdk__opt[aria-selected="true"] {
+  background: #1C1F22;
+  box-shadow: inset 2px 0 0 var(--k-neon);
+}
+.cmdk__opt .kc {
+  --kh: 1.6rem;
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: none;
+}
+.cmdk__hint {
+  margin-left: auto;
+  font-family: var(--k-mono);
+  font-size: 0.68rem;
+  color: var(--k-dim);
+}
+.cmdk__empty {
+  padding: 1.25rem;
+  color: var(--k-dim);
+  font-family: var(--k-mono);
+  font-size: 0.85rem;
+}
+.cmdk__foot {
+  display: flex;
+  gap: 1rem;
+  padding: 0.6rem 1.1rem;
+  border-top: 1px solid #1F1F1F;
+  font-family: var(--k-mono);
+  font-size: 0.66rem;
+  color: var(--k-dim);
+}
+
+/* ═══ Slot 8 — 404: a key popped off ═══ */
+.k404 {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.5rem;
+  min-height: 100svh;
+  padding: 3rem var(--k-gutter);
+  text-align: center;
+}
+.k404__row {
+  display: flex;
+  gap: 0.6rem;
+}
+.k404__row .kc {
+  --kh: clamp(4rem, 20vw, 7rem);
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: calc(var(--kh) * 0.55);
+}
+/* The empty socket, with the switch's cross-shaped stem showing. */
+.k404__socket {
+  position: relative;
+  width: clamp(4rem, 20vw, 7rem);
+  height: clamp(4rem, 20vw, 7rem);
+  border-radius: 12px;
+  background: #050505;
+  box-shadow: inset 0 4px 14px rgba(0, 0, 0, 0.9), inset 0 0 0 1px #1A1A1A;
+}
+.k404__socket::before,
+.k404__socket::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  background: #3A3A3A;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(232, 255, 71, 0.25);
+}
+.k404__socket::before { width: 34%; height: 9%; }
+.k404__socket::after  { width: 9%;  height: 34%; }
+.k404 h1 {
+  margin: 0;
+  font-family: var(--k-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  letter-spacing: -0.02em;
+}
+.k404 p {
+  margin: 0;
+  max-width: 28rem;
+  color: var(--k-dim);
+}
+
+/* "View the 3D version" (rendered by LaptopExperience) floats over the corner of
+   the page. On the keyboard it would sit on the footer's arrow keys, and the
+   function row already carries a lit 3D key — so it steps aside wherever the
+   function row is present. Without :has() support both simply show. */
+body:has(.frow) .laptop-restore {
+  display: none;
+}
+/* Elsewhere, as a lit key. */
+.laptop-restore {
+  font-family: var(--k-mono);
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: #0A0A0A;
+  background: linear-gradient(180deg, #F2FF7A 0%, #E8FF47 55%, #D4EB2E 100%);
+  border: 0;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 3px 0 #8C9A1C,
+    0 8px 24px rgba(232, 255, 71, 0.25);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.laptop-restore:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 #8C9A1C;
+}
+.laptop-restore:focus-visible {
+  outline: 2px solid var(--k-neon);
+  outline-offset: 3px;
+}
+
+/* Motion has an off switch: nothing types, flashes or travels. Keys still light
+   to show state — that is information, not motion. */
+@media (prefers-reduced-motion: reduce) {
+  .kw[data-typed] .kc,
+  .kw[data-typed] .kc::after,
+  .board .kc[data-relabel] {
+    animation: none;
+  }
+  .pal__caret,
+  .role__caret {
+    animation: none;
+  }
+  .kc,
+  .kc::after,
+  .stk,
+  .laptop-restore {
+    transition: none;
+  }
+  a.kc:active,
+  button.kc:active,
+  .kc[data-strike],
+  .stk:hover,
+  .laptop-restore:active {
+    transform: none;
+    scale: none;
+  }
+}
+
+/* Programmatic focus targets (the palette and function row move focus here). */
+.ks:focus {
+  outline: none;
+}
+/* The hero hint speaks to whichever input the visitor has. */
+.hint-touch { display: none; }
+@media (hover: none) {
+  .hint-desk { display: none; }
+  .hint-touch { display: inline; }
+}

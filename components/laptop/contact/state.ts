@@ -68,7 +68,15 @@ export function allValid(): boolean {
  * the form has no backend, and pretending otherwise would silently drop messages.
  */
 export function buildMailto(to: string): string {
-  const { name, email, message } = contactState.values
+  return mailtoFor(to, contactState.values)
+}
+
+/**
+ * The same message from explicit values — used by the text version's form, which
+ * keeps its own state. One format, whichever form it was typed into.
+ */
+export function mailtoFor(to: string, values: Record<ContactField, string>): string {
+  const { name, email, message } = values
   const subject = `Portfolio enquiry from ${name.trim() || "someone"}`
   const body = [message.trim(), "", "—", name.trim(), email.trim()].join("\n")
   return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`

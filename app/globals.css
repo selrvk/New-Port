@@ -11,7 +11,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-sans: var(--font-archivo);
+  --font-sans: var(--font-jakarta);
   --radius: 0.625rem;
   --background: #FFF4EA;
   --foreground: oklch(0.145 0 0);
@@ -244,12 +244,11 @@
     @apply border-border outline-ring/50;
 
   }
-  /* The text version's box board, set on html and body as well as the panels, so
-     the overscroll bounce on trackpads and iOS shows board rather than a different
-     colour. The 3D layer overrides this with [data-laptop] before first paint. */
+  /* The same black as both versions of the page, set on html and body too so the
+     overscroll bounce on trackpads and iOS never shows a different colour. */
   html,
   body {
-    background-color: #F7F6F2;
+    background-color: #0A0A0A;
   }
   body {
     @apply text-foreground;

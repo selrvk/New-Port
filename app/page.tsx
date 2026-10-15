@@ -23,9 +23,8 @@ import AboutMe from "@/components/sections/about-me";
 import Languages from "@/components/sections/languages";
 import Contact from "@/components/sections/contact";
 
-import { BoxFooter } from "@/components/box/BoxFooter";
-import { BoxHeader } from "@/components/box/BoxHeader";
-import { PrintStrip } from "@/components/box/PrintStrip";
+import { Chrome } from "@/components/keys/Chrome";
+import { KeysFooter } from "@/components/keys/KeysFooter";
 import { DomActivityProvider } from "@/components/portfolio-dom/DomActivity";
 import { LaptopExperienceLoader } from "@/components/laptop/LaptopExperienceLoader";
 import { BootScreen } from "@/components/laptop/BootScreen";
@@ -42,16 +41,16 @@ export default function Home() {
 
       <LaptopExperienceLoader />
 
-      {/* Layer 1 — "the box it came in" (app/box.css). Everything the 3D layer
-          hides lives inside data-portfolio-dom, header and footer included.
-          DomActivityProvider lets it stand its scroll work down while covered.
+      {/* Layer 1 — "Keystrokes": the laptop's keyboard (app/keys.css). Everything
+          the 3D layer hides lives inside data-portfolio-dom, the function row and
+          footer included. DomActivityProvider lets it stand its listeners and
+          animation loops down while covered.
           <main> takes tabIndex -1 so "Skip to content" can move focus into it; in
           3D mode, focus arriving anywhere in this layer is what reveals it — see
           LaptopExperience. */}
-      <div className="box" data-portfolio-dom>
+      <div className="keys" data-portfolio-dom>
         <DomActivityProvider>
-          <PrintStrip />
-          <BoxHeader />
+          <Chrome />
           <main id="main" tabIndex={-1}>
             <Hero />
             <Projects />
@@ -62,7 +61,7 @@ export default function Home() {
             <Languages />
             <Contact />
           </main>
-          <BoxFooter />
+          <KeysFooter />
         </DomActivityProvider>
       </div>
     </>

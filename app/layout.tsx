@@ -1,40 +1,28 @@
 import type { Metadata } from "next";
-import { Archivo, Syne, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Syne, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import "./box.css";
+import "./keys.css";
 import { bootScript } from "@/components/laptop/boot";
 
-// The text version — "the box it came in" — is set in two families: Archivo, whose
-// width axis gives both the extra-wide packaging headlines and the condensed
-// label caps from one file, and JetBrains Mono for spec values and small print.
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-mono",
-});
-
-// Used only by the 3D layer — its HUD and the text painted onto the laptop screen
-// (FONTS in components/laptop/config.ts). Not preloaded: phones and every other
-// text-layout visitor never use them, and the 3D boot screen waits for
-// document.fonts.ready before revealing the scene, so they still arrive in time.
+// One type system for both versions of the site: Syne for display, Plus Jakarta
+// Sans for reading, JetBrains Mono for keycaps, code and labels. The 3D layer paints
+// its screen text in the same three (FONTS in components/laptop/config.ts).
 const syne = Syne({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-syne",
-  preload: false,
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-jakarta",
-  preload: false,
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -58,10 +46,9 @@ export default function RootLayout({
       </head>
       <body
         className={`
-          ${archivo.variable}
-          ${jetbrainsMono.variable}
           ${syne.variable}
           ${plusJakartaSans.variable}
+          ${jetbrainsMono.variable}
           antialiased
         `}
       >
