@@ -863,8 +863,9 @@ button.kc--enter:active {
 /* Holographic film on the featured stickers; tilting one under the light (hover)
    shifts its colours. */
 .stk__holo {
+  /* Strength (HOLO_OPACITY) comes from the shared design; the blend is set here,
+     and soft-light on canvas for the 3D lid. */
   mix-blend-mode: soft-light;
-  opacity: 0.7;
   transition: filter 0.7s ease;
 }
 .stk:hover .stk__holo {

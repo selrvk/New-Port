@@ -5,7 +5,9 @@
 // Certifications, landing on the back of the lid as you scroll.
 //
 // Each is a textured plane inside `lidGroup`, so it inherits the lid's rotation and
-// stays flush against it — including when the lid closes at the very end.
+// stays flush against it — including when the lid closes at the very end. Each is
+// die-cut to its own shape — the same stickers as the text version, from the
+// shared design in lib/stickerDesign.ts — on a texture transparent outside the cut.
 //
 // The lid back faces -Z in lidGroup space, so each plane is rotated 180° about Y to
 // face outward. Getting that wrong renders them mirrored and facing into the lid,
@@ -23,8 +25,10 @@ import { sortedCertifications } from "@/data/certifications"
 
 import { SECTIONS, STICKERS } from "./config"
 import { stickerPose } from "./certs/landing"
+import { invalidateFonts } from "./lib/canvas2d"
 import { localProgress } from "./lib/keyframes"
-import { makeStickerTexture } from "./lib/stickerTexture"
+import { shapeFor } from "./lib/stickerDesign"
+import { makeStickerTexture, paddedSize, paintSticker } from "./lib/stickerTexture"
 
 type Props = {
   progressRef: React.RefObject<number>
@@ -39,6 +43,30 @@ export function Stickers({ progressRef }: Props) {
     []
   )
   useEffect(() => () => textures.forEach((t) => t.dispose()), [textures])
+
+  // Each sticker's plane matches its own die-cut shape (stickerDesign.ts).
+  const sizes = useMemo(
+    () => sortedCertifications.map((cert, i) => paddedSize(shapeFor(cert, i))),
+    []
+  )
+
+  // Repaint once web fonts have loaded. The first paint happens at mount, when the
+  // canvas may still only have a fallback face — and names are sized for Syne.
+  useEffect(() => {
+    let alive = true
+    const ready = document.fonts?.ready ?? Promise.resolve()
+    ready.then(() => {
+      if (!alive) return
+      invalidateFonts()
+      textures.forEach((tex, i) => {
+        paintSticker(tex.image as HTMLCanvasElement, sortedCertifications[i], i)
+        tex.needsUpdate = true
+      })
+    })
+    return () => {
+      alive = false
+    }
+  }, [textures])
 
   // Hidden until the first frame decides otherwise. Previously this was a
   // `visible={false}` JSX prop, which React re-applies on every render and would
@@ -84,7 +112,7 @@ export function Stickers({ progressRef }: Props) {
           // planes, distance sorting is unstable and flickers; this is not.
           renderOrder={10 + i}
         >
-          <planeGeometry args={[STICKERS.size.w, STICKERS.size.h]} />
+          <planeGeometry args={[sizes[i].w * STICKERS.unit, sizes[i].h * STICKERS.unit]} />
           <meshStandardMaterial
             map={textures[i]}
             // Self-illuminated as well as lit.

@@ -509,9 +509,10 @@ export const KEYBOARD = {
 // Textured planes inside `lidGroup`, flush against the BACK of the lid.
 //
 // `layout` is normalised to the lid: x -1→1 across it, y 0→1 from hinge to top edge.
-// A sticker is 0.62 x 0.42 scene units on a 3.04 x 1.99 lid, so its half-size is
-// 0.204 in normalised x and 0.106 in y — meaning x must stay within ±0.796 and y
-// within 0.106→0.894 or it hangs off the edge. An earlier draft had a slot at
+// Stickers come in different die-cut shapes and sizes (see `unit`); the largest
+// is about 0.76 x 0.57 scene units on a 3.04 x 1.99 lid, a half-size of up to 0.25
+// in normalised x and 0.14 in y. Each slot below is checked against its own
+// sticker's size so none hangs off the edge. An earlier draft had a slot at
 // y -0.14, which is below the hinge entirely.
 //
 // Neighbours are placed CLOSER than their full width and height so they overlap.
@@ -549,7 +550,13 @@ export const STICKERS = {
   landSpan: 0.78,
   /** Fraction of the section one sticker takes to land. */
   landDuration: 0.26,
-  size: { w: 0.62, h: 0.42 },
+  /**
+   * Scene units per unit of a sticker's design viewBox (stickerDesign.ts). Each
+   * sticker's plane is its own shape's size times this, so a burst, a pill and a
+   * ticket keep their proportions; the classic rectangle comes out about the
+   * 0.62 × 0.42 every sticker used to be.
+   */
+  unit: 0.0024,
   /**
    * Self-illumination so a sticker is never invisible just because nothing happens
    * to be lighting the lid's back at that moment. High enough to read, low enough

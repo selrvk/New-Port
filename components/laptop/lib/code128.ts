@@ -1,6 +1,6 @@
-// components/keys/code128.ts
+// components/laptop/lib/code128.ts
 //
-// A Code 128 (code set B) encoder, so the barcode on a label sticker is a real
+// A Code 128 (code set B) encoder, so the barcode on the label sticker (2D and 3D) is a real
 // one: point a phone camera at it and it reads the credential ID printed beneath
 // it. A decorative stripe pattern would be a small lie on a page that otherwise
 // only states facts.
