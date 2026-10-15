@@ -1,43 +1,28 @@
 // components/sections/certifications.tsx
 //
 // F3 — Certifications: the stickers off the back of the 3D laptop's lid, in the
-// same colourways (components/laptop/lib/stickerStyles.ts), stuck onto a dark lid.
-// The stickers are the picture; the list underneath is the record — full names,
-// issuers, dates and credential IDs.
+// same colourways (components/laptop/lib/stickerStyles.ts), each die-cut to its own
+// shape (components/keys/Sticker.tsx) and stuck onto a dark lid. The stickers are
+// the picture; the list underneath is the record — full names, issuers, dates and
+// credential IDs.
 
 import type { CSSProperties } from "react"
 
 import { stickerStyle } from "@/components/laptop/lib/stickerStyles"
 import { Section } from "@/components/keys/Section"
+import { shapeFor, Sticker, StickerDefs, stickerSize } from "@/components/keys/Sticker"
 import { SectionHead } from "@/components/keys/SectionHead"
 import {
   certCount,
   certifications,
-  issuedYear,
-  issuerCode,
   sortedCertifications,
 } from "@/data/certifications"
 
 const issuerCount = new Set(certifications.map((c) => c.issuer)).size
 
 /** Stuck on by hand: a small, repeatable tilt and drop per sticker. */
-const tilt = (i: number) => ((i * 37) % 13) - 6
-const drop = (i: number) => ((i * 53) % 9) - 4
-
-/**
- * Font size, in % of the sticker's width, that fits the short name on one line.
- * Estimated per character, because Syne's capitals are far wider than its lower
- * case — counting characters alone let "HTML·CSS·JS" run off its sticker. The 60
- * is calibrated against the rendered stickers: it puts the widest name at about
- * 82% of the face, inside the face's own padding.
- */
-function fit(text: string): number {
-  let em = 0
-  for (const ch of text) {
-    em += ch === " " ? 0.3 : /[·.,]/.test(ch) ? 0.32 : /[A-Z0-9+&]/.test(ch) ? 0.86 : 0.64
-  }
-  return Math.min(16, 60 / Math.max(em, 1))
-}
+const tilt = (i: number) => ((i * 37) % 15) - 7
+const drop = (i: number) => ((i * 53) % 11) - 5
 
 export default function Certifications() {
   return (
@@ -55,8 +40,9 @@ export default function Certifications() {
       </SectionHead>
 
       <div className="lid" aria-hidden="true">
+        <StickerDefs />
         {sortedCertifications.map((c, i) => {
-          const st = stickerStyle(c, i)
+          const shape = shapeFor(c, i)
           return (
             <div
               key={c.id}
@@ -65,31 +51,11 @@ export default function Certifications() {
                 {
                   "--tilt": `${tilt(i)}deg`,
                   "--drop": `${drop(i)}px`,
+                  "--u": stickerSize(shape).w,
                 } as CSSProperties
               }
             >
-              <div className="stk__paper">
-                <div
-                  className="stk__face"
-                  data-rule={st.rule ? "" : undefined}
-                  style={
-                    {
-                      "--fill": st.fill,
-                      "--text": st.text,
-                      "--accent": st.accent,
-                      "--rule": st.rule,
-                      "--fit": fit(c.short),
-                    } as CSSProperties
-                  }
-                >
-                  <span className="stk__issuer">{issuerCode(c.issuer)}</span>
-                  <span className="stk__name">{c.short}</span>
-                  <span className="stk__foot">
-                    <span>{issuedYear(c.issued)}</span>
-                    <span>{c.featured ? "★" : ""}</span>
-                  </span>
-                </div>
-              </div>
+              <Sticker cert={c} style={stickerStyle(c, i)} shape={shape} />
             </div>
           )
         })}

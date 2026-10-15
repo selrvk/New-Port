@@ -803,13 +803,18 @@ button.kc--enter:active {
 }
 
 /* ═══ Certifications — the stickers off the 3D lid ═══ */
+/* A collage, not a grid: each sticker keeps its own shape and natural size (its
+   SVG width in viewBox units, --u, times one scale), wraps where it fits, and
+   overlaps its neighbours a little at its own tilt. */
 .lid {
+  --stk-scale: clamp(0.5px, 0.16vw, 0.8px);
   position: relative;
-  display: grid;
-  /* Two across on a phone, more as room allows. */
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 8rem), 1fr));
-  gap: 0 0.6rem;
-  padding: clamp(1.4rem, 4vw, 2.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem 0;
+  padding: clamp(1.75rem, 5vw, 3rem) clamp(1rem, 4vw, 2.5rem);
   border-radius: 22px;
   background:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 3px),
@@ -820,83 +825,53 @@ button.kc--enter:active {
     0 40px 80px -40px rgba(0, 0, 0, 0.9);
   margin-bottom: 2.5rem;
 }
-/* The outer element is only the container and the hand-stuck tilt. Container
-   units (cqi) resolve against the nearest container ANCESTOR, never the element
-   itself — so the die-cut padding lives one level down, on .stk__paper, where it
-   measures against the sticker. On .stk it fell back to the viewport, which
-   matched a sticker's width on a phone and swallowed the face on a desktop. */
+.stk-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
 .stk {
-  container-type: inline-size;
   position: relative;
-  aspect-ratio: 512 / 340;
+  flex: none;
+  width: calc(var(--u) * var(--stk-scale));
+  margin: -0.3rem -0.2rem;
   rotate: var(--tilt, 0deg);
   translate: 0 var(--drop, 0);
-  /* Pulls the next row up a little so tilted stickers overlap, as on the 3D lid
-     (grid gaps cannot be negative; item margins can). */
-  margin-bottom: calc(-1 * clamp(0.15rem, 1.4vw, 0.6rem));
   transition: rotate 0.25s ease, scale 0.25s ease;
 }
 .stk:hover {
   z-index: 1;
   rotate: 0deg;
-  scale: 1.05;
+  scale: 1.06;
 }
-.stk__paper {
-  height: 100%;
-  padding: 3.5cqi;
-  border-radius: 9cqi;
-  background: #F4F1EA;
-  box-shadow: 0 6px 14px -4px rgba(0, 0, 0, 0.75), 0 1px 0 rgba(0, 0, 0, 0.4);
+.stk__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* The shadow follows the die-cut, not a box. */
+  filter: drop-shadow(0 6px 7px rgba(0, 0, 0, 0.55)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
 }
-.stk__face {
-  position: relative;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100%;
-  padding: 6cqi 7cqi 5.5cqi;
-  border-radius: 6.5cqi;
-  background: var(--fill);
-  color: var(--text);
-}
-.stk__face[data-rule]::before {
-  content: "";
-  position: absolute;
-  inset: 3cqi;
-  border: 1px solid var(--rule);
-  border-radius: 4.5cqi;
-  pointer-events: none;
-}
-.stk__issuer {
-  font-family: var(--k-mono);
-  font-weight: 700;
-  font-size: 5.5cqi;
-  letter-spacing: 0.35em;
-  color: var(--accent);
-  white-space: nowrap;
-  overflow: hidden;
-}
-.stk__name {
-  align-self: center;
+.stk-name {
   font-family: var(--k-display);
   font-weight: 800;
-  font-size: calc(var(--fit) * 1cqi);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
 }
-.stk__foot {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 3cqi;
-  border-top: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+.stk-mono {
   font-family: var(--k-mono);
-  font-size: 5cqi;
 }
-.stk__foot span:first-child {
-  opacity: 0.75;
+/* Holographic film on the featured stickers; tilting one under the light (hover)
+   shifts its colours. */
+.stk__holo {
+  mix-blend-mode: soft-light;
+  opacity: 0.7;
+  transition: filter 0.7s ease;
 }
-.stk__foot span:last-child {
-  color: var(--accent);
+.stk:hover .stk__holo {
+  filter: hue-rotate(140deg);
+}
+.stk__sheen {
+  pointer-events: none;
 }
 .certs {
   display: grid;
@@ -1563,6 +1538,7 @@ body:has(.frow) .laptop-restore {
   .kc,
   .kc::after,
   .stk,
+  .stk__holo,
   .laptop-restore {
     transition: none;
   }
