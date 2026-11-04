@@ -49,9 +49,8 @@ export const projects: Project[] = [
       "Inventory, point of sale, attendance and fleet tracking for small businesses, built around a cheap barcode scanner. Businesses sign up for a free trial, and the database itself keeps each one's data separate.",
     stack: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS"],
     image: "/pictures/business-suite.webp",
-    // No public deployment yet, so the primary link is the repository itself.
-    demo: "https://github.com/selrvk/business-suite",
-    demoLabel: "source",
+    demo: "https://business-suite.charlesalcantara.com",
+    source: "https://github.com/selrvk/business-suite",
   },
   {
     id: 9,
