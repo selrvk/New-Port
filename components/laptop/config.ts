@@ -156,8 +156,8 @@ export const SECTION_SCROLL_VH: Record<SectionId, number> = {
   // log types out, then the name card settles. Roughly 1.0vh / 1.0vh / 1.2vh.
   hero: 3.2,
   // ~0.52vh per project, so adding one lengthens the section rather than
-  // speeding the others up. Six projects -> 3.1.
-  projects: 3.1,
+  // speeding the others up. Eight projects -> 4.1.
+  projects: 4.1,
   // Six categories, each typing its name then listing its skills.
   skills: 3.0,
   certifications: 1.9,

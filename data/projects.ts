@@ -43,6 +43,27 @@ export const projects: Project[] = [
     demoLabel: "app store",
   },
   {
+    id: 8,
+    title: "Business Suite: Inventory & POS",
+    description:
+      "Inventory, point of sale, attendance and fleet tracking for small businesses, built around a cheap barcode scanner. Businesses sign up for a free trial, and the database itself keeps each one's data separate.",
+    stack: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS"],
+    image: "/pictures/business-suite.webp",
+    // No public deployment yet, so the primary link is the repository itself.
+    demo: "https://github.com/selrvk/business-suite",
+    demoLabel: "source",
+  },
+  {
+    id: 9,
+    title: "Sol by Sol",
+    description:
+      "A junior astronaut mission trainer for ages 10 to 16, built with Team ARCHSPACE for the 2026 NASA Space Apps Challenge. Run a Moon or Mars outpost and trade science against survival — every meter shows the real NASA figures behind it.",
+    stack: ["React", "TypeScript", "Vite", "Recharts"],
+    image: "/pictures/sol-by-sol.webp",
+    demo: "https://sol-by-sol.vercel.app",
+    source: "https://github.com/selrvk/sol-by-sol",
+  },
+  {
     id: 1,
     title: "System Administration & Automation System",
     description: "Full-stack SADAS app with database from Supabase",
@@ -50,15 +71,6 @@ export const projects: Project[] = [
     image: "/pictures/sadas-img.webp",
     demo: "https://sadas.charlesalcantara.com",
     source: "https://github.com/selrvk/sadas"
-  },
-  {
-    id: 2,
-    title: "Inventory Management System",
-    description: "An Inventory Management System for a local business in Batangas.",
-    image: "/pictures/fnv-img.webp",
-    stack: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Supabase"],
-    demo: "https://ims.charlesalcantara.com",
-    source: "https://github.com/selrvk/fnv-inventory"
   },
   {
     id: 3,
@@ -76,7 +88,7 @@ export const projects: Project[] = [
     image: "/pictures/weather-img.webp",
     stack: ["React","HTML5", "CSS3", "Next.js"],
     demo: "https://skies.charlesalcantara.com",
-    source: "https://github.com/selrvk/yoru-hotel"
+    source: "https://github.com/selrvk/Weather-App"
   },
   {
     id: 5,
@@ -85,6 +97,5 @@ export const projects: Project[] = [
     image: "/pictures/para-img.webp",
     stack: ["React", "NodeJS", "TypeScript"],
     demo: "https://para.charlesalcantara.com",
-    source: "https://github.com/selrvk"
   },
 ];

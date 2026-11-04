@@ -25,11 +25,16 @@ function splitUrl(href: string): { host: string; rest: string } {
 
 export default function Projects() {
   const onStore = projects.filter((p) => p.demoLabel === "app store").length
+  // A project whose only link is its repository isn't something you can open live,
+  // so the count says so rather than claiming every one is.
+  const live = projects.filter((p) => !p.demo.includes("github.com")).length
+  const opens =
+    live === projects.length ? "every one opens live" : `${live} of the ${projects.length} open live`
   return (
     <Section id="projects" labelledBy="projects-title">
       <SectionHead id="projects" headingId="projects-title" meta={<span>{projects.length} open tabs</span>}>
-        Apps, systems and sites — every one links to the real thing
-        {onStore ? `, and ${onStore} are on the App Store` : ""}.
+        Apps, systems and sites — {opens}
+        {onStore ? `, ${onStore} of them on the App Store` : ""}.
       </SectionHead>
 
       <ol className="wins">
