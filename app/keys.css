@@ -166,6 +166,15 @@ body {
 .kc[aria-checked="true"]::after {
   opacity: 1;
 }
+/* A struck key lights at once and fades slowly — a backlight, not a dimmer. The
+   transition that applies is the one on the state being entered, so this only
+   speeds up the way on; the way off keeps .kc's slow fade. */
+.kc[data-lit] {
+  transition: transform 0.08s ease, box-shadow 0.08s ease, color 0s;
+}
+.kc[data-lit]::after {
+  transition-duration: 0.05s;
+}
 /* Interactive keys: hover warms the legend, press is real key travel. */
 a.kc,
 button.kc {
@@ -176,9 +185,14 @@ button.kc:hover {
   color: var(--k-neon);
 }
 a.kc:active,
+button.kc:active {
+  transform: translateY(calc(var(--kh) * 0.07));
+}
+/* A struck decorative key (keyPress.ts) moves on `translate`, animated there with
+   its spring; here it only gets the squashed skirt of a key at the bottom. */
+a.kc:active,
 button.kc:active,
 .kc[data-strike] {
-  transform: translateY(calc(var(--kh) * 0.07));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     inset 0 -1px 0 rgba(0, 0, 0, 0.4),
@@ -256,16 +270,20 @@ button.kc--enter:active {
   padding: 0;
 }
 .kw[data-typed] .kc {
-  animation: kc-strike 0.32s ease-out both;
+  animation: kc-strike 0.3s linear both;
   animation-delay: calc(var(--i) * var(--k-stroke));
 }
 .kw[data-typed] .kc::after {
   animation: kc-flash 1.5s ease-out both;
   animation-delay: calc(var(--i) * var(--k-stroke));
 }
+/* Down, then a spring back that overshoots and settles — the same stroke as
+   keyPress.ts gives a key you press yourself. */
 @keyframes kc-strike {
-  0%   { transform: translateY(0); }
-  18%  { transform: translateY(calc(var(--kh) * 0.07)); color: var(--k-neon); }
+  0%   { transform: translateY(0); animation-timing-function: ease-out; }
+  15%  { transform: translateY(calc(var(--kh) * 0.09)); color: var(--k-neon); animation-timing-function: ease-out; }
+  43%  { transform: translateY(calc(var(--kh) * -0.04)); animation-timing-function: ease-in-out; }
+  72%  { transform: translateY(calc(var(--kh) * 0.013)); animation-timing-function: ease-in-out; }
   100% { transform: translateY(0); }
 }
 @keyframes kc-flash {
@@ -1180,6 +1198,12 @@ button.kc--enter:active {
 .board .kc[data-held]::after {
   opacity: 1;
 }
+.board[data-manual] .kc::after {
+  transition: opacity 0.45s ease;
+}
+.board[data-manual] .kc[data-lit]::after {
+  transition-duration: 0.05s;
+}
 .board .kc[data-held] {
   color: var(--k-neon);
 }
@@ -1538,6 +1562,9 @@ body:has(.frow) .laptop-restore {
   }
   .kc,
   .kc::after,
+  .kc[data-lit],
+  .kc[data-lit]::after,
+  .board[data-manual] .kc::after,
   .stk,
   .stk__holo,
   .laptop-restore {
@@ -1545,7 +1572,6 @@ body:has(.frow) .laptop-restore {
   }
   a.kc:active,
   button.kc:active,
-  .kc[data-strike],
   .stk:hover,
   .laptop-restore:active {
     transform: none;

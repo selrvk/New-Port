@@ -36,6 +36,7 @@ import { useDomPaused } from "@/components/portfolio-dom/DomActivity"
 import { contact } from "@/data/contact"
 import { socials } from "@/data/profile"
 
+import { pressKey, releaseKey } from "./keyPress"
 import { SECTIONS } from "./sections"
 
 // ── Shared ──────────────────────────────────────────────────────────────────
@@ -436,40 +437,65 @@ function useTypeOnView(paused: boolean) {
 /** Keys whose legends are words or symbols rather than the character typed. */
 const NAMED: Record<string, string> = { Enter: "↵", Escape: "ESC", Backspace: "⌫", Tab: "TAB" }
 
+/** How long a key stays lit once it is back up: long enough to see what you hit. */
+const ECHO_DIM_MS = 500
+
 function useKeyEcho(paused: boolean) {
   useEffect(() => {
     if (paused) return
-    const timers = new Set<number>()
-    const onKey = (e: KeyboardEvent) => {
+    // Keycaps held down right now, by physical key — so keyup releases exactly what
+    // keydown pressed, even if shift changed the character in between.
+    const down = new Map<string, HTMLElement[]>()
+
+    const release = (code: string) => {
+      const keys = down.get(code)
+      if (!keys) return
+      down.delete(code)
+      keys.forEach((k) => releaseKey(k, ECHO_DIM_MS))
+    }
+    const releaseAll = () => [...down.keys()].forEach(release)
+
+    const onDown = (e: KeyboardEvent) => {
       if (e.repeat || e.metaKey || e.ctrlKey || e.altKey || isTypingTarget(e.target)) return
       const legend = NAMED[e.key] ?? (e.key.length === 1 ? e.key.toUpperCase() : null)
       if (!legend) return
-      const keys = document.querySelectorAll<HTMLElement>(
-        `.keys .kc[data-legend="${CSS.escape(legend)}"]`
-      )
-      keys.forEach((k) => {
-        k.setAttribute("data-strike", "")
-        k.setAttribute("data-lit", "")
-      })
-      const up = window.setTimeout(() => keys.forEach((k) => k.removeAttribute("data-strike")), 140)
-      const dim = window.setTimeout(() => keys.forEach((k) => k.removeAttribute("data-lit")), 650)
-      timers.add(up).add(dim)
+      const code = e.code || e.key
+      release(code)
+      const keys = [
+        ...document.querySelectorAll<HTMLElement>(`.keys .kc[data-legend="${CSS.escape(legend)}"]`),
+      ]
+      if (keys.length === 0) return
+      keys.forEach(pressKey)
+      down.set(code, keys)
     }
-    window.addEventListener("keydown", onKey)
+    const onUp = (e: KeyboardEvent) => {
+      // macOS sends no keyup for keys let go while ⌘ is held, so ⌘'s own keyup
+      // lets go of everything.
+      if (e.key === "Meta") releaseAll()
+      else release(e.code || e.key)
+    }
+
+    window.addEventListener("keydown", onDown)
+    window.addEventListener("keyup", onUp)
+    window.addEventListener("blur", releaseAll)
     return () => {
-      window.removeEventListener("keydown", onKey)
-      timers.forEach((t) => window.clearTimeout(t))
+      window.removeEventListener("keydown", onDown)
+      window.removeEventListener("keyup", onUp)
+      window.removeEventListener("blur", releaseAll)
+      releaseAll()
     }
   }, [paused])
 }
 
 // ── Pressable keys ───────────────────────────────────────────────────────────
 
+const TAP_DIM_MS = 350
+
 /**
  * One delegated listener for every decorative keycap. Links and buttons that look
  * like keys are left alone — they have their own :active press and do something.
- * The press holds while the pointer is down, as a real key does, and the light
- * lingers a moment after release.
+ * The press holds while the pointer is down, as a real key does, springs back on
+ * release (keyPress.ts), and the light lingers a moment after.
  */
 function usePressKeys(paused: boolean) {
   useEffect(() => {
@@ -477,14 +503,11 @@ function usePressKeys(paused: boolean) {
     const root = document.querySelector<HTMLElement>(".keys")
     if (!root) return
     let held: HTMLElement | null = null
-    const timers = new Set<number>()
 
     const release = () => {
       const key = held
       held = null
-      if (!key) return
-      key.removeAttribute("data-strike")
-      timers.add(window.setTimeout(() => key.removeAttribute("data-lit"), 350))
+      if (key) releaseKey(key, TAP_DIM_MS)
     }
     const onDown = (e: PointerEvent) => {
       if (e.button !== 0 || !(e.target instanceof Element)) return
@@ -492,8 +515,7 @@ function usePressKeys(paused: boolean) {
       if (!key || !root.contains(key) || key.closest("a, button")) return
       release()
       held = key
-      key.setAttribute("data-strike", "")
-      key.setAttribute("data-lit", "")
+      pressKey(key)
     }
 
     root.addEventListener("pointerdown", onDown)
@@ -503,7 +525,7 @@ function usePressKeys(paused: boolean) {
       root.removeEventListener("pointerdown", onDown)
       window.removeEventListener("pointerup", release)
       window.removeEventListener("pointercancel", release)
-      timers.forEach((t) => window.clearTimeout(t))
+      release()
     }
   }, [paused])
 }

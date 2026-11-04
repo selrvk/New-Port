@@ -11,7 +11,8 @@
 //     flash pink so the change is visible),
 //   · types that language's greeting into the field, lighting each key as it is
 //     struck and letting the light decay — same rhythm (greetingLoop.ts) and same
-//     flash (FLASH_PEAK / FLASH_DECAY) as the 3D keyboard.
+//     flash (FLASH_PEAK / FLASH_DECAY) as the 3D keyboard. Each key also bounces
+//     as it is hit (keyPress.ts), which the painted 3D keys cannot.
 //
 // The loop runs only while the board is on screen, never while the 3D layer is
 // covering the page, and not at all under reduced motion — there the greeting is
@@ -41,6 +42,7 @@ import { GRID_UNITS_X, GRID_UNITS_Y, KEYS, LETTER_KEY_INDEX } from "@/data/keybo
 import { changedKeys, languages } from "@/data/languages"
 
 import { isTypingTarget, useReducedMotion } from "./Chrome"
+import { bounceKey } from "./keyPress"
 
 /** The field shows the most recent characters once it is full. */
 const FIELD_MAX = 24
@@ -131,6 +133,8 @@ export function LanguageBoard() {
     const start = performance.now()
     let lastShown = -1
     let lastCaret: boolean | null = null
+    // Characters struck so far this pass, so each key bounces once, as it is hit.
+    let struck = 0
     const glowing = new Set<string>()
 
     const frame = (now: number) => {
@@ -146,6 +150,19 @@ export function LanguageBoard() {
         caretRef.current.toggleAttribute("data-off", !f.caretOn)
         lastCaret = f.caretOn
       }
+
+      // Struck keys bounce as well as light. A jump of more than a couple of
+      // characters means the board was off screen; catch up without a flurry.
+      const n = f.charProgress < 0 ? 0 : Math.min(text.length, Math.floor(f.charProgress))
+      if (n > struck && n - struck <= 2) {
+        for (let i = struck; i < n; i++) {
+          for (const id of keyIdsFor(text[i])) {
+            const el = keyEls.current.get(id)
+            if (el) bounceKey(el)
+          }
+        }
+      }
+      struck = n
 
       const values = new Map<string, number>()
       if (f.charProgress >= 0) {
@@ -388,6 +405,7 @@ export function LanguageBoard() {
         className="board"
         ref={boardRef}
         aria-hidden="true"
+        data-manual={auto ? undefined : ""}
         style={{ "--cols": GRID_UNITS_X, "--rows": GRID_UNITS_Y } as CSSProperties}
       >
         {/* Taps type; the board is aria-hidden, and keyboard users type on their
